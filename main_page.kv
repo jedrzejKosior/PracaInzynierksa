@@ -1,0 +1,87 @@
+#:import utils kivy.utils
+
+<TextInput>
+    multiline: False
+    background_color: utils.get_color_from_hex("#FCF7F8")
+    font_name: "OpenSans-Semibold"
+
+<Label>
+    background_normal: ""
+    background_color: (206/255, 211/255, 220/255, 1)
+    canvas.before:
+        Color:
+            rgba: self.background_color
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    color: (0, 0, 0, 1)
+    font_name: "OpenSans-Semibold"
+
+<Button>
+    background_normal: ""
+    background_color: utils.get_color_from_hex("#90C2E7")
+    font_name: "OpenSans-Semibold"
+
+<RoundedButton@Button>
+    background_color: (0,0,0,0)
+    canvas.before:
+        Color:
+            rgba: (163/255,22/255,33/255,1) if self.state=='normal' else (80/255,0/255,0/255,1)
+        BorderImage:
+            border: 25,25,25,25
+            source: 'shadow.png'
+            pos: self.x+2, self.y-8
+            size: self.width+6, self.height+6
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [10]
+
+
+<MyLayout>
+    firstName: firstName
+    lastName: lastName
+
+    GridLayout:
+        cols: 1
+        size: root.width, root.height
+        padding: 10
+        spacing: 10
+        GridLayout:
+            cols: 2
+
+            Label:
+                text: "FIRST NAME"
+
+            TextInput:
+                id: firstName
+
+            Label:
+                text: "LAST NAME"
+            TextInput:
+                id: lastName
+
+        RoundedButton:
+            text: "SUBMIT"
+            font_size: 32
+            on_press: root.press()
+            #background_color: utils.get_color_from_hex("#A31621")
+            color: (1, 1, 1, 1)
+
+        BoxLayout:
+            orientation: "horizontal"
+            spacing: 20
+            padding: 50
+            Button:
+                text: "Hey"
+                id: printName
+            Button:
+                text: "Hi"
+                size_hint: (None, None)
+                width: 200
+                height: 50
+            Button:
+                text: "Hello"
+                size_hint: (0.5, 0.5)
+                pos_hint: {'center_y': 0.5}
+
