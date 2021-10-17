@@ -3,12 +3,10 @@ from kivy.uix.widget import Widget
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 from kivy.core.window import Window
-
+from kivy.uix.screenmanager import ScreenManager, Screen
 import psycopg2
 
-# Name of style file
-Builder.load_file('login_page.kv')
-Window.minimum_width, Window.minimum_height = 500, 560
+# #############################DATABASE START#############################
 
 # connect to database
 conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
@@ -17,8 +15,10 @@ conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", pas
 # cursor
 cur = conn.cursor()
 
-# cur.execute("CREATE TABLE clients (first_name text,last_name text,address text,city text,state text,zipcode text,room_number integer)")
-# cur.execute("INSERT INTO clients VALUES ('Klaudia', 'Kromolowska', 'ul. Gminna 89', 'Czestochowa', 'Slask', '11-222', '5')")
+# cur.execute("CREATE TABLE clients
+# (first_name text,last_name text,address text,city text,state text,zipcode text,room_number integer)")
+# cur.execute("INSERT INTO clients VALUES
+# ('Klaudia', 'Kromolowska', 'ul. Gminna 89', 'Czestochowa', 'Slask', '11-222', '5')")
 
 
 # commit your changes
@@ -29,6 +29,12 @@ cur.close()
 
 # close connection
 conn.close()
+
+# ################ DATABASE END #############
+
+# Name of style file
+Builder.load_file('login_page.kv')
+Window.minimum_width, Window.minimum_height = 500, 560
 
 
 class MyLayout(Widget):
