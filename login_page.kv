@@ -23,6 +23,7 @@
 
 <RoundedButton@Button>
     background_color: (0,0,0,0)
+    color: (1, 1, 1, 1)
     canvas.before:
         Color:
             rgba: (163/255,22/255,33/255,1) if self.state=='normal' else (80/255,0/255,0/255,1)
@@ -36,8 +37,13 @@
             size: self.size
             radius: [10]
 
+WindowManager:
+	LoginWindow:
+	MainWindow:
 
-<MyLayout>
+
+<LoginWindow>:
+	name: "loginWindow"
     login: login
     password: password
     BoxLayout:
@@ -46,6 +52,7 @@
         padding: 150
         spacing: 10
         Label:
+#            id = loginLabel
             text: "USER:"
             font_size: 20
         TextInput:
@@ -59,7 +66,28 @@
         RoundedButton:
             text: "LOGIN"
             font_size: 30
-            on_press: root.press()
-            color: (1, 1, 1, 1)
+            on_release:
+                app.root.current = root.loginPress()
+                root.manager.transition.direction = "left"
 
 
+<MainWindow>:
+	name: "mainWindow"
+
+	BoxLayout:
+		orientation: "vertical"
+		size: root.width, root.height
+
+		Label:
+			text: "Second Screen"
+			font_size: 32
+
+		Button:
+			text: "Go Back"
+			font_size: 32
+			on_release:
+				app.root.current = "loginWindow"
+				root.manager.transition.direction = "right"
+
+
+#you can use the root.manager.get_screen('screen_name').widget_id.parameter (like root.manager.get_screen('main_window').label.text) inside your .kv file
