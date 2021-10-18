@@ -34,9 +34,10 @@ class LoginWindow(Screen):
                     self.window = "mainWindow"
                     break
                 else:
-                    # self.ids.loginLabel.text = f'SIKE!'
+                    self.ids.passwordLabel.text = 'INCORRECT PASSWORD'
                     print("Incorrect password")
             else:
+                self.ids.loginLabel.text = 'INCORRECT LOGIN'
                 print("Incorrect login")
 
         # print(f"Hello {login}, {password}")
