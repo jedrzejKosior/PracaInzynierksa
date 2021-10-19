@@ -3,7 +3,6 @@ from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ObjectProperty
 from kivy.core.window import Window
-from kivy.properties import StringProperty
 import psycopg2
 
 # cur.execute("CREATE TABLE users(userName text,password text)")
@@ -32,13 +31,13 @@ class LoginWindow(Screen):
             if login == user[0]:
                 if password == user[1]:
                     self.window = "mainWindow"
-                    break
                 else:
-                    self.ids.passwordLabel.text = 'INCORRECT PASSWORD'
-                    print("Incorrect password")
+                    self.ids.passwordLabel.text = 'INCORRECT PASSWORD!'
+                    self.ids.passwordLabel.color = (163 / 255, 22 / 255, 33 / 255, 1)
+                break
             else:
-                self.ids.loginLabel.text = 'INCORRECT LOGIN'
-                print("Incorrect login")
+                self.ids.loginLabel.text = 'INCORRECT LOGIN!'
+                self.ids.loginLabel.color = (163 / 255, 22 / 255, 33 / 255, 1)
 
         # print(f"Hello {login}, {password}")
         # commit your changes

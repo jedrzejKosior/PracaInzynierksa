@@ -4,7 +4,9 @@
     multiline: False
     background_color: utils.get_color_from_hex("#FCF7F8")
     font_name: "OpenSans-Semibold"
-
+    halign: 'center'
+    valign: 'middle'
+    font_size: 20
 <Label>
     background_normal: ""
     background_color: (206/255, 211/255, 220/255, 1)
@@ -16,6 +18,7 @@
             pos: self.pos
     color: (0, 0, 0, 1)
     font_name: "OpenSans-Semibold"
+    font_size: 30
 <Button>
     background_normal: ""
     background_color: utils.get_color_from_hex("#90C2E7")
@@ -54,16 +57,16 @@ WindowManager:
         Label:
             id: loginLabel
             text: "USER:"
-            font_size: 20
         TextInput:
             id: login
+            hint_text: "ENTER LOGIN"
         Label:
             id: passwordLabel
             text: "PASSWORD:"
-            font_size: 20
-
         TextInput:
             id: password
+            hint_text: "ENTER PASSWORD"
+            password: True
         RoundedButton:
             text: "LOGIN"
             font_size: 30
