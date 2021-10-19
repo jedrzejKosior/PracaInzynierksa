@@ -32,7 +32,7 @@ class LoginWindow(Screen):
             if login == user[0]:
                 foundLogin = True
                 if password == user[1]:
-                    self.window = "mainWindow"
+                    self.window = "registerWindow"
                 else:
                     self.ids.passwordLabel.text = 'INCORRECT PASSWORD!'
                     self.ids.passwordLabel.color = (163 / 255, 22 / 255, 33 / 255, 1)
@@ -56,7 +56,7 @@ class LoginWindow(Screen):
         return self.window
 
 
-class MainWindow(Screen):
+class RegisterWindow(Screen):
     pass
 
 

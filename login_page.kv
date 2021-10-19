@@ -18,7 +18,7 @@
             pos: self.pos
     color: (0, 0, 0, 1)
     font_name: "OpenSans-Semibold"
-    font_size: 30
+    font_size: 20
 <Button>
     background_normal: ""
     background_color: utils.get_color_from_hex("#90C2E7")
@@ -42,7 +42,7 @@
 
 WindowManager:
 	LoginWindow:
-	MainWindow:
+	RegisterWindow:
 
 
 <LoginWindow>:
@@ -56,13 +56,15 @@ WindowManager:
         spacing: 10
         Label:
             id: loginLabel
-            text: "USER:"
+            text: "USERNAME:"
+            font_size: 30
         TextInput:
             id: login
-            hint_text: "ENTER LOGIN"
+            hint_text: "ENTER USERNAME"
         Label:
             id: passwordLabel
             text: "PASSWORD:"
+            font_size: 30
         TextInput:
             id: password
             hint_text: "ENTER PASSWORD"
@@ -75,23 +77,104 @@ WindowManager:
                 root.manager.transition.direction = "left"
 
 
-<MainWindow>:
-	name: "mainWindow"
-
+<RegisterWindow>:
+	name: "registerWindow"
 	BoxLayout:
-		orientation: "vertical"
-		size: root.width, root.height
+        size: root.width, root.height
+	    orientation: "vertical"
+        padding: 30
+        spacing: 10
+        GridLayout:
+            spacing: 5
+            cols: 2
+            Label:
+                id: firstNameLabel
+                text: "FIRST NAME:"
+            TextInput:
+                id: firstName
+                hint_text: "ENTER FIRST NAME"
+            Label:
+                id: secondNameLabel
+                text: "SECOND NAME:"
+            TextInput:
+                id: secondName
+                hint_text: "ENTER SECOND NAME"
+            Label:
+                id: addressLabel
+                text: "ADDRESS:"
+            TextInput:
+                id: address
+                hint_text: "ENTER ADDRESS"
+            Label:
+                id: cityLabel
+                text: "CITY:"
+            TextInput:
+                id: city
+                hint_text: "ENTER CITY"
+            Label:
+                id: stateLabel
+                text: "STATE:"
+            TextInput:
+                id: state
+                hint_text: "ENTER STATE"
+            Label:
+                id: zipcodeLabel
+                text: "ZIPCODE:"
+            TextInput:
+                id: zipcode
+                hint_text: "ENTER ZIPCODE"
+        Label:
+            text: "ROOM INFORMATION"
+            font_size: 20
+        GridLayout:
+            spacing: 5
+            cols: 2
+            Label:
+                id: roomNumberLabel
+                text: "ROOM NUMBER:"
+            TextInput:
+                id: roomNumber
+                hint_text: "dropdown TODO"
+            Label:
+                id: statusLabel
+                text: "STATUS:"
+            TextInput:
+                id: status
+                hint_text: "dropdown TODO"
+            Label:
+                id: bookStartDateLabel
+                text: "BOOK START DATE:"
+            TextInput:
+                id: bookStartDate
+                hint_text: "calendar popup TODO"
+            Label:
+                id: bookEndDateLabel
+                text: "BOOK END DATE:"
+            TextInput:
+                id: bookEndDate
+                hint_text: "calendar popup TODO"
+            Label:
+                id: paymentStatusLabel
+                text: "PAYMENT STATUS:"
+            TextInput:
+                id: state
+                hint_text: "dropdown TODO"
 
-		Label:
-			text: "Second Screen"
-			font_size: 32
 
-		Button:
-			text: "Go Back"
-			font_size: 32
-			on_release:
-				app.root.current = "loginWindow"
-				root.manager.transition.direction = "right"
+#	BoxLayout:
+#		orientation: "vertical"
+#		size: root.width, root.height
+#
+#		Label:
+#			text: "Second Screen"
+#			font_size: 32
+#
+#		Button:
+#			text: "Go Back"
+#			font_size: 32
+#			on_release:
+#				app.root.current = "loginWindow"
+#				root.manager.transition.direction = "right"
 
 
 #you can use the root.manager.get_screen('screen_name').widget_id.parameter (like root.manager.get_screen('main_window').label.text) inside your .kv file
