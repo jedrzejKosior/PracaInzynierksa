@@ -27,17 +27,19 @@ class LoginWindow(Screen):
         password = self.password.text
         cur.execute("SELECT * from users")
         userData = cur.fetchall()
+        foundLogin = False
         for user in userData:
             if login == user[0]:
+                foundLogin = True
                 if password == user[1]:
                     self.window = "mainWindow"
                 else:
                     self.ids.passwordLabel.text = 'INCORRECT PASSWORD!'
                     self.ids.passwordLabel.color = (163 / 255, 22 / 255, 33 / 255, 1)
                 break
-            else:
-                self.ids.loginLabel.text = 'INCORRECT LOGIN!'
-                self.ids.loginLabel.color = (163 / 255, 22 / 255, 33 / 255, 1)
+        if not foundLogin:
+            self.ids.loginLabel.text = 'INCORRECT LOGIN!'
+            self.ids.loginLabel.color = (163 / 255, 22 / 255, 33 / 255, 1)
 
         # print(f"Hello {login}, {password}")
         # commit your changes
