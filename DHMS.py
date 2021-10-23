@@ -57,7 +57,10 @@ class LoginWindow(Screen):
 
 
 class RegisterWindow(Screen):
-    pass
+    firstName = ObjectProperty(None)
+
+    def registerPress(self):
+        print(self.ids.firstName.text)
 
 
 class WindowManager(ScreenManager):

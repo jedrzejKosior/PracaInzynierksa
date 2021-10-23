@@ -134,7 +134,8 @@ WindowManager:
                 text: "ROOM NUMBER:"
             TextInput:
                 id: roomNumber
-                hint_text: "dropdown TODO"
+                hint_text: "choose number window"
+                on_text: root.manager.get_screen("registerWindow").ids.firstName.text = self.text
             Label:
                 id: statusLabel
                 text: "STATUS:"
@@ -159,6 +160,13 @@ WindowManager:
             TextInput:
                 id: state
                 hint_text: "dropdown TODO"
+        RoundedButton:
+            text: "Register"
+            font_size: 30
+            on_release:
+                root.registerPress()
+#                app.root.current = root.registerPress()
+#                root.manager.transition.direction = "left"
 
 
 #	BoxLayout:
