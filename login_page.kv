@@ -10,15 +10,15 @@
 <Label>
     background_normal: ""
     background_color: (206/255, 211/255, 220/255, 1)
-    canvas.before:
-        Color:
-            rgba: self.background_color
-        Rectangle:
-            size: self.size
-            pos: self.pos
+#    canvas.before:
+#        Color:
+#            rgba: self.background_color
+#        Rectangle:
+#            size: self.size
+#            pos: self.pos
     color: (0, 0, 0, 1)
     font_name: "OpenSans-Semibold"
-    font_size: 20
+    font_size: 15
 <Button>
     background_normal: ""
     background_color: utils.get_color_from_hex("#90C2E7")
@@ -27,6 +27,8 @@
 <RoundedButton@Button>
     background_color: (0,0,0,0)
     color: (1, 1, 1, 1)
+    size_hint_y: None
+    height: 50
     canvas.before:
         Color:
             rgba: (163/255,22/255,33/255,1) if self.state=='normal' else (80/255,0/255,0/255,1)
@@ -49,6 +51,11 @@ WindowManager:
 	name: "loginWindow"
     login: login
     password: password
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: "background.png"
     BoxLayout:
         orientation: "vertical"
         size: root.width, root.height
@@ -58,17 +65,25 @@ WindowManager:
             id: loginLabel
             text: "USERNAME:"
             font_size: 30
+            size_hint_y: None
+            height: 50
         TextInput:
             id: login
             hint_text: "ENTER USERNAME"
+            size_hint_y: None
+            height: 50
         Label:
             id: passwordLabel
             text: "PASSWORD:"
             font_size: 30
+            size_hint_y: None
+            height: 50
         TextInput:
             id: password
             hint_text: "ENTER PASSWORD"
             password: True
+            size_hint_y: None
+            height: 50
         RoundedButton:
             text: "LOGIN"
             font_size: 30
@@ -79,11 +94,23 @@ WindowManager:
 
 <RegisterWindow>:
 	name: "registerWindow"
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: "background.png"
 	BoxLayout:
         size: root.width, root.height
 	    orientation: "vertical"
         padding: 30
         spacing: 10
+        Label:
+            text: "REGISTER"
+            font_size: 20
+            size_hint_y: None
+            height: 40
+            color: (1, 1, 1, 1)
+            pos_hint_y: 0.1
         GridLayout:
             spacing: 5
             cols: 2
@@ -126,6 +153,8 @@ WindowManager:
         Label:
             text: "ROOM INFORMATION"
             font_size: 20
+            size_hint_y: None
+            height: 30
         GridLayout:
             spacing: 5
             cols: 2
@@ -161,7 +190,7 @@ WindowManager:
                 id: state
                 hint_text: "dropdown TODO"
         RoundedButton:
-            text: "Register"
+            text: "REGISTER"
             font_size: 30
             on_release:
                 root.registerPress()
