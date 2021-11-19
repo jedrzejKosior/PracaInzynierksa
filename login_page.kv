@@ -6,16 +6,10 @@
     font_name: "OpenSans-Semibold"
     halign: 'center'
     valign: 'middle'
-    font_size: 20
+    font_size: 12
 <Label>
     background_normal: ""
     background_color: (206/255, 211/255, 220/255, 1)
-#    canvas.before:
-#        Color:
-#            rgba: self.background_color
-#        Rectangle:
-#            size: self.size
-#            pos: self.pos
     color: (0, 0, 0, 1)
     font_name: "OpenSans-Semibold"
     font_size: 15
@@ -23,24 +17,29 @@
     background_normal: ""
     background_color: utils.get_color_from_hex("#90C2E7")
     font_name: "OpenSans-Semibold"
-
+    canvas.before:
+        Color:
+            rgba: .5, .5, .5, 1
+        Line:
+            width: 2
+            rectangle: self.x, self.y, self.width, self.height
 <RoundedButton@Button>
-    background_color: (0,0,0,0)
+    background_color: utils.get_color_from_hex("#A31621")
     color: (1, 1, 1, 1)
     size_hint_y: None
     height: 50
-    canvas.before:
-        Color:
-            rgba: (163/255,22/255,33/255,1) if self.state=='normal' else (80/255,0/255,0/255,1)
-        BorderImage:
-            border: 25,25,25,25
-            source: 'shadow.png'
-            pos: self.x+2, self.y-8
-            size: self.width+6, self.height+6
-        RoundedRectangle:
-            pos: self.pos
-            size: self.size
-            radius: [10]
+#    canvas.before:
+#        Color:
+#            rgba: (163/255,22/255,33/255,1) if self.state=='normal' else (80/255,0/255,0/255,1)
+#        BorderImage:
+#            border: 25,25,25,25
+#            source: 'shadow.png'
+#            pos: self.x+2, self.y-8
+#            size: self.width+6, self.height+6
+#        RoundedRectangle:
+#            pos: self.pos
+#            size: self.size
+#            radius: [10]
 
 WindowManager:
 	LoginWindow:
@@ -55,7 +54,7 @@ WindowManager:
         Rectangle:
             pos: self.pos
             size: self.size
-            source: "background.png"
+            source: "gradientBackground.png"
     BoxLayout:
         orientation: "vertical"
         size: root.width, root.height
@@ -72,6 +71,7 @@ WindowManager:
             hint_text: "ENTER USERNAME"
             size_hint_y: None
             height: 50
+            font_size: 20
         Label:
             id: passwordLabel
             text: "PASSWORD:"
@@ -84,6 +84,7 @@ WindowManager:
             password: True
             size_hint_y: None
             height: 50
+            font_size: 20
         RoundedButton:
             text: "LOGIN"
             font_size: 30
@@ -98,7 +99,7 @@ WindowManager:
         Rectangle:
             pos: self.pos
             size: self.size
-            source: "background.png"
+            source: "gradientBackground.png"
 	BoxLayout:
         size: root.width, root.height
 	    orientation: "vertical"
@@ -109,8 +110,7 @@ WindowManager:
             font_size: 20
             size_hint_y: None
             height: 40
-            color: (1, 1, 1, 1)
-            pos_hint_y: 0.1
+            color: (0, 0, 0, 1)
         GridLayout:
             spacing: 5
             cols: 2
@@ -120,6 +120,7 @@ WindowManager:
             TextInput:
                 id: firstName
                 hint_text: "ENTER FIRST NAME"
+                on_text: root.manager.get_screen("registerWindow").ids.firstName.text = self.text
             Label:
                 id: secondNameLabel
                 text: "SECOND NAME:"
@@ -150,33 +151,27 @@ WindowManager:
             TextInput:
                 id: zipcode
                 hint_text: "ENTER ZIPCODE"
-        Label:
-            text: "ROOM INFORMATION"
-            font_size: 20
-            size_hint_y: None
-            height: 30
-        GridLayout:
-            spacing: 5
-            cols: 2
             Label:
                 id: roomNumberLabel
                 text: "ROOM NUMBER:"
-            TextInput:
+            Spinner:
                 id: roomNumber
-                hint_text: "choose number window"
-                on_text: root.manager.get_screen("registerWindow").ids.firstName.text = self.text
+                text: "choose number window"
             Label:
                 id: statusLabel
                 text: "STATUS:"
-            TextInput:
+            Spinner:
                 id: status
-                hint_text: "dropdown TODO"
+                text: "CHOOSE STATUS"
+                values: ["CLEAR", "OCCUPIED", "RESERVED"]
+                on_text: root.spinnerClicked(status.text)
             Label:
                 id: bookStartDateLabel
                 text: "BOOK START DATE:"
             TextInput:
                 id: bookStartDate
-                hint_text: "calendar popup TODO"
+                hint_text: "CHOOSE START DATE"
+#                on_release: root.showDatePicker()
             Label:
                 id: bookEndDateLabel
                 text: "BOOK END DATE:"
@@ -186,16 +181,15 @@ WindowManager:
             Label:
                 id: paymentStatusLabel
                 text: "PAYMENT STATUS:"
-            TextInput:
+            Spinner:
                 id: state
-                hint_text: "dropdown TODO"
+                text: "CHOOSE STATUS"
         RoundedButton:
             text: "REGISTER"
             font_size: 30
             on_release:
                 root.registerPress()
-#                app.root.current = root.registerPress()
-#                root.manager.transition.direction = "left"
+
 
 
 #	BoxLayout:

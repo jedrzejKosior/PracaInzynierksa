@@ -8,7 +8,51 @@ import psycopg2
 # cur.execute("CREATE TABLE users(userName text,password text)")
 # cur.execute("INSERT INTO users VALUES('reception1', 'admin1234')")
 
-Window.minimum_width, Window.minimum_height = 500, 560
+Window.minimum_width, Window.minimum_height = 500, 580
+
+
+# validations of inputs
+def is_not_right_zipcode(textInput):
+    if len(textInput) == 0 or len(textInput) != 6:
+        return True
+    if textInput[2] != "-":
+        return True
+    for i in range(len(textInput)):
+        if i == 2:
+            i = i + 1
+        if textInput[i].isdigit():
+            continue
+        else:
+            return True
+    return False
+
+
+def is_not_right_name_city_state(textInput):
+    if len(textInput) == 0:
+        return True
+    if not textInput[0].isupper():
+        return True
+    for i in range(len(textInput)):
+        if textInput[i].isalpha():
+            continue
+        else:
+            return True
+    return False
+
+
+def is_not_right_date(textInput):
+    if len(textInput) == 0 or len(textInput) != 10:
+        return True
+    if textInput[2] != "/" or textInput[5] != "/":
+        return True
+    for i in range(len(textInput)):
+        if i == 2 or i == 5:
+            i = i + 1
+        if textInput[i].isdigit():
+            continue
+        else:
+            return True
+    return False
 
 
 # Define our different screens
@@ -61,7 +105,10 @@ class RegisterWindow(Screen):
 
     def registerPress(self):
         print(self.ids.firstName.text)
+        print(self.ids.status.text)
 
+    def spinnerClicked(self, value):
+        self.ids.status.text = value
 
 class WindowManager(ScreenManager):
     pass
