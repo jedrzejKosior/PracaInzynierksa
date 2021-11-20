@@ -109,6 +109,7 @@ WindowManager:
 <DateWindow>:
     name: "dateWindow"
     startDay: startDay
+    endDay: endDay
     canvas.before:
         Rectangle:
             pos: self.pos
@@ -127,26 +128,27 @@ WindowManager:
             cols: 3
             Spinner:
                 id: startDay
-                text: root.currentDay # TODO manage days that are in selected month
+                text: root.currentDay
                 background_color: utils.get_color_from_hex("#4E8098")
                 size_hint_y: None
                 height: 50
-                values: root.days
+                values: root.daysStart
             Spinner:
                 id: startMonth
                 text: root.months[root.currentMonth-1]
                 background_color: utils.get_color_from_hex("#4E8098")
                 size_hint_y: None
                 height: 50
-                on_text: root.daysInSelectedMonth()
-                values: ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"]
+                on_text: root.daysInSelectedMonthForStart()
+                values: root.months
             Spinner:
                 id: startYear
                 text: root.currentYear
                 background_color: utils.get_color_from_hex("#4E8098")
                 size_hint_y: None
                 height: 50
-                values: ["2021", "2022", "2023", "2024"]
+                on_text: root.daysInSelectedMonthForStart()
+                values: ["2021", "2022", "2023", "2024", "2025", "2026", "2027"]
         Label:
             font_size: 20
             text: "END DATE"
@@ -154,25 +156,27 @@ WindowManager:
             cols: 3
             Spinner:
                 id: endDay
-                text: root.currentDay # TODO manage days that are in selected month
+                text: root.currentDay
                 background_color: utils.get_color_from_hex("#4E8098")
                 size_hint_y: None
                 height: 50
-                values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"]
+                values: root.daysEnd
             Spinner:
                 id: endMonth
                 text: root.months[root.currentMonth-1]
                 background_color: utils.get_color_from_hex("#4E8098")
                 size_hint_y: None
                 height: 50
-                values: ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"]
+                on_text: root.daysInSelectedMonthForEnd()
+                values: root.months
             Spinner:
                 id: endYear
                 text: root.currentYear
                 background_color: utils.get_color_from_hex("#4E8098")
                 size_hint_y: None
                 height: 50
-                values: ["2021", "2022", "2023", "2024"]
+                on_text: root.daysInSelectedMonthForEnd()
+                values: ["2021", "2022", "2023", "2024", "2025", "2026", "2027"]
         RoundedButton:
             text: "SEARCH"
             font_size: 30

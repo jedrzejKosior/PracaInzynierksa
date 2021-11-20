@@ -89,21 +89,33 @@ class LoginWindow(Screen):
 
 class DateWindow(Screen):
     startDay = ObjectProperty(None)
+    endDay = ObjectProperty(None)
     months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER",
               "NOVEMBER", "DECEMBER"]
 
     currentYear = str(datetime.now().year)
     currentMonth = datetime.now().month
     currentDay = str(datetime.now().day)
-    days = []
+    daysStart = []
     for i in range(monthrange(int(currentYear), currentMonth)[1]):
-        days.append(str(i+1))
+        daysStart.append(str(i+1))
+    daysEnd = daysStart.copy()
 
-    def daysInSelectedMonth(self):
-        self.days = []
+    def daysInSelectedMonthForStart(self):
+        self.daysStart = []
         for i in range(monthrange(int(self.ids.startYear.text), self.months.index(self.ids.startMonth.text)+1)[1]):
-            self.days.append(str(i+1))
-        self.startDay.values = self.days
+            self.daysStart.append(str(i+1))
+        self.startDay.values = self.daysStart
+        if int(self.startDay.text) > int(self.daysStart[-1]):
+            self.startDay.text = str(self.daysStart[-1])
+
+    def daysInSelectedMonthForEnd(self):
+        self.daysEnd = []
+        for i in range(monthrange(int(self.ids.endYear.text), self.months.index(self.ids.endMonth.text)+1)[1]):
+            self.daysEnd.append(str(i+1))
+        self.endDay.values = self.daysEnd
+        if int(self.endDay.text) > int(self.daysEnd[-1]):
+            self.endDay.text = str(self.daysEnd[-1])
 
     def limit_spinner(self):
         maxItems = 3
