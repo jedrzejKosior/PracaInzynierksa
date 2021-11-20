@@ -41,21 +41,6 @@ def is_not_right_name_city_state(textInput):
     return False
 
 
-def is_not_right_date(textInput):
-    if len(textInput) == 0 or len(textInput) != 10:
-        return True
-    if textInput[2] != "/" or textInput[5] != "/":
-        return True
-    for i in range(len(textInput)):
-        if i == 2 or i == 5:
-            i = i + 1
-        if textInput[i].isdigit():
-            continue
-        else:
-            return True
-    return False
-
-
 # Define our different screens
 class LoginWindow(Screen):
     login = ObjectProperty(None)
@@ -68,6 +53,7 @@ class LoginWindow(Screen):
         # cursor
         cur = conn.cursor()
 
+        isCorrect = True
         login = self.login.text
         password = self.password.text
         cur.execute("SELECT * from users")
@@ -77,14 +63,12 @@ class LoginWindow(Screen):
             if login == user[0]:
                 foundLogin = True
                 if password == user[1]:
-                    self.window = "registerWindow"
+                    self.window = "dateWindow"
                 else:
-                    self.ids.passwordLabel.text = 'INCORRECT PASSWORD!'
-                    self.ids.passwordLabel.color = (163 / 255, 22 / 255, 33 / 255, 1)
+                    isCorrect = False
                 break
         if not foundLogin:
-            self.ids.loginLabel.text = 'INCORRECT LOGIN!'
-            self.ids.loginLabel.color = (163 / 255, 22 / 255, 33 / 255, 1)
+            isCorrect = False
 
         # print(f"Hello {login}, {password}")
         # commit your changes
@@ -98,7 +82,7 @@ class LoginWindow(Screen):
         # Clear input
         self.login.text = ""
         self.password.text = ""
-        return self.window
+        return isCorrect, self.window
 
 
 class RegisterWindow(Screen):
@@ -116,12 +100,22 @@ class RegisterWindow(Screen):
         self.spinner.dropdown_cls.max_height = maxItems * dp(48)
 
 
+class DateWindow(Screen):
+    def limit_spinner(self):
+        maxItems = 3
+        self.spinner.dropdown_cls.max_height = maxItems * dp(48)
+
+    def searchPress(self):
+        pass
+
+
+
 class WindowManager(ScreenManager):
     pass
 
 
 # Name of style file
-kv = Builder.load_file('login_page.kv')
+kv = Builder.load_file('design.kv')
 
 
 class DesktopHotelManagementSystem(App):
