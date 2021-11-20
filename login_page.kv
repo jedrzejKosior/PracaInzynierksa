@@ -1,4 +1,5 @@
-#:import utils kivy.utils
+#: import utils kivy.utils
+#: import WipeTransition kivy.uix.screenmanager.WipeTransition
 
 <TextInput>
     multiline: False
@@ -42,6 +43,7 @@
 #            radius: [10]
 
 WindowManager:
+    transition: WipeTransition()
 	LoginWindow:
 	RegisterWindow:
 
@@ -90,11 +92,12 @@ WindowManager:
             font_size: 30
             on_release:
                 app.root.current = root.loginPress()
-                root.manager.transition.direction = "left"
 
 
 <RegisterWindow>:
 	name: "registerWindow"
+	spinner: roomNumber
+	on_enter: root.limit_spinner()
     canvas.before:
         Rectangle:
             pos: self.pos
@@ -157,21 +160,24 @@ WindowManager:
             Spinner:
                 id: roomNumber
                 text: "choose number window"
+                background_color: utils.get_color_from_hex("#4E8098")
+                values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29"]
             Label:
                 id: statusLabel
                 text: "STATUS:"
             Spinner:
                 id: status
                 text: "CHOOSE STATUS"
+                background_color: utils.get_color_from_hex("#4E8098")
                 values: ["CLEAR", "OCCUPIED", "RESERVED"]
                 on_text: root.spinnerClicked(status.text)
             Label:
                 id: bookStartDateLabel
                 text: "BOOK START DATE:"
-            TextInput:
+            Button:
                 id: bookStartDate
-                hint_text: "CHOOSE START DATE"
-#                on_release: root.showDatePicker()
+                text: "CHOOSE START DATE"
+#                on_release: root.openCalendar()
             Label:
                 id: bookEndDateLabel
                 text: "BOOK END DATE:"
@@ -184,6 +190,7 @@ WindowManager:
             Spinner:
                 id: state
                 text: "CHOOSE STATUS"
+                ackground_color: utils.get_color_from_hex("#4E8098")
         RoundedButton:
             text: "REGISTER"
             font_size: 30
@@ -209,3 +216,5 @@ WindowManager:
 
 
 #you can use the root.manager.get_screen('screen_name').widget_id.parameter (like root.manager.get_screen('main_window').label.text) inside your .kv file
+
+

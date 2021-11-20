@@ -3,6 +3,7 @@ from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ObjectProperty
 from kivy.core.window import Window
+from kivy.metrics import dp
 import psycopg2
 
 # cur.execute("CREATE TABLE users(userName text,password text)")
@@ -110,6 +111,11 @@ class RegisterWindow(Screen):
     def spinnerClicked(self, value):
         self.ids.status.text = value
 
+    def limit_spinner(self):
+        maxItems = 3
+        self.spinner.dropdown_cls.max_height = maxItems * dp(48)
+
+
 class WindowManager(ScreenManager):
     pass
 
@@ -119,7 +125,6 @@ kv = Builder.load_file('login_page.kv')
 
 
 class DesktopHotelManagementSystem(App):
-
     def build(self):
         Window.clearcolor = (206 / 255, 211 / 255, 220 / 255, 1)
         return kv
@@ -127,3 +132,6 @@ class DesktopHotelManagementSystem(App):
 
 if __name__ == '__main__':
     DesktopHotelManagementSystem().run()
+
+# TODO change layout to accomplish step by step. On first register window, input room requirements such as START and END
+# TODO DATES, room people size. If available proceed to ROOM GUI, select and hit next, input CLIENT data and REGISTER
