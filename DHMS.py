@@ -4,6 +4,8 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ObjectProperty
 from kivy.core.window import Window
 from kivy.metrics import dp
+from datetime import datetime
+from calendar import monthrange
 import psycopg2
 
 # cur.execute("CREATE TABLE users(userName text,password text)")
@@ -85,6 +87,32 @@ class LoginWindow(Screen):
         return isCorrect, self.window
 
 
+class DateWindow(Screen):
+    startDay = ObjectProperty(None)
+    months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER",
+              "NOVEMBER", "DECEMBER"]
+
+    currentYear = str(datetime.now().year)
+    currentMonth = datetime.now().month
+    currentDay = str(datetime.now().day)
+    days = []
+    for i in range(monthrange(int(currentYear), currentMonth)[1]):
+        days.append(str(i+1))
+
+    def daysInSelectedMonth(self):
+        self.days = []
+        for i in range(monthrange(int(self.ids.startYear.text), self.months.index(self.ids.startMonth.text)+1)[1]):
+            self.days.append(str(i+1))
+        self.startDay.values = self.days
+
+    def limit_spinner(self):
+        maxItems = 3
+        self.spinner.dropdown_cls.max_height = maxItems * dp(48)
+
+    def searchPress(self):
+        pass
+
+
 class RegisterWindow(Screen):
     firstName = ObjectProperty(None)
 
@@ -98,16 +126,6 @@ class RegisterWindow(Screen):
     def limit_spinner(self):
         maxItems = 3
         self.spinner.dropdown_cls.max_height = maxItems * dp(48)
-
-
-class DateWindow(Screen):
-    def limit_spinner(self):
-        maxItems = 3
-        self.spinner.dropdown_cls.max_height = maxItems * dp(48)
-
-    def searchPress(self):
-        pass
-
 
 
 class WindowManager(ScreenManager):

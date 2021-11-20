@@ -108,18 +108,17 @@ WindowManager:
 
 <DateWindow>:
     name: "dateWindow"
+    startDay: startDay
     canvas.before:
         Rectangle:
             pos: self.pos
             size: self.size
             source: "gradientBackground.png"
     spinner: startDay
-    spinner: startMonth
-    spinner: startYear
     on_enter: root.limit_spinner()
     BoxLayout:
         orientation: "vertical"
-        padding: 50
+        padding: 140
         spacing: 10
         Label:
             font_size: 20
@@ -128,21 +127,22 @@ WindowManager:
             cols: 3
             Spinner:
                 id: startDay
-                text: "DAY" # TODO set date to today and manage days that are in selected month
+                text: root.currentDay # TODO manage days that are in selected month
                 background_color: utils.get_color_from_hex("#4E8098")
                 size_hint_y: None
                 height: 50
-                values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"]
+                values: root.days
             Spinner:
                 id: startMonth
-                text: "MONTH"
+                text: root.months[root.currentMonth-1]
                 background_color: utils.get_color_from_hex("#4E8098")
                 size_hint_y: None
                 height: 50
+                on_text: root.daysInSelectedMonth()
                 values: ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"]
             Spinner:
                 id: startYear
-                text: "YEAR"
+                text: root.currentYear
                 background_color: utils.get_color_from_hex("#4E8098")
                 size_hint_y: None
                 height: 50
@@ -154,21 +154,21 @@ WindowManager:
             cols: 3
             Spinner:
                 id: endDay
-                text: "DAY" # TODO set date to today and manage days that are in selected month
+                text: root.currentDay # TODO manage days that are in selected month
                 background_color: utils.get_color_from_hex("#4E8098")
                 size_hint_y: None
                 height: 50
                 values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"]
             Spinner:
                 id: endMonth
-                text: "MONTH"
+                text: root.months[root.currentMonth-1]
                 background_color: utils.get_color_from_hex("#4E8098")
                 size_hint_y: None
                 height: 50
                 values: ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"]
             Spinner:
                 id: endYear
-                text: "YEAR"
+                text: root.currentYear
                 background_color: utils.get_color_from_hex("#4E8098")
                 size_hint_y: None
                 height: 50
