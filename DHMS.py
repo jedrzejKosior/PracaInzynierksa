@@ -192,6 +192,10 @@ class DateWindow(Screen):
         pass
 
 
+class RoomWindow(Screen):
+    pass
+
+
 class RegisterWindow(Screen):
     firstName = ObjectProperty(None)
 
@@ -223,6 +227,3 @@ class DesktopHotelManagementSystem(App):
 
 if __name__ == '__main__':
     DesktopHotelManagementSystem().run()
-
-# TODO change layout to accomplish step by step. On first register window, input room requirements such as START and END
-# TODO DATES, room people size. If available proceed to ROOM GUI, select and hit next, input CLIENT data and REGISTER

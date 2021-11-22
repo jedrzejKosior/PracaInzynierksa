@@ -12,12 +12,12 @@
 <Label>
     background_normal: ""
     background_color: (206/255, 211/255, 220/255, 1)
-    color: (0, 0, 0, 1)
+    color: (1, 1, 1, 1)
     font_name: "OpenSans-Semibold"
     font_size: 15
 <Button>
     background_normal: ""
-    background_color: utils.get_color_from_hex("#90C2E7")
+    background_color: utils.get_color_from_hex("#4E8098")
     font_name: "OpenSans-Semibold"
     canvas.before:
         Color:
@@ -26,7 +26,8 @@
             width: 2
             rectangle: self.x, self.y, self.width, self.height
 <Spinner>
-    color: (1, 1, 1, 1)
+    color: (0, 0, 0, 1)
+    background_color: utils.get_color_from_hex("#90C2E7")
 <Popup>
     auto_dismiss: True
     background: "popupBackground.png"
@@ -50,6 +51,7 @@
         spacing: 10
         Label:
             text: "INCORRECT LOGIN OR PASSWORD"
+            color: (0, 0, 0, 1)
         Button:
             text: "OK"
             on_release: root.dismiss()
@@ -59,6 +61,7 @@
         spacing: 10
         Label:
             text: "INVALID DATE PERIOD"
+            color: (0, 0, 0, 1)
         Button:
             text: "OK"
             on_release: root.dismiss()
@@ -68,7 +71,7 @@ WindowManager:
 	LoginWindow:
 	RegisterWindow:
 	DateWindow:
-#	RoomWindow:
+	RoomWindow:
 
 
 <LoginWindow>:
@@ -88,6 +91,7 @@ WindowManager:
         Label:
             id: loginLabel
             text: "USERNAME:"
+            color: (0, 0, 0, 1)
             font_size: 30
             size_hint_y: None
             height: 50
@@ -100,6 +104,7 @@ WindowManager:
         Label:
             id: passwordLabel
             text: "PASSWORD:"
+            color: (0, 0, 0, 1)
             font_size: 30
             size_hint_y: None
             height: 50
@@ -137,20 +142,21 @@ WindowManager:
         spacing: 10
         Label:
             font_size: 20
+            color: (0, 0, 0, 1)
             text: "START DATE"
         GridLayout:
             cols: 3
             Spinner:
                 id: startDay
                 text: root.currentDay
-                background_color: utils.get_color_from_hex("#4E8098")
+                background_color: utils.get_color_from_hex("#90C2E7")
                 size_hint_y: None
                 height: 50
                 values: root.daysStart
             Spinner:
                 id: startMonth
                 text: root.months[root.currentMonth-1]
-                background_color: utils.get_color_from_hex("#4E8098")
+                background_color: utils.get_color_from_hex("#90C2E7")
                 size_hint_y: None
                 height: 50
                 on_text: root.daysInSelectedMonthForStart()
@@ -158,27 +164,28 @@ WindowManager:
             Spinner:
                 id: startYear
                 text: root.currentYear
-                background_color: utils.get_color_from_hex("#4E8098")
+                background_color: utils.get_color_from_hex("#90C2E7")
                 size_hint_y: None
                 height: 50
                 on_text: root.daysInSelectedMonthForStart()
                 values: ["2021", "2022", "2023", "2024", "2025", "2026", "2027"]
         Label:
             font_size: 20
+            color: (0, 0, 0, 1)
             text: "END DATE"
         GridLayout:
             cols: 3
             Spinner:
                 id: endDay
                 text: root.currentDay
-                background_color: utils.get_color_from_hex("#4E8098")
+                background_color: utils.get_color_from_hex("#90C2E7")
                 size_hint_y: None
                 height: 50
                 values: root.daysEnd
             Spinner:
                 id: endMonth
                 text: root.months[root.currentMonth-1]
-                background_color: utils.get_color_from_hex("#4E8098")
+                background_color: utils.get_color_from_hex("#90C2E7")
                 size_hint_y: None
                 height: 50
                 on_text: root.daysInSelectedMonthForEnd()
@@ -186,19 +193,141 @@ WindowManager:
             Spinner:
                 id: endYear
                 text: root.currentYear
-                background_color: utils.get_color_from_hex("#4E8098")
+                background_color: utils.get_color_from_hex("#90C2E7")
                 size_hint_y: None
                 height: 50
                 on_text: root.daysInSelectedMonthForEnd()
                 values: ["2021", "2022", "2023", "2024", "2025", "2026", "2027"]
-        RoundedButton:
-            text: "SEARCH"
-            font_size: 30
-            on_release: if root.wrongTimePeriod() == False: Factory.DatePeriod().open()
+        BoxLayout:
+            orientation: "horizontal"
+            RoundedButton:
+                text: "BACK"
+                background_color: utils.get_color_from_hex("#CED3DC")
+                color: (0, 0, 0, 1)
+                font_size: 30
+                on_release: app.root.current = "loginWindow"
+            RoundedButton:
+                text: "SEARCH"
+                font_size: 30
+                on_release: app.root.current = "roomWindow" if root.wrongTimePeriod() else Factory.DatePeriod().open()
 
-#<RoomWindow>:
-#    name: "roomWindow"
-#
+
+<RoomWindow>:
+    name: "roomWindow"
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: "gradientBackground.png"
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 30
+#        spacing: 10
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 10
+            Spinner:
+                text: "1"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "2"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "3"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "4"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "5"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "6"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "7"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "8"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "9"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "10"
+                values: ["Clear", "Reserved", "Occupied"]
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 10
+            Spinner:
+                text: "1"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "2"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "3"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "4"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "5"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "6"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "7"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "8"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "9"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "10"
+                values: ["Clear", "Reserved", "Occupied"]
+        Label:
+            text: "GROUND FLOOR"
+            color: (0, 0, 0, 1)
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 10
+            Spinner:
+                text: "11"
+                values: ["CLEAR", "RESERVED", "OCCUPIED"]
+            Spinner:
+                text: "12"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "13"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "14"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "15"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "16"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "17"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "18"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "19"
+                values: ["Clear", "Reserved", "Occupied"]
+            Spinner:
+                text: "20"
+                values: ["Clear", "Reserved", "Occupied"]
+
+
+
 
 
 <RegisterWindow>:
