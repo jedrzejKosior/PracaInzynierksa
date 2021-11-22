@@ -53,12 +53,22 @@
         Button:
             text: "OK"
             on_release: root.dismiss()
+<DatePeriod@Popup>
+    BoxLayout:
+        orientation: "vertical"
+        spacing: 10
+        Label:
+            text: "INVALID DATE PERIOD"
+        Button:
+            text: "OK"
+            on_release: root.dismiss()
 
 WindowManager:
     transition: WipeTransition()
 	LoginWindow:
 	RegisterWindow:
 	DateWindow:
+#	RoomWindow:
 
 
 <LoginWindow>:
@@ -110,6 +120,10 @@ WindowManager:
     name: "dateWindow"
     startDay: startDay
     endDay: endDay
+    startMonth: startMonth
+    endMonth: endMonth
+    startYear: startYear
+    endYear: endYear
     canvas.before:
         Rectangle:
             pos: self.pos
@@ -119,7 +133,7 @@ WindowManager:
     on_enter: root.limit_spinner()
     BoxLayout:
         orientation: "vertical"
-        padding: 140
+        padding: 150
         spacing: 10
         Label:
             font_size: 20
@@ -180,12 +194,11 @@ WindowManager:
         RoundedButton:
             text: "SEARCH"
             font_size: 30
-            on_release:
-                root.registerPress()
+            on_release: if root.wrongTimePeriod() == False: Factory.DatePeriod().open()
 
-
-
-
+#<RoomWindow>:
+#    name: "roomWindow"
+#
 
 
 <RegisterWindow>:
