@@ -8,7 +8,7 @@
     font_name: "OpenSans-Semibold"
     halign: 'center'
     valign: 'middle'
-    font_size: 12
+    font_size: 15
 <Label>
     background_normal: ""
     background_color: (206/255, 211/255, 220/255, 1)
@@ -66,11 +66,20 @@
         Button:
             text: "OK"
             on_release: root.dismiss()
-
+<RoomNumberPopup@Popup>
+    BoxLayout:
+        orientation: "vertical"
+        spacing: 10
+        Label:
+            text: "NO SELECTED ROOM"
+            color: (0, 0, 0, 1)
+        Button:
+            text: "OK"
+            on_release: root.dismiss()
 WindowManager:
     transition: WipeTransition()
 	LoginWindow:
-	RegisterWindow:
+	BookWindow:
 	DateWindow:
 	RoomWindow:
 
@@ -383,17 +392,14 @@ WindowManager:
                 background_color: utils.get_color_from_hex("#4E8098")
             RoundedButton:
                 text: "CHOOSE"
-#                on_release: app.root.current = "roomWindow" if root.wrongTimePeriod() else Factory.DatePeriod().open()
+                on_release: app.root.current = "bookWindow" if len(app.selectedRoomNumbers) else Factory.RoomNumberPopup().open()
 
-
-
-
-
-
-<RegisterWindow>:
-	name: "registerWindow"
-	spinner: roomNumber
-	on_enter: root.limit_spinner()
+<BookWindow>: # TODO checkbox invoice
+	name: "bookWindow"
+	firstName: firstName
+	secondName: secondName
+	email: email
+	telephone: telephone
     canvas.before:
         Rectangle:
             pos: self.pos
@@ -405,130 +411,55 @@ WindowManager:
         padding: 30
         spacing: 10
         Label:
-            text: "REGISTER"
+            text: "CLIENT INFORMATION"
             font_size: 20
-            size_hint_y: None
-            height: 40
             color: (0, 0, 0, 1)
         GridLayout:
-            spacing: 5
             cols: 2
+            spacing: 10
             Label:
                 id: firstNameLabel
                 text: "FIRST NAME:"
+                color: (0, 0, 0, 1)
             TextInput:
                 id: firstName
                 hint_text: "ENTER FIRST NAME"
-                on_text: root.manager.get_screen("registerWindow").ids.firstName.text = self.text
             Label:
                 id: secondNameLabel
                 text: "SECOND NAME:"
+                color: (0, 0, 0, 1)
             TextInput:
                 id: secondName
                 hint_text: "ENTER SECOND NAME"
             Label:
-                id: addressLabel
-                text: "ADDRESS:"
+                id: emailLabel
+                text: "E-MAIL ADDRESS:"
+                color: (0, 0, 0, 1)
             TextInput:
-                id: address
-                hint_text: "ENTER ADDRESS"
+                id: email
+                hint_text: "ENTER E-MAIL ADDRESS"
             Label:
-                id: cityLabel
-                text: "CITY:"
+                id: telephoneLabel
+                text: "TELEPHONE NUMBER:"
+                color: (0, 0, 0, 1)
             TextInput:
-                id: city
-                hint_text: "ENTER CITY"
-            Label:
-                id: stateLabel
-                text: "STATE:"
-            TextInput:
-                id: state
-                hint_text: "ENTER STATE"
-            Label:
-                id: zipcodeLabel
-                text: "ZIPCODE:"
-            TextInput:
-                id: zipcode
-                hint_text: "ENTER ZIPCODE"
-            Label:
-                id: roomNumberLabel
-                text: "ROOM NUMBER:"
-            Spinner:
-                id: roomNumber
-                text: "choose number window"
-                background_color: utils.get_color_from_hex("#4E8098")
-                values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29"]
-            Label:
-                id: statusLabel
-                text: "STATUS:"
-            Spinner:
-                id: status
-                text: "CHOOSE STATUS"
-                background_color: utils.get_color_from_hex("#4E8098")
-                values: ["CLEAR", "OCCUPIED", "RESERVED"]
-                on_text: root.spinnerClicked(status.text)
-            Label:
-                id: bookStartDateLabel
-                text: "BOOK START DATE:"
-            Button:
-                id: bookStartDate
-                text: "CHOOSE START DATE"
-            Label:
-                id: bookEndDateLabel
-                text: "BOOK END DATE:"
-            TextInput:
-                id: bookEndDate
-                hint_text: "calendar popup TODO"
-            Label:
-                id: paymentStatusLabel
-                text: "PAYMENT STATUS:"
-            Spinner:
-                id: state
-                text: "CHOOSE STATUS"
-                background_color: utils.get_color_from_hex("#4E8098")
-        RoundedButton:
-            text: "REGISTER"
-            font_size: 30
-            on_release:
-                root.registerPress()
+                id: telephone
+                hint_text: "ENTER TELEPHONE NUMBER"
+        BoxLayout:
+            orientation: "horizontal"
+            RoundedButton:
+                text: "BACK"
+                background_color: utils.get_color_from_hex("#CED3DC")
+                color: (0, 0, 0, 1)
+                on_release: app.root.current = "roomWindow"
+            RoundedButton:
+                text: "BOOK"
+                on_release:
+                    root.registerPress()
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#	BoxLayout:
-#		orientation: "vertical"
-#		size: root.width, root.height
-#
-#		Label:
-#			text: "Second Screen"
-#			font_size: 32
-#
-#		Button:
-#			text: "Go Back"
-#			font_size: 32
-#			on_release:
-#				app.root.current = "loginWindow"
-#				root.manager.transition.direction = "right"
 
 
 #you can use the root.manager.get_screen('screen_name').widget_id.parameter (like root.manager.get_screen('main_window').label.text) inside your .kv file
-
-

@@ -64,34 +64,6 @@ Window.minimum_width, Window.minimum_height = 800, 580
 #     return False
 
 
-def is_not_right_zipcode(textInput):
-    if len(textInput) == 0 or len(textInput) != 6:
-        return True
-    if textInput[2] != "-":
-        return True
-    for i in range(len(textInput)):
-        if i == 2:
-            i = i + 1
-        if textInput[i].isdigit():
-            continue
-        else:
-            return True
-    return False
-
-
-def is_not_right_name_city_state(textInput):
-    if len(textInput) == 0:
-        return True
-    if not textInput[0].isupper():
-        return True
-    for i in range(len(textInput)):
-        if textInput[i].isalpha():
-            continue
-        else:
-            return True
-    return False
-
-
 # Define our different screens
 class LoginWindow(Screen):
     login = ObjectProperty(None)
@@ -114,7 +86,7 @@ class LoginWindow(Screen):
             if login == user[0]:
                 foundLogin = True
                 if password == user[1]:
-                    self.window = "dateWindow"
+                    self.window = "bookWindow"
                 else:
                     isCorrect = False
                 break
@@ -200,922 +172,187 @@ class DateWindow(Screen):
 
 class RoomWindow(Screen):
     isSelected = False
-    selectedRoomNumber = 0
 
     def selectedRoom1(self):
         if self.ids.room1.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(1)
             self.ids.room1.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
         elif 0.55 < self.ids.room1.background_color[0] < 0.57:
-            if self.ids.room2.background_color[0] == 0: self.ids.room2.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room3.background_color[0] == 0: self.ids.room3.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room4.background_color[0] == 0: self.ids.room4.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room5.background_color[0] == 0: self.ids.room5.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room6.background_color[0] == 0: self.ids.room6.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room7.background_color[0] == 0: self.ids.room7.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room8.background_color[0] == 0: self.ids.room8.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room9.background_color[0] == 0: self.ids.room9.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room10.background_color[0] == 0: self.ids.room10.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room11.background_color[0] == 0: self.ids.room11.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room12.background_color[0] == 0: self.ids.room12.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room13.background_color[0] == 0: self.ids.room13.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room14.background_color[0] == 0: self.ids.room14.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room15.background_color[0] == 0: self.ids.room15.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room16.background_color[0] == 0: self.ids.room16.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room17.background_color[0] == 0: self.ids.room17.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room18.background_color[0] == 0: self.ids.room18.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room19.background_color[0] == 0: self.ids.room19.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room20.background_color[0] == 0: self.ids.room20.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
             self.ids.room1.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
-            self.selectedRoomNumber = 1
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(1)
 
     def selectedRoom2(self):
         if self.ids.room2.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(2)
             self.ids.room2.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
         elif 0.55 < self.ids.room2.background_color[0] < 0.57:
-            if self.ids.room1.background_color[0] == 0: self.ids.room1.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room3.background_color[0] == 0: self.ids.room3.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room4.background_color[0] == 0: self.ids.room4.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room5.background_color[0] == 0: self.ids.room5.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room6.background_color[0] == 0: self.ids.room6.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room7.background_color[0] == 0: self.ids.room7.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room8.background_color[0] == 0: self.ids.room8.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room9.background_color[0] == 0: self.ids.room9.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room10.background_color[0] == 0: self.ids.room10.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room11.background_color[0] == 0: self.ids.room11.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room12.background_color[0] == 0: self.ids.room12.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room13.background_color[0] == 0: self.ids.room13.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room14.background_color[0] == 0: self.ids.room14.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room15.background_color[0] == 0: self.ids.room15.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room16.background_color[0] == 0: self.ids.room16.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room17.background_color[0] == 0: self.ids.room17.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room18.background_color[0] == 0: self.ids.room18.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room19.background_color[0] == 0: self.ids.room19.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room20.background_color[0] == 0: self.ids.room20.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
             self.ids.room2.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
-            self.selectedRoomNumber = 2
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(2)
 
     def selectedRoom3(self):
         if self.ids.room3.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(3)
             self.ids.room3.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
         elif 0.55 < self.ids.room3.background_color[0] < 0.57:
-            if self.ids.room1.background_color[0] == 0: self.ids.room1.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room2.background_color[0] == 0: self.ids.room2.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room4.background_color[0] == 0: self.ids.room4.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room5.background_color[0] == 0: self.ids.room5.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room6.background_color[0] == 0: self.ids.room6.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room7.background_color[0] == 0: self.ids.room7.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room8.background_color[0] == 0: self.ids.room8.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room9.background_color[0] == 0: self.ids.room9.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room10.background_color[0] == 0: self.ids.room10.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room11.background_color[0] == 0: self.ids.room11.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room12.background_color[0] == 0: self.ids.room12.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room13.background_color[0] == 0: self.ids.room13.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room14.background_color[0] == 0: self.ids.room14.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room15.background_color[0] == 0: self.ids.room15.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room16.background_color[0] == 0: self.ids.room16.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room17.background_color[0] == 0: self.ids.room17.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room18.background_color[0] == 0: self.ids.room18.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room19.background_color[0] == 0: self.ids.room19.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room20.background_color[0] == 0: self.ids.room20.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
             self.ids.room3.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
-            self.selectedRoomNumber = 3
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(3)
 
     def selectedRoom4(self):
         if self.ids.room4.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(4)
             self.ids.room4.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
         elif 0.55 < self.ids.room4.background_color[0] < 0.57:
-            if self.ids.room1.background_color[0] == 0: self.ids.room1.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room2.background_color[0] == 0: self.ids.room2.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room3.background_color[0] == 0: self.ids.room3.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room5.background_color[0] == 0: self.ids.room5.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room6.background_color[0] == 0: self.ids.room6.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room7.background_color[0] == 0: self.ids.room7.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room8.background_color[0] == 0: self.ids.room8.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room9.background_color[0] == 0: self.ids.room9.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room10.background_color[0] == 0: self.ids.room10.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room11.background_color[0] == 0: self.ids.room11.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room12.background_color[0] == 0: self.ids.room12.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room13.background_color[0] == 0: self.ids.room13.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room14.background_color[0] == 0: self.ids.room14.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room15.background_color[0] == 0: self.ids.room15.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room16.background_color[0] == 0: self.ids.room16.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room17.background_color[0] == 0: self.ids.room17.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room18.background_color[0] == 0: self.ids.room18.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room19.background_color[0] == 0: self.ids.room19.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room20.background_color[0] == 0: self.ids.room20.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
             self.ids.room4.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
-            self.selectedRoomNumber = 4
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(4)
 
     def selectedRoom5(self):
         if self.ids.room5.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(5)
             self.ids.room5.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
         elif 0.55 < self.ids.room5.background_color[0] < 0.57:
-            if self.ids.room1.background_color[0] == 0: self.ids.room1.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room2.background_color[0] == 0: self.ids.room2.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room3.background_color[0] == 0: self.ids.room3.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room4.background_color[0] == 0: self.ids.room4.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room6.background_color[0] == 0: self.ids.room6.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room7.background_color[0] == 0: self.ids.room7.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room8.background_color[0] == 0: self.ids.room8.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room9.background_color[0] == 0: self.ids.room9.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room10.background_color[0] == 0: self.ids.room10.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room11.background_color[0] == 0: self.ids.room11.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room12.background_color[0] == 0: self.ids.room12.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room13.background_color[0] == 0: self.ids.room13.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room14.background_color[0] == 0: self.ids.room14.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room15.background_color[0] == 0: self.ids.room15.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room16.background_color[0] == 0: self.ids.room16.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room17.background_color[0] == 0: self.ids.room17.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room18.background_color[0] == 0: self.ids.room18.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room19.background_color[0] == 0: self.ids.room19.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room20.background_color[0] == 0: self.ids.room20.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
             self.ids.room5.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
-            self.selectedRoomNumber = 5
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(5)
 
     def selectedRoom6(self):
         if self.ids.room6.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(6)
             self.ids.room6.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
         elif 0.55 < self.ids.room6.background_color[0] < 0.57:
-            if self.ids.room1.background_color[0] == 0: self.ids.room1.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room2.background_color[0] == 0: self.ids.room2.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room3.background_color[0] == 0: self.ids.room3.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room4.background_color[0] == 0: self.ids.room4.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room5.background_color[0] == 0: self.ids.room5.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room7.background_color[0] == 0: self.ids.room7.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room8.background_color[0] == 0: self.ids.room8.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room9.background_color[0] == 0: self.ids.room9.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room10.background_color[0] == 0: self.ids.room10.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room11.background_color[0] == 0: self.ids.room11.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room12.background_color[0] == 0: self.ids.room12.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room13.background_color[0] == 0: self.ids.room13.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room14.background_color[0] == 0: self.ids.room14.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room15.background_color[0] == 0: self.ids.room15.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room16.background_color[0] == 0: self.ids.room16.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room17.background_color[0] == 0: self.ids.room17.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room18.background_color[0] == 0: self.ids.room18.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room19.background_color[0] == 0: self.ids.room19.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room20.background_color[0] == 0: self.ids.room20.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
             self.ids.room6.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
-            self.selectedRoomNumber = 6
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(6)
 
     def selectedRoom7(self):
         if self.ids.room7.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(7)
             self.ids.room7.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
         elif 0.55 < self.ids.room7.background_color[0] < 0.57:
-            if self.ids.room1.background_color[0] == 0: self.ids.room1.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room2.background_color[0] == 0: self.ids.room2.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room3.background_color[0] == 0: self.ids.room3.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room4.background_color[0] == 0: self.ids.room4.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room5.background_color[0] == 0: self.ids.room5.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room6.background_color[0] == 0: self.ids.room6.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room8.background_color[0] == 0: self.ids.room8.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room9.background_color[0] == 0: self.ids.room9.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room10.background_color[0] == 0: self.ids.room10.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room11.background_color[0] == 0: self.ids.room11.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room12.background_color[0] == 0: self.ids.room12.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room13.background_color[0] == 0: self.ids.room13.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room14.background_color[0] == 0: self.ids.room14.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room15.background_color[0] == 0: self.ids.room15.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room16.background_color[0] == 0: self.ids.room16.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room17.background_color[0] == 0: self.ids.room17.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room18.background_color[0] == 0: self.ids.room18.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room19.background_color[0] == 0: self.ids.room19.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room20.background_color[0] == 0: self.ids.room20.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
             self.ids.room7.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
-            self.selectedRoomNumber = 7
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(7)
 
     def selectedRoom8(self):
         if self.ids.room8.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(8)
             self.ids.room8.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
         elif 0.55 < self.ids.room8.background_color[0] < 0.57:
-            if self.ids.room1.background_color[0] == 0: self.ids.room1.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room2.background_color[0] == 0: self.ids.room2.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room3.background_color[0] == 0: self.ids.room3.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room4.background_color[0] == 0: self.ids.room4.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room5.background_color[0] == 0: self.ids.room5.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room6.background_color[0] == 0: self.ids.room6.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room7.background_color[0] == 0: self.ids.room7.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room9.background_color[0] == 0: self.ids.room9.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room10.background_color[0] == 0: self.ids.room10.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room11.background_color[0] == 0: self.ids.room11.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room12.background_color[0] == 0: self.ids.room12.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room13.background_color[0] == 0: self.ids.room13.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room14.background_color[0] == 0: self.ids.room14.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room15.background_color[0] == 0: self.ids.room15.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room16.background_color[0] == 0: self.ids.room16.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room17.background_color[0] == 0: self.ids.room17.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room18.background_color[0] == 0: self.ids.room18.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room19.background_color[0] == 0: self.ids.room19.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room20.background_color[0] == 0: self.ids.room20.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
             self.ids.room8.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
-            self.selectedRoomNumber = 8
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(8)
 
     def selectedRoom9(self):
         if self.ids.room9.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(9)
             self.ids.room9.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
         elif 0.55 < self.ids.room9.background_color[0] < 0.57:
-            if self.ids.room1.background_color[0] == 0: self.ids.room1.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room2.background_color[0] == 0: self.ids.room2.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room3.background_color[0] == 0: self.ids.room3.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room4.background_color[0] == 0: self.ids.room4.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room5.background_color[0] == 0: self.ids.room5.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room6.background_color[0] == 0: self.ids.room6.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room7.background_color[0] == 0: self.ids.room7.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room8.background_color[0] == 0: self.ids.room8.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room10.background_color[0] == 0: self.ids.room10.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room11.background_color[0] == 0: self.ids.room11.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room12.background_color[0] == 0: self.ids.room12.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room13.background_color[0] == 0: self.ids.room13.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room14.background_color[0] == 0: self.ids.room14.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room15.background_color[0] == 0: self.ids.room15.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room16.background_color[0] == 0: self.ids.room16.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room17.background_color[0] == 0: self.ids.room17.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room18.background_color[0] == 0: self.ids.room18.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room19.background_color[0] == 0: self.ids.room19.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room20.background_color[0] == 0: self.ids.room20.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
             self.ids.room9.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
-            self.selectedRoomNumber = 9
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(9)
 
     def selectedRoom10(self):
         if self.ids.room10.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(10)
             self.ids.room10.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
         elif 0.55 < self.ids.room10.background_color[0] < 0.57:
-            if self.ids.room1.background_color[0] == 0: self.ids.room1.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room2.background_color[0] == 0: self.ids.room2.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room3.background_color[0] == 0: self.ids.room3.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room4.background_color[0] == 0: self.ids.room4.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room5.background_color[0] == 0: self.ids.room5.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room6.background_color[0] == 0: self.ids.room6.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room7.background_color[0] == 0: self.ids.room7.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room8.background_color[0] == 0: self.ids.room8.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room9.background_color[0] == 0: self.ids.room9.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room11.background_color[0] == 0: self.ids.room11.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room12.background_color[0] == 0: self.ids.room12.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room13.background_color[0] == 0: self.ids.room13.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room14.background_color[0] == 0: self.ids.room14.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room15.background_color[0] == 0: self.ids.room15.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room16.background_color[0] == 0: self.ids.room16.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room17.background_color[0] == 0: self.ids.room17.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room18.background_color[0] == 0: self.ids.room18.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room19.background_color[0] == 0: self.ids.room19.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room20.background_color[0] == 0: self.ids.room20.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
             self.ids.room10.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
-            self.selectedRoomNumber = 10
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(10)
 
     def selectedRoom11(self):
         if self.ids.room11.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(11)
             self.ids.room11.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
         elif 0.55 < self.ids.room11.background_color[0] < 0.57:
-            if self.ids.room1.background_color[0] == 0: self.ids.room1.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room2.background_color[0] == 0: self.ids.room2.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room3.background_color[0] == 0: self.ids.room3.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room4.background_color[0] == 0: self.ids.room4.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room5.background_color[0] == 0: self.ids.room5.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room6.background_color[0] == 0: self.ids.room6.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room7.background_color[0] == 0: self.ids.room7.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room8.background_color[0] == 0: self.ids.room8.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room9.background_color[0] == 0: self.ids.room9.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room10.background_color[0] == 0: self.ids.room10.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room12.background_color[0] == 0: self.ids.room12.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room13.background_color[0] == 0: self.ids.room13.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room14.background_color[0] == 0: self.ids.room14.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room15.background_color[0] == 0: self.ids.room15.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room16.background_color[0] == 0: self.ids.room16.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room17.background_color[0] == 0: self.ids.room17.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room18.background_color[0] == 0: self.ids.room18.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room19.background_color[0] == 0: self.ids.room19.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room20.background_color[0] == 0: self.ids.room20.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
             self.ids.room11.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
-            self.selectedRoomNumber = 11
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(11)
 
     def selectedRoom12(self):
         if self.ids.room12.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(12)
             self.ids.room12.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
         elif 0.55 < self.ids.room12.background_color[0] < 0.57:
-            if self.ids.room1.background_color[0] == 0: self.ids.room1.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room2.background_color[0] == 0: self.ids.room2.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room3.background_color[0] == 0: self.ids.room3.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room4.background_color[0] == 0: self.ids.room4.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room5.background_color[0] == 0: self.ids.room5.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room6.background_color[0] == 0: self.ids.room6.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room7.background_color[0] == 0: self.ids.room7.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room8.background_color[0] == 0: self.ids.room8.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room9.background_color[0] == 0: self.ids.room9.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room10.background_color[0] == 0: self.ids.room10.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room11.background_color[0] == 0: self.ids.room11.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room13.background_color[0] == 0: self.ids.room13.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room14.background_color[0] == 0: self.ids.room14.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room15.background_color[0] == 0: self.ids.room15.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room16.background_color[0] == 0: self.ids.room16.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room17.background_color[0] == 0: self.ids.room17.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room18.background_color[0] == 0: self.ids.room18.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room19.background_color[0] == 0: self.ids.room19.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room20.background_color[0] == 0: self.ids.room20.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
             self.ids.room12.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
-            self.selectedRoomNumber = 12
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(12)
 
     def selectedRoom13(self):
         if self.ids.room13.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(13)
             self.ids.room13.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
         elif 0.55 < self.ids.room13.background_color[0] < 0.57:
-            if self.ids.room1.background_color[0] == 0: self.ids.room1.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room2.background_color[0] == 0: self.ids.room2.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room3.background_color[0] == 0: self.ids.room3.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room4.background_color[0] == 0: self.ids.room4.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room5.background_color[0] == 0: self.ids.room5.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room6.background_color[0] == 0: self.ids.room6.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room7.background_color[0] == 0: self.ids.room7.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room8.background_color[0] == 0: self.ids.room8.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room9.background_color[0] == 0: self.ids.room9.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room10.background_color[0] == 0: self.ids.room10.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room11.background_color[0] == 0: self.ids.room11.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room12.background_color[0] == 0: self.ids.room12.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room14.background_color[0] == 0: self.ids.room14.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room15.background_color[0] == 0: self.ids.room15.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room16.background_color[0] == 0: self.ids.room16.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room17.background_color[0] == 0: self.ids.room17.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room18.background_color[0] == 0: self.ids.room18.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room19.background_color[0] == 0: self.ids.room19.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room20.background_color[0] == 0: self.ids.room20.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
             self.ids.room13.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
-            self.selectedRoomNumber = 13
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(13)
 
     def selectedRoom14(self):
         if self.ids.room14.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(14)
             self.ids.room14.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
         elif 0.55 < self.ids.room14.background_color[0] < 0.57:
-            if self.ids.room1.background_color[0] == 0: self.ids.room1.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room2.background_color[0] == 0: self.ids.room2.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room3.background_color[0] == 0: self.ids.room3.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room4.background_color[0] == 0: self.ids.room4.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room5.background_color[0] == 0: self.ids.room5.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room6.background_color[0] == 0: self.ids.room6.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room7.background_color[0] == 0: self.ids.room7.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room8.background_color[0] == 0: self.ids.room8.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room9.background_color[0] == 0: self.ids.room9.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room10.background_color[0] == 0: self.ids.room10.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room11.background_color[0] == 0: self.ids.room11.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room12.background_color[0] == 0: self.ids.room12.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room13.background_color[0] == 0: self.ids.room13.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room15.background_color[0] == 0: self.ids.room15.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room16.background_color[0] == 0: self.ids.room16.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room17.background_color[0] == 0: self.ids.room17.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room18.background_color[0] == 0: self.ids.room18.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room19.background_color[0] == 0: self.ids.room19.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room20.background_color[0] == 0: self.ids.room20.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
             self.ids.room14.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
-            self.selectedRoomNumber = 14
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(14)
 
     def selectedRoom15(self):
         if self.ids.room15.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(15)
             self.ids.room15.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
         elif 0.55 < self.ids.room15.background_color[0] < 0.57:
-            if self.ids.room1.background_color[0] == 0: self.ids.room1.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room2.background_color[0] == 0: self.ids.room2.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room3.background_color[0] == 0: self.ids.room3.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room4.background_color[0] == 0: self.ids.room4.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room5.background_color[0] == 0: self.ids.room5.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room6.background_color[0] == 0: self.ids.room6.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room7.background_color[0] == 0: self.ids.room7.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room8.background_color[0] == 0: self.ids.room8.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room9.background_color[0] == 0: self.ids.room9.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room10.background_color[0] == 0: self.ids.room10.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room11.background_color[0] == 0: self.ids.room11.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room12.background_color[0] == 0: self.ids.room12.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room13.background_color[0] == 0: self.ids.room13.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room14.background_color[0] == 0: self.ids.room14.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room16.background_color[0] == 0: self.ids.room16.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room17.background_color[0] == 0: self.ids.room17.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room18.background_color[0] == 0: self.ids.room18.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room19.background_color[0] == 0: self.ids.room19.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room20.background_color[0] == 0: self.ids.room20.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
             self.ids.room15.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
-            self.selectedRoomNumber = 15
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(15)
 
     def selectedRoom16(self):
         if self.ids.room16.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(16)
             self.ids.room16.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
         elif 0.55 < self.ids.room16.background_color[0] < 0.57:
-            if self.ids.room1.background_color[0] == 0: self.ids.room1.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room2.background_color[0] == 0: self.ids.room2.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room3.background_color[0] == 0: self.ids.room3.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room4.background_color[0] == 0: self.ids.room4.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room5.background_color[0] == 0: self.ids.room5.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room6.background_color[0] == 0: self.ids.room6.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room7.background_color[0] == 0: self.ids.room7.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room8.background_color[0] == 0: self.ids.room8.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room9.background_color[0] == 0: self.ids.room9.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room10.background_color[0] == 0: self.ids.room10.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room11.background_color[0] == 0: self.ids.room11.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room12.background_color[0] == 0: self.ids.room12.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room13.background_color[0] == 0: self.ids.room13.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room14.background_color[0] == 0: self.ids.room14.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room15.background_color[0] == 0: self.ids.room15.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room17.background_color[0] == 0: self.ids.room17.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room18.background_color[0] == 0: self.ids.room18.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room19.background_color[0] == 0: self.ids.room19.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room20.background_color[0] == 0: self.ids.room20.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
             self.ids.room16.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
-            self.selectedRoomNumber = 16
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(16)
 
     def selectedRoom17(self):
         if self.ids.room17.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(17)
             self.ids.room17.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
         elif 0.55 < self.ids.room17.background_color[0] < 0.57:
-            if self.ids.room1.background_color[0] == 0: self.ids.room1.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room2.background_color[0] == 0: self.ids.room2.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room3.background_color[0] == 0: self.ids.room3.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room4.background_color[0] == 0: self.ids.room4.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room5.background_color[0] == 0: self.ids.room5.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room6.background_color[0] == 0: self.ids.room6.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room7.background_color[0] == 0: self.ids.room7.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room8.background_color[0] == 0: self.ids.room8.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room9.background_color[0] == 0: self.ids.room9.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room10.background_color[0] == 0: self.ids.room10.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room11.background_color[0] == 0: self.ids.room11.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room12.background_color[0] == 0: self.ids.room12.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room13.background_color[0] == 0: self.ids.room13.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room14.background_color[0] == 0: self.ids.room14.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room15.background_color[0] == 0: self.ids.room15.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room16.background_color[0] == 0: self.ids.room16.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room18.background_color[0] == 0: self.ids.room18.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room19.background_color[0] == 0: self.ids.room19.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room20.background_color[0] == 0: self.ids.room20.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
             self.ids.room17.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
-            self.selectedRoomNumber = 17
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(17)
 
     def selectedRoom18(self):
         if self.ids.room18.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(18)
             self.ids.room18.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
         elif 0.55 < self.ids.room18.background_color[0] < 0.57:
-            if self.ids.room1.background_color[0] == 0: self.ids.room1.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room2.background_color[0] == 0: self.ids.room2.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room3.background_color[0] == 0: self.ids.room3.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room4.background_color[0] == 0: self.ids.room4.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room5.background_color[0] == 0: self.ids.room5.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room6.background_color[0] == 0: self.ids.room6.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room7.background_color[0] == 0: self.ids.room7.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room8.background_color[0] == 0: self.ids.room8.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room9.background_color[0] == 0: self.ids.room9.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room10.background_color[0] == 0: self.ids.room10.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room11.background_color[0] == 0: self.ids.room11.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room12.background_color[0] == 0: self.ids.room12.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room13.background_color[0] == 0: self.ids.room13.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room14.background_color[0] == 0: self.ids.room14.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room15.background_color[0] == 0: self.ids.room15.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room16.background_color[0] == 0: self.ids.room16.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room17.background_color[0] == 0: self.ids.room17.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room19.background_color[0] == 0: self.ids.room19.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room20.background_color[0] == 0: self.ids.room20.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
             self.ids.room18.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
-            self.selectedRoomNumber = 18
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(18)
 
     def selectedRoom19(self):
         if self.ids.room19.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(19)
             self.ids.room19.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
         elif 0.55 < self.ids.room19.background_color[0] < 0.57:
-            if self.ids.room1.background_color[0] == 0: self.ids.room1.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room2.background_color[0] == 0: self.ids.room2.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room3.background_color[0] == 0: self.ids.room3.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room4.background_color[0] == 0: self.ids.room4.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room5.background_color[0] == 0: self.ids.room5.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room6.background_color[0] == 0: self.ids.room6.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room7.background_color[0] == 0: self.ids.room7.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room8.background_color[0] == 0: self.ids.room8.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room9.background_color[0] == 0: self.ids.room9.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room10.background_color[0] == 0: self.ids.room10.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room11.background_color[0] == 0: self.ids.room11.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room12.background_color[0] == 0: self.ids.room12.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room13.background_color[0] == 0: self.ids.room13.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room14.background_color[0] == 0: self.ids.room14.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room15.background_color[0] == 0: self.ids.room15.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room16.background_color[0] == 0: self.ids.room16.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room17.background_color[0] == 0: self.ids.room17.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room18.background_color[0] == 0: self.ids.room18.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room20.background_color[0] == 0: self.ids.room20.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
             self.ids.room19.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
-            self.selectedRoomNumber = 19
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(19)
 
     def selectedRoom20(self):
         if self.ids.room20.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(20)
             self.ids.room20.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
         elif 0.55 < self.ids.room20.background_color[0] < 0.57:
-            if self.ids.room1.background_color[0] == 0: self.ids.room1.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room2.background_color[0] == 0: self.ids.room2.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room3.background_color[0] == 0: self.ids.room3.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room4.background_color[0] == 0: self.ids.room4.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room5.background_color[0] == 0: self.ids.room5.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room6.background_color[0] == 0: self.ids.room6.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room7.background_color[0] == 0: self.ids.room7.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room8.background_color[0] == 0: self.ids.room8.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room9.background_color[0] == 0: self.ids.room9.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room10.background_color[0] == 0: self.ids.room10.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room11.background_color[0] == 0: self.ids.room11.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room12.background_color[0] == 0: self.ids.room12.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room13.background_color[0] == 0: self.ids.room13.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room14.background_color[0] == 0: self.ids.room14.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room15.background_color[0] == 0: self.ids.room15.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room16.background_color[0] == 0: self.ids.room16.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room17.background_color[0] == 0: self.ids.room17.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room18.background_color[0] == 0: self.ids.room18.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
-            if self.ids.room19.background_color[0] == 0: self.ids.room19.background_color = (
-                144 / 255, 194 / 255, 231 / 255, 1)
             self.ids.room20.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
-            self.selectedRoomNumber = 20
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(20)
 
 
-class RegisterWindow(Screen):
-    firstName = ObjectProperty(None)
-
+class BookWindow(Screen):
     def registerPress(self):
-        print(self.ids.firstName.text)
-        print(self.ids.status.text)
+        DesktopHotelManagementSystem.clientInformation.append(self.ids.firstName.text)
+        DesktopHotelManagementSystem.clientInformation.append(self.ids.secondName.text)
+        DesktopHotelManagementSystem.clientInformation.append(self.ids.email.text)
+        DesktopHotelManagementSystem.clientInformation.append(self.ids.telephone.text)
+        print(DesktopHotelManagementSystem.clientInformation)
 
-    def spinnerClicked(self, value):
-        self.ids.status.text = value
-
-    def limit_spinner(self):
-        maxItems = 3
-        self.spinner.dropdown_cls.max_height = maxItems * dp(48)
+    def is_not_right_name_city_state(self, textInput):
+        if len(textInput) == 0:
+            return True
+        if not textInput[0].isupper():
+            return True
+        for i in range(len(textInput)):
+            if textInput[i].isalpha():
+                continue
+            else:
+                return True
+        return False
 
 
 class WindowManager(ScreenManager):
@@ -1133,6 +370,8 @@ class DesktopHotelManagementSystem(App):
     endMonthOutput = ""
     startYearOutput = ""
     endYearOutput = ""
+    selectedRoomNumbers = []
+    clientInformation = []
 
     def build(self):
         Window.clearcolor = (206 / 255, 211 / 255, 220 / 255, 1)
