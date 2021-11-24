@@ -45,6 +45,7 @@
     color: (1, 1, 1, 1)
     size_hint_y: None
     height: 50
+    font_size: 20
 <LoginPopup@Popup>
     BoxLayout:
         orientation: "vertical"
@@ -204,16 +205,35 @@ WindowManager:
                 text: "BACK"
                 background_color: utils.get_color_from_hex("#CED3DC")
                 color: (0, 0, 0, 1)
-                font_size: 30
                 on_release: app.root.current = "loginWindow"
             RoundedButton:
                 text: "SEARCH"
-                font_size: 30
-                on_release: app.root.current = "roomWindow" if root.wrongTimePeriod() else Factory.DatePeriod().open()
+                on_release: app.root.current = root.searchPress() if root.wrongTimePeriod() else Factory.DatePeriod().open()
 
 
 <RoomWindow>:
     name: "roomWindow"
+    room1: room1
+    room2: room2
+    room3: room3
+    room4: room4
+    room5: room5
+    room6: room6
+    room7: room7
+    room8: room8
+    room9: room9
+    room10: room10
+    room11: room11
+    room12: room12
+    room13: room13
+    room14: room14
+    room15: room15
+    room16: room16
+    room17: room17
+    room18: room18
+    room19: room19
+    room20: room20
+
     canvas.before:
         Rectangle:
             pos: self.pos
@@ -222,109 +242,149 @@ WindowManager:
     BoxLayout:
         orientation: 'vertical'
         padding: 30
-#        spacing: 10
         BoxLayout:
             orientation: 'horizontal'
             spacing: 10
-            Spinner:
+            Button:
+                id: room1
                 text: "1"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom1()
+            Button:
                 text: "2"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
+                id: room2
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom2()
+            Button:
                 text: "3"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
+                id: room3
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom3()
+            Button:
                 text: "4"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
+                id: room4
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom4()
+            Button:
                 text: "5"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
+                id: room5
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom5()
+            Button:
                 text: "6"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
+                id: room6
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom6()
+            Button:
                 text: "7"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
+                id: room7
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom7()
+            Button:
                 text: "8"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
+                id: room8
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom8()
+            Button:
                 text: "9"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
+                id: room9
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom9()
+            Button:
                 text: "10"
-                values: ["Clear", "Reserved", "Occupied"]
-        BoxLayout:
-            orientation: 'horizontal'
-            spacing: 10
-            Spinner:
-                text: "1"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
-                text: "2"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
-                text: "3"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
-                text: "4"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
-                text: "5"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
-                text: "6"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
-                text: "7"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
-                text: "8"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
-                text: "9"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
-                text: "10"
-                values: ["Clear", "Reserved", "Occupied"]
+                id: room10
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom10()
         Label:
             text: "GROUND FLOOR"
             color: (0, 0, 0, 1)
         BoxLayout:
             orientation: 'horizontal'
             spacing: 10
-            Spinner:
+            Button:
                 text: "11"
-                values: ["CLEAR", "RESERVED", "OCCUPIED"]
-            Spinner:
+                id: room11
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom11()
+            Button:
                 text: "12"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
+                id: room12
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom12()
+            Button:
                 text: "13"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
+                id: room13
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom13()
+            Button:
                 text: "14"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
+                id: room14
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom14()
+            Button:
                 text: "15"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
+                id: room15
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom15()
+            Button:
                 text: "16"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
+                id: room16
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom16()
+            Button:
                 text: "17"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
+                id: room17
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom17()
+            Button:
                 text: "18"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
+                id: room18
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom18()
+            Button:
                 text: "19"
-                values: ["Clear", "Reserved", "Occupied"]
-            Spinner:
+                id: room19
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom19()
+            Button:
                 text: "20"
-                values: ["Clear", "Reserved", "Occupied"]
+                id: room20
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom20()
+        BoxLayout:
+            orientation: "horizontal"
+            RoundedButton:
+                text: "BACK"
+                background_color: utils.get_color_from_hex("#CED3DC")
+                color: (0, 0, 0, 1)
+                on_release: app.root.current = "dateWindow"
+            RoundedButton:
+                text: "NEXT FLOOR"
+                background_color: utils.get_color_from_hex("#4E8098")
+            RoundedButton:
+                text: "CHOOSE"
+#                on_release: app.root.current = "roomWindow" if root.wrongTimePeriod() else Factory.DatePeriod().open()
+
 
 
 
@@ -425,7 +485,7 @@ WindowManager:
             Spinner:
                 id: state
                 text: "CHOOSE STATUS"
-                ackground_color: utils.get_color_from_hex("#4E8098")
+                background_color: utils.get_color_from_hex("#4E8098")
         RoundedButton:
             text: "REGISTER"
             font_size: 30
