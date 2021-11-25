@@ -64,6 +64,44 @@ Window.minimum_width, Window.minimum_height = 800, 580
 #     return False
 
 
+def isRightName(textInput):
+    if len(textInput) == 0:
+        return False
+    if not textInput[0].isupper():
+        return False
+    for i in range(len(textInput)):
+        if not textInput[i].isalpha():
+            return False
+    return True
+
+
+def isRightTelephoneNumber(number):
+    if len(number) != 9 and len(number) != 12:
+        return False
+    if len(number) == 9:
+        for i in range(len(number)):
+            if not number[i].isdigit():
+                return False
+    else:
+        if number[0] == '+':
+            i = 1
+            while i < len(number):
+                if not number[i].isdigit():
+                    return False
+                i = i + 1
+        else:
+            return False
+    return True
+
+
+def isRightEmail(email):
+    if len(email) < 5:
+        return False
+    if "@" not in email or "." not in email:
+        return False
+    return True
+
+
 # Define our different screens
 class LoginWindow(Screen):
     login = ObjectProperty(None)
@@ -86,7 +124,7 @@ class LoginWindow(Screen):
             if login == user[0]:
                 foundLogin = True
                 if password == user[1]:
-                    self.window = "bookWindow"
+                    self.window = "dateWindow"
                 else:
                     isCorrect = False
                 break
@@ -171,8 +209,6 @@ class DateWindow(Screen):
 
 
 class RoomWindow(Screen):
-    isSelected = False
-
     def selectedRoom1(self):
         if self.ids.room1.background_color[0] == 0:  # if green
             DesktopHotelManagementSystem.selectedRoomNumbers.remove(1)
@@ -334,25 +370,97 @@ class RoomWindow(Screen):
             DesktopHotelManagementSystem.selectedRoomNumbers.append(20)
 
 
+class RoomWindowFloor2(Screen):
+    def selectedRoom21(self):
+        if self.ids.room21.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(21)
+            self.ids.room21.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+        elif 0.55 < self.ids.room21.background_color[0] < 0.57:
+            self.ids.room21.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(21)
+
+    def selectedRoom22(self):
+        if self.ids.room22.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(22)
+            self.ids.room22.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+        elif 0.55 < self.ids.room22.background_color[0] < 0.57:
+            self.ids.room22.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(22)
+
+    def selectedRoom23(self):
+        if self.ids.room23.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(23)
+            self.ids.room23.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+        elif 0.55 < self.ids.room23.background_color[0] < 0.57:
+            self.ids.room23.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(23)
+
+    def selectedRoom24(self):
+        if self.ids.room24.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(24)
+            self.ids.room24.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+        elif 0.55 < self.ids.room24.background_color[0] < 0.57:
+            self.ids.room24.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(24)
+
+    def selectedRoom25(self):
+        if self.ids.room25.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(25)
+            self.ids.room25.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+        elif 0.55 < self.ids.room25.background_color[0] < 0.57:
+            self.ids.room25.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(25)
+
+    def selectedRoom26(self):
+        if self.ids.room26.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(26)
+            self.ids.room26.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+        elif 0.55 < self.ids.room26.background_color[0] < 0.57:
+            self.ids.room6.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(26)
+
+    def selectedRoom27(self):
+        if self.ids.room27.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(27)
+            self.ids.room27.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+        elif 0.55 < self.ids.room27.background_color[0] < 0.57:
+            self.ids.room27.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(27)
+
+    def selectedRoom28(self):
+        if self.ids.room28.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(28)
+            self.ids.room28.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+        elif 0.55 < self.ids.room28.background_color[0] < 0.57:
+            self.ids.room28.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(28)
+
+    def selectedRoom29(self):
+        if self.ids.room29.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(29)
+            self.ids.room29.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+        elif 0.55 < self.ids.room29.background_color[0] < 0.57:
+            self.ids.room29.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(29)
+
+    def selectedRoom30(self):
+        if self.ids.room30.background_color[0] == 0:  # if green
+            DesktopHotelManagementSystem.selectedRoomNumbers.remove(30)
+            self.ids.room30.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+        elif 0.55 < self.ids.room30.background_color[0] < 0.57:
+            self.ids.room30.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            DesktopHotelManagementSystem.selectedRoomNumbers.append(30)
+
+
 class BookWindow(Screen):
     def registerPress(self):
-        DesktopHotelManagementSystem.clientInformation.append(self.ids.firstName.text)
-        DesktopHotelManagementSystem.clientInformation.append(self.ids.secondName.text)
-        DesktopHotelManagementSystem.clientInformation.append(self.ids.email.text)
-        DesktopHotelManagementSystem.clientInformation.append(self.ids.telephone.text)
-        print(DesktopHotelManagementSystem.clientInformation)
-
-    def is_not_right_name_city_state(self, textInput):
-        if len(textInput) == 0:
+        if isRightName(self.ids.firstName.text) and isRightName(self.ids.lastName.text) and isRightEmail(
+                self.ids.email.text) and isRightTelephoneNumber(self.ids.telephone.text):
+            DesktopHotelManagementSystem.clientInformation.append(self.ids.firstName.text)
+            DesktopHotelManagementSystem.clientInformation.append(self.ids.lastName.text)
+            DesktopHotelManagementSystem.clientInformation.append(self.ids.email.text)
+            DesktopHotelManagementSystem.clientInformation.append(self.ids.telephone.text)
             return True
-        if not textInput[0].isupper():
-            return True
-        for i in range(len(textInput)):
-            if textInput[i].isalpha():
-                continue
-            else:
-                return True
-        return False
 
 
 class WindowManager(ScreenManager):

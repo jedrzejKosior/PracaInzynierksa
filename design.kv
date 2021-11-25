@@ -76,12 +76,23 @@
         Button:
             text: "OK"
             on_release: root.dismiss()
+<BookWindowPopup@Popup>
+    BoxLayout:
+        orientation: "vertical"
+        spacing: 10
+        Label:
+            text: "INVALID CLIENT DATA"
+            color: (0, 0, 0, 1)
+        Button:
+            text: "OK"
+            on_release: root.dismiss()
 WindowManager:
     transition: WipeTransition()
 	LoginWindow:
-	BookWindow:
 	DateWindow:
 	RoomWindow:
+	RoomWindowFloor2
+	BookWindow:
 
 
 <LoginWindow>:
@@ -390,6 +401,112 @@ WindowManager:
             RoundedButton:
                 text: "NEXT FLOOR"
                 background_color: utils.get_color_from_hex("#4E8098")
+                on_release: app.root.current = "roomWindowFloor2"
+            RoundedButton:
+                text: "CHOOSE"
+                on_release: app.root.current = "bookWindow" if len(app.selectedRoomNumbers) else Factory.RoomNumberPopup().open()
+
+<RoomWindowFloor2>:
+    name: "roomWindowFloor2"
+    room21: room21
+    room22: room22
+    room23: room23
+    room24: room24
+    room25: room25
+    room26: room26
+    room27: room27
+    room28: room28
+    room29: room29
+    room30: room30
+
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: "gradientBackground.png"
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 30
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 10
+            Button:
+                id: room21
+                text: "21"
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom21()
+            Button:
+                text: "22"
+                id: room22
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom22()
+            Button:
+                text: "23"
+                id: room23
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom23()
+            Button:
+                text: "24"
+                id: room24
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom24()
+            Button:
+                text: "25"
+                id: room25
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom25()
+        Label:
+            text: "FIRST FLOOR"
+            color: (0, 0, 0, 1)
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 10
+            Button:
+                text: "26"
+                id: room26
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom26()
+            Button:
+                text: "27"
+                id: room27
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom27()
+            Button:
+                text: "28"
+                id: room28
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom28()
+            Button:
+                text: "29"
+                id: room29
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom29()
+            Button:
+                text: "30"
+                id: room30
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.selectedRoom30()
+        BoxLayout:
+            orientation: "horizontal"
+            RoundedButton:
+                text: "BACK"
+                background_color: utils.get_color_from_hex("#CED3DC")
+                color: (0, 0, 0, 1)
+                on_release: app.root.current = "dateWindow"
+            RoundedButton:
+                text: "PREVIOUS FLOOR"
+                background_color: utils.get_color_from_hex("#4E8098")
+                on_release: app.root.current = "roomWindow"
             RoundedButton:
                 text: "CHOOSE"
                 on_release: app.root.current = "bookWindow" if len(app.selectedRoomNumbers) else Factory.RoomNumberPopup().open()
@@ -397,7 +514,7 @@ WindowManager:
 <BookWindow>: # TODO checkbox invoice
 	name: "bookWindow"
 	firstName: firstName
-	secondName: secondName
+	lastName: lastName
 	email: email
 	telephone: telephone
     canvas.before:
@@ -425,12 +542,12 @@ WindowManager:
                 id: firstName
                 hint_text: "ENTER FIRST NAME"
             Label:
-                id: secondNameLabel
-                text: "SECOND NAME:"
+                id: lastNameLabel
+                text: "LAST NAME:"
                 color: (0, 0, 0, 1)
             TextInput:
-                id: secondName
-                hint_text: "ENTER SECOND NAME"
+                id: lastName
+                hint_text: "ENTER LAST NAME"
             Label:
                 id: emailLabel
                 text: "E-MAIL ADDRESS:"
@@ -454,8 +571,7 @@ WindowManager:
                 on_release: app.root.current = "roomWindow"
             RoundedButton:
                 text: "BOOK"
-                on_release:
-                    root.registerPress()
+                on_release: if root.registerPress() != True: Factory.BookWindowPopup().open()
 
 
 
