@@ -17,7 +17,7 @@ Window.minimum_width, Window.minimum_height = 800, 580
 # validations of inputs
 
 # def is_already_taken_for_update(room_number, starting_date, ending_date, client):
-#     conn = psycopg2.connect('hotel.db')
+#     conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin)
 #     cursor = conn.cursor()
 #     cursor.execute("SELECT book_start, book_end, client_id FROM room" + str(room_number))
 #     status_checking = cursor.fetchall()
@@ -43,7 +43,7 @@ Window.minimum_width, Window.minimum_height = 800, 580
 #
 #
 # def is_already_taken(room_number, starting_date, ending_date):
-#     conn = psycopg2.connect('hotel.db')
+#     conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin)
 #     cursor = conn.cursor()
 #     cursor.execute("SELECT book_start, book_end, client_id FROM room" + str(room_number))
 #     status_checking = cursor.fetchall()
@@ -138,10 +138,6 @@ class LoginWindow(Screen):
         cur.close()
         # close connection
         conn.close()
-        # update button label
-        # self.ids.printName.text = f'Hello {login}!'
-        # Clear input
-        self.login.text = ""
         self.password.text = ""
         return isCorrect, self.window
 
@@ -206,6 +202,30 @@ class DateWindow(Screen):
         DesktopHotelManagementSystem.endMonthOutput = self.ids.endMonth.text
         DesktopHotelManagementSystem.endYearOutput = self.ids.endYear.text
         return 'roomWindow'
+
+        # if ((starting_date >= status_checking[i][0] and starting_date < status_checking[i][1]) or (
+        #         ending_date > status_checking[i][0] and ending_date <= status_checking[i][1]) or (
+        #         starting_date <= status_checking[i][0] and ending_date >= status_checking[i][1])):
+
+
+def turnRedIfUnavailable(roomNumber, startDate, endDate):
+    # connect to database
+    conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
+    # cursor
+    cur = conn.cursor()
+    cur.execute("SELECT startDate, endDate FROM room" + str(roomNumber))
+    roomsDates = cur.fetchall()
+    for roomPeriod in roomsDates:
+        if (int(startDate) >= int(roomPeriod[0]) and int(startDate) < int(roomPeriod[1])) or (int(endDate) > int(roomPeriod[0]) and int(endDate) <= int(roomPeriod[1])) or (int(startDate) <= int(roomPeriod[0]) and int(endDate) >= int(roomPeriod[1])):
+            print("dupa")  # TODO
+    conn.commit()
+    # close cursor
+    cur.close()
+    # close connection
+    conn.close()
+
+
+turnRedIfUnavailable(17, 20210101, 20211201)
 
 
 class RoomWindow(Screen):
@@ -453,6 +473,9 @@ class RoomWindowFloor2(Screen):
 
 
 class BookWindow(Screen):
+    months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER",
+              "NOVEMBER", "DECEMBER"]
+
     def registerPress(self):
         if isRightName(self.ids.firstName.text) and isRightName(self.ids.lastName.text) and isRightEmail(
                 self.ids.email.text) and isRightTelephoneNumber(self.ids.telephone.text):
@@ -460,7 +483,63 @@ class BookWindow(Screen):
             DesktopHotelManagementSystem.clientInformation.append(self.ids.lastName.text)
             DesktopHotelManagementSystem.clientInformation.append(self.ids.email.text)
             DesktopHotelManagementSystem.clientInformation.append(self.ids.telephone.text)
+            # connect to database
+            conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
+            # cursor
+            cur = conn.cursor()
+            cur.execute("SELECT MAX(clientID) FROM clients")
+            maxID = cur.fetchall()[0][0]
+            if maxID is None:
+                maxID = 1
+            else:
+                maxID = int(maxID) + 1
+            cur.execute("SELECT clientID FROM clients WHERE email = '" + DesktopHotelManagementSystem.clientInformation[
+                2] + "' AND telephone = '" + DesktopHotelManagementSystem.clientInformation[3] + "'")
+            existedClientID = cur.fetchall()
+            if len(existedClientID):
+                selectedID = existedClientID[0][0]
+            else:
+                selectedID = maxID
+                cur.execute(
+                    "INSERT INTO clients VALUES('" + DesktopHotelManagementSystem.clientInformation[0] + "', '" +
+                    DesktopHotelManagementSystem.clientInformation[1] + "', '" +
+                    DesktopHotelManagementSystem.clientInformation[2] + "', '" +
+                    DesktopHotelManagementSystem.clientInformation[3] + "', '" + str(selectedID) + "')")
+                conn.commit()
+            if int(self.months.index(DesktopHotelManagementSystem.startMonthOutput) + 1) < 10:
+                startMonthToDatabase = str(0) + str(
+                    int(self.months.index(DesktopHotelManagementSystem.startMonthOutput) + 1))
+            else:
+                startMonthToDatabase = str(int(self.months.index(DesktopHotelManagementSystem.startMonthOutput) + 1))
+            if int(DesktopHotelManagementSystem.startDayOutput) < 10:
+                startDayToDatabase = str(0) + str(int(DesktopHotelManagementSystem.startDayOutput))
+            else:
+                startDayToDatabase = str(int(DesktopHotelManagementSystem.startDayOutput))
+
+            if int(self.months.index(DesktopHotelManagementSystem.endMonthOutput) + 1) < 10:
+                endMonthToDatabase = str(0) + str(
+                    int(self.months.index(DesktopHotelManagementSystem.endMonthOutput) + 1))
+            else:
+                endMonthToDatabase = str(int(self.months.index(DesktopHotelManagementSystem.endMonthOutput)) + 1)
+            if int(DesktopHotelManagementSystem.endDayOutput) < 10:
+                endDayToDatabase = str(0) + str(int(DesktopHotelManagementSystem.endDayOutput))
+            else:
+                endDayToDatabase = str(int(DesktopHotelManagementSystem.endDayOutput))
+
+            for room in DesktopHotelManagementSystem.selectedRoomNumbers:
+                cur.execute("INSERT INTO room" + str(room) + " VALUES('" + str(
+                    room) + "', '" + DesktopHotelManagementSystem.startYearOutput + startMonthToDatabase +
+                            startDayToDatabase + "', '" + DesktopHotelManagementSystem.endYearOutput +
+                            endMonthToDatabase + endDayToDatabase + "', '" + str(selectedID) + "')")
+            conn.commit()
+            # close cursor
+            cur.close()
+            # close connection
+            conn.close()
+
             return True
+        else:
+            return False
 
 
 class WindowManager(ScreenManager):

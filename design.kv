@@ -571,7 +571,7 @@ WindowManager:
                 on_release: app.root.current = "roomWindow"
             RoundedButton:
                 text: "BOOK"
-                on_release: if root.registerPress() != True: Factory.BookWindowPopup().open()
+                on_release: app.root.current = "loginWindow" if root.registerPress() else Factory.BookWindowPopup().open()
 
 
 
