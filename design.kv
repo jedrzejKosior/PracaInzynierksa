@@ -253,6 +253,7 @@ WindowManager:
     room18: room18
     room19: room19
     room20: room20
+    on_pre_enter: root.makeRedColors()
 
     canvas.before:
         Rectangle:
@@ -418,7 +419,7 @@ WindowManager:
     room28: room28
     room29: room29
     room30: room30
-
+    on_pre_enter: root.makeRedColorsFloor2()
     canvas.before:
         Rectangle:
             pos: self.pos
@@ -512,6 +513,7 @@ WindowManager:
                 on_release: app.root.current = "bookWindow" if len(app.selectedRoomNumbers) else Factory.RoomNumberPopup().open()
 
 <BookWindow>: # TODO checkbox invoice
+    on_pre_leave: root.resetToDefaults()
 	name: "bookWindow"
 	firstName: firstName
 	lastName: lastName

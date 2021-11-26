@@ -8,62 +8,10 @@ from datetime import datetime
 from calendar import monthrange
 import psycopg2
 
-# cur.execute("CREATE TABLE users(userName text,password text)")
-# cur.execute("INSERT INTO users VALUES('reception1', 'admin1234')")
-
 Window.minimum_width, Window.minimum_height = 800, 580
 
 
 # validations of inputs
-
-# def is_already_taken_for_update(room_number, starting_date, ending_date, client):
-#     conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin)
-#     cursor = conn.cursor()
-#     cursor.execute("SELECT book_start, book_end, client_id FROM room" + str(room_number))
-#     status_checking = cursor.fetchall()
-#
-#     # commit changes
-#     conn.commit()
-#
-#     # close connection
-#     conn.close()
-#     i = 0
-#     # for i in range(len(status_checking)):
-#     while (i < len(status_checking)):
-#         if ((starting_date >= status_checking[i][0] and starting_date < status_checking[i][1]) or (
-#                 ending_date > status_checking[i][0] and ending_date <= status_checking[i][1]) or (
-#                 starting_date <= status_checking[i][0] and ending_date >= status_checking[i][1])):
-#             if (int(client) == int(status_checking[i][2])):
-#                 i = i + 1
-#                 continue
-#             else:
-#                 return True
-#         i = i + 1
-#     return False
-#
-#
-# def is_already_taken(room_number, starting_date, ending_date):
-#     conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin)
-#     cursor = conn.cursor()
-#     cursor.execute("SELECT book_start, book_end, client_id FROM room" + str(room_number))
-#     status_checking = cursor.fetchall()
-#
-#     # commit changes
-#     conn.commit()
-#
-#     # close connection
-#     conn.close()
-#     i = 0
-#     # for i in range(len(status_checking)):
-#     while (i < len(status_checking)):
-#         if ((starting_date >= status_checking[i][0] and starting_date < status_checking[i][1]) or (
-#                 ending_date > status_checking[i][0] and ending_date <= status_checking[i][1]) or (
-#                 starting_date <= status_checking[i][0] and ending_date >= status_checking[i][1])):
-#             return True
-#         i = i + 1
-#     return False
-
-
 def isRightName(textInput):
     if len(textInput) == 0:
         return False
@@ -201,39 +149,155 @@ class DateWindow(Screen):
         DesktopHotelManagementSystem.endDayOutput = self.ids.endDay.text
         DesktopHotelManagementSystem.endMonthOutput = self.ids.endMonth.text
         DesktopHotelManagementSystem.endYearOutput = self.ids.endYear.text
+        DesktopHotelManagementSystem.startDateToCheckColor, DesktopHotelManagementSystem.endDateToCheckColor = dataParsing()
         return 'roomWindow'
 
-        # if ((starting_date >= status_checking[i][0] and starting_date < status_checking[i][1]) or (
-        #         ending_date > status_checking[i][0] and ending_date <= status_checking[i][1]) or (
-        #         starting_date <= status_checking[i][0] and ending_date >= status_checking[i][1])):
 
-
-def turnRedIfUnavailable(roomNumber, startDate, endDate):
+def turnRedIfUnavailable():
+    startDate = DesktopHotelManagementSystem.startDateToCheckColor
+    endDate = DesktopHotelManagementSystem.endDateToCheckColor
     # connect to database
     conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
     # cursor
     cur = conn.cursor()
-    cur.execute("SELECT startDate, endDate FROM room" + str(roomNumber))
-    roomsDates = cur.fetchall()
-    for roomPeriod in roomsDates:
-        if (int(startDate) >= int(roomPeriod[0]) and int(startDate) < int(roomPeriod[1])) or (int(endDate) > int(roomPeriod[0]) and int(endDate) <= int(roomPeriod[1])) or (int(startDate) <= int(roomPeriod[0]) and int(endDate) >= int(roomPeriod[1])):
-            print("dupa")  # TODO
+    unavailableRooms = []
+    for roomNumber in range(30):
+        cur.execute("SELECT startDate, endDate FROM room" + str(roomNumber + 1))
+        roomsDates = cur.fetchall()
+        for roomPeriod in roomsDates:
+            if (int(startDate) >= int(roomPeriod[0]) and int(startDate) < int(roomPeriod[1])) or (
+                    int(endDate) > int(roomPeriod[0]) and int(endDate) <= int(roomPeriod[1])) or (
+                    int(startDate) <= int(roomPeriod[0]) and int(endDate) >= int(roomPeriod[1])):
+                unavailableRooms.append(roomNumber + 1)
     conn.commit()
     # close cursor
     cur.close()
     # close connection
     conn.close()
+    return unavailableRooms
 
 
-turnRedIfUnavailable(17, 20210101, 20211201)
+def dataParsing():
+    months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER",
+              "NOVEMBER", "DECEMBER"]
+    if int(months.index(DesktopHotelManagementSystem.startMonthOutput) + 1) < 10:
+        startMonthToDatabase = str(0) + str(
+            int(months.index(DesktopHotelManagementSystem.startMonthOutput) + 1))
+    else:
+        startMonthToDatabase = str(int(months.index(DesktopHotelManagementSystem.startMonthOutput) + 1))
+    if int(DesktopHotelManagementSystem.startDayOutput) < 10:
+        startDayToDatabase = str(0) + str(int(DesktopHotelManagementSystem.startDayOutput))
+    else:
+        startDayToDatabase = str(int(DesktopHotelManagementSystem.startDayOutput))
+
+    if int(months.index(DesktopHotelManagementSystem.endMonthOutput) + 1) < 10:
+        endMonthToDatabase = str(0) + str(
+            int(months.index(DesktopHotelManagementSystem.endMonthOutput) + 1))
+    else:
+        endMonthToDatabase = str(int(months.index(DesktopHotelManagementSystem.endMonthOutput)) + 1)
+    if int(DesktopHotelManagementSystem.endDayOutput) < 10:
+        endDayToDatabase = str(0) + str(int(DesktopHotelManagementSystem.endDayOutput))
+    else:
+        endDayToDatabase = str(int(DesktopHotelManagementSystem.endDayOutput))
+    startDateToCheckColor = str(
+        DesktopHotelManagementSystem.startYearOutput) + startMonthToDatabase + startDayToDatabase
+    endDateToCheckColor = str(DesktopHotelManagementSystem.endYearOutput) + endMonthToDatabase + endDayToDatabase
+    return startDateToCheckColor, endDateToCheckColor
 
 
 class RoomWindow(Screen):
+    def makeRedColors(self):
+        if 0.63 < self.ids.room1.background_color[0] < 0.64:
+            self.ids.room1.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room2.background_color[0] < 0.64:
+            self.ids.room2.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room3.background_color[0] < 0.64:
+            self.ids.room3.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room4.background_color[0] < 0.64:
+            self.ids.room4.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room5.background_color[0] < 0.64:
+            self.ids.room5.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room6.background_color[0] < 0.64:
+            self.ids.room6.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room7.background_color[0] < 0.64:
+            self.ids.room7.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room8.background_color[0] < 0.64:
+            self.ids.room8.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room9.background_color[0] < 0.64:
+            self.ids.room9.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room10.background_color[0] < 0.64:
+            self.ids.room10.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room11.background_color[0] < 0.64:
+            self.ids.room11.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room12.background_color[0] < 0.64:
+            self.ids.room12.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room13.background_color[0] < 0.64:
+            self.ids.room13.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room14.background_color[0] < 0.64:
+            self.ids.room14.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room15.background_color[0] < 0.64:
+            self.ids.room15.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room16.background_color[0] < 0.64:
+            self.ids.room16.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room17.background_color[0] < 0.64:
+            self.ids.room17.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room18.background_color[0] < 0.64:
+            self.ids.room18.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room19.background_color[0] < 0.64:
+            self.ids.room19.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room20.background_color[0] < 0.64:
+            self.ids.room20.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+
+        unavailableRooms = turnRedIfUnavailable()
+        for room in unavailableRooms:
+            if room in DesktopHotelManagementSystem.selectedRoomNumbers:
+                DesktopHotelManagementSystem.selectedRoomNumbers.remove(room)
+            if room == 1:
+                self.ids.room1.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 2:
+                self.ids.room2.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 3:
+                self.ids.room3.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 4:
+                self.ids.room4.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 5:
+                self.ids.room5.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 6:
+                self.ids.room6.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 7:
+                self.ids.room7.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 8:
+                self.ids.room8.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 9:
+                self.ids.room9.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 10:
+                self.ids.room10.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 11:
+                self.ids.room11.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 12:
+                self.ids.room12.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 13:
+                self.ids.room13.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 14:
+                self.ids.room14.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 15:
+                self.ids.room15.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 16:
+                self.ids.room16.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 17:
+                self.ids.room17.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 18:
+                self.ids.room18.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 19:
+                self.ids.room19.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 20:
+                self.ids.room20.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+
     def selectedRoom1(self):
         if self.ids.room1.background_color[0] == 0:  # if green
             DesktopHotelManagementSystem.selectedRoomNumbers.remove(1)
             self.ids.room1.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
-        elif 0.55 < self.ids.room1.background_color[0] < 0.57:
+        elif 0.55 < self.ids.room1.background_color[0] < 0.57:  # if blue
             self.ids.room1.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
             DesktopHotelManagementSystem.selectedRoomNumbers.append(1)
 
@@ -391,6 +455,53 @@ class RoomWindow(Screen):
 
 
 class RoomWindowFloor2(Screen):
+    def makeRedColorsFloor2(self):
+        if 0.63 < self.ids.room21.background_color[0] < 0.64:
+            self.ids.room21.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room22.background_color[0] < 0.64:
+            self.ids.room22.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room23.background_color[0] < 0.64:
+            self.ids.room23.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room24.background_color[0] < 0.64:
+            self.ids.room24.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room25.background_color[0] < 0.64:
+            self.ids.room25.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room26.background_color[0] < 0.64:
+            self.ids.room26.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room27.background_color[0] < 0.64:
+            self.ids.room27.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room28.background_color[0] < 0.64:
+            self.ids.room28.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room29.background_color[0] < 0.64:
+            self.ids.room29.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        if 0.63 < self.ids.room30.background_color[0] < 0.64:
+            self.ids.room30.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+
+        unavailableRooms = turnRedIfUnavailable()
+        for room in unavailableRooms:
+            if room in DesktopHotelManagementSystem.selectedRoomNumbers:
+                DesktopHotelManagementSystem.selectedRoomNumbers.remove(room)
+            if room == 21:
+                self.ids.room21.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 22:
+                self.ids.room22.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 23:
+                self.ids.room23.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 24:
+                self.ids.room24.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 25:
+                self.ids.room25.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 26:
+                self.ids.room26.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 27:
+                self.ids.room27.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 28:
+                self.ids.room28.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 29:
+                self.ids.room29.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+            if room == 30:
+                self.ids.room30.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
+
     def selectedRoom21(self):
         if self.ids.room21.background_color[0] == 0:  # if green
             DesktopHotelManagementSystem.selectedRoomNumbers.remove(21)
@@ -476,6 +587,63 @@ class BookWindow(Screen):
     months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER",
               "NOVEMBER", "DECEMBER"]
 
+    def resetToDefaults(self):
+        self.manager.get_screen('dateWindow').startDay.text = DateWindow.currentDay
+        self.manager.get_screen('dateWindow').startMonth.text = DateWindow.months[DateWindow.currentMonth - 1]
+        self.manager.get_screen('dateWindow').startYear.text = DateWindow.currentYear
+
+        self.manager.get_screen('dateWindow').endDay.text = DateWindow.currentDay
+        self.manager.get_screen('dateWindow').endMonth.text = DateWindow.months[DateWindow.currentMonth - 1]
+        self.manager.get_screen('dateWindow').endYear.text = DateWindow.currentYear
+
+        self.manager.get_screen('roomWindow').room1.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room2.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room3.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room4.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room5.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room6.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room7.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room8.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room9.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room10.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room11.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room12.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room13.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room14.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room15.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room16.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room17.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room18.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room19.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room20.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+
+        self.manager.get_screen('roomWindowFloor2').room21.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindowFloor2').room22.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindowFloor2').room23.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindowFloor2').room24.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindowFloor2').room25.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindowFloor2').room26.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindowFloor2').room27.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindowFloor2').room28.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindowFloor2').room29.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindowFloor2').room30.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+
+        self.manager.get_screen('bookWindow').firstName.text = ""
+        self.manager.get_screen('bookWindow').lastName.text = ""
+        self.manager.get_screen('bookWindow').email.text = ""
+        self.manager.get_screen('bookWindow').telephone.text = ""
+
+        DesktopHotelManagementSystem.startDayOutput = ""
+        DesktopHotelManagementSystem.endDayOutput = ""
+        DesktopHotelManagementSystem.startMonthOutput = ""
+        DesktopHotelManagementSystem.endMonthOutput = ""
+        DesktopHotelManagementSystem.startYearOutput = ""
+        DesktopHotelManagementSystem.endYearOutput = ""
+        DesktopHotelManagementSystem.selectedRoomNumbers = []
+        DesktopHotelManagementSystem.clientInformation = []
+        DesktopHotelManagementSystem.startDateToCheckColor = ""
+        DesktopHotelManagementSystem.endDateToCheckColor = ""
+
     def registerPress(self):
         if isRightName(self.ids.firstName.text) and isRightName(self.ids.lastName.text) and isRightEmail(
                 self.ids.email.text) and isRightTelephoneNumber(self.ids.telephone.text):
@@ -559,6 +727,8 @@ class DesktopHotelManagementSystem(App):
     endYearOutput = ""
     selectedRoomNumbers = []
     clientInformation = []
+    startDateToCheckColor = ""
+    endDateToCheckColor = ""
 
     def build(self):
         Window.clearcolor = (206 / 255, 211 / 255, 220 / 255, 1)
