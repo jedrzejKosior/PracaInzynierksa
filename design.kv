@@ -89,10 +89,12 @@
 WindowManager:
     transition: WipeTransition()
 	LoginWindow:
+	ActionWindow:
 	DateWindow:
 	RoomWindow:
 	RoomWindowFloor2
 	BookWindow:
+	BrowserWindow:
 
 
 <LoginWindow>:
@@ -141,6 +143,30 @@ WindowManager:
             font_size: 30
             on_release: app.root.current = root.loginPress()[1] if root.loginPress()[0] else Factory.LoginPopup().open()
 
+<ActionWindow>:
+    name: "actionWindow"
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: "gradientBackground.png"
+    BoxLayout:
+        orientation: "vertical"
+        spacing: 10
+        padding: 150
+        Button:
+            text: "BOOK CLIENT STAY"
+            on_release: app.root.current = "dateWindow"
+            background_color: utils.get_color_from_hex("#90C2E7")
+            color: (0, 0, 0, 1)
+        Button:
+            text: "BROWSE BOOKED STAYS"
+            on_release: app.root.current = "browserWindow"
+            background_color: utils.get_color_from_hex("#90C2E7")
+            color: (0, 0, 0, 1)
+        RoundedButton:
+            text: "LOGOUT"
+            on_release: app.root.current = "loginWindow"
 
 <DateWindow>:
     name: "dateWindow"
@@ -225,7 +251,7 @@ WindowManager:
                 text: "BACK"
                 background_color: utils.get_color_from_hex("#CED3DC")
                 color: (0, 0, 0, 1)
-                on_release: app.root.current = "loginWindow"
+                on_release: app.root.current = root.resetToDefaults()
             RoundedButton:
                 text: "SEARCH"
                 on_release: app.root.current = root.searchPress() if root.wrongTimePeriod() else Factory.DatePeriod().open()
@@ -573,11 +599,7 @@ WindowManager:
                 on_release: app.root.current = "roomWindow"
             RoundedButton:
                 text: "BOOK"
-                on_release: app.root.current = "loginWindow" if root.registerPress() else Factory.BookWindowPopup().open()
+                on_release: app.root.current = "actionWindow" if root.registerPress() else Factory.BookWindowPopup().open()
 
-
-
-
-
-
-#you can use the root.manager.get_screen('screen_name').widget_id.parameter (like root.manager.get_screen('main_window').label.text) inside your .kv file
+<BrowserWindow>:
+    name: "browserWindow"

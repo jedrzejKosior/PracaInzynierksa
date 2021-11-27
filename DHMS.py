@@ -7,6 +7,7 @@ from kivy.metrics import dp
 from datetime import datetime
 from calendar import monthrange
 import psycopg2
+import re
 
 Window.minimum_width, Window.minimum_height = 800, 580
 
@@ -43,11 +44,11 @@ def isRightTelephoneNumber(number):
 
 
 def isRightEmail(email):
-    if len(email) < 5:
+    regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+    if re.fullmatch(regex, email):
+        return True
+    else:
         return False
-    if "@" not in email or "." not in email:
-        return False
-    return True
 
 
 # Define our different screens
@@ -72,7 +73,7 @@ class LoginWindow(Screen):
             if login == user[0]:
                 foundLogin = True
                 if password == user[1]:
-                    self.window = "dateWindow"
+                    self.window = "actionWindow"
                 else:
                     isCorrect = False
                 break
@@ -88,6 +89,10 @@ class LoginWindow(Screen):
         conn.close()
         self.password.text = ""
         return isCorrect, self.window
+
+
+class ActionWindow(Screen):
+    pass
 
 
 class DateWindow(Screen):
@@ -108,6 +113,65 @@ class DateWindow(Screen):
     for i in range(monthrange(int(currentYear), currentMonth)[1]):
         daysStart.append(str(i + 1))
     daysEnd = daysStart.copy()
+
+    def resetToDefaults(self):
+        self.manager.get_screen('dateWindow').startDay.text = DateWindow.currentDay
+        self.manager.get_screen('dateWindow').startMonth.text = DateWindow.months[DateWindow.currentMonth - 1]
+        self.manager.get_screen('dateWindow').startYear.text = DateWindow.currentYear
+
+        self.manager.get_screen('dateWindow').endDay.text = DateWindow.currentDay
+        self.manager.get_screen('dateWindow').endMonth.text = DateWindow.months[DateWindow.currentMonth - 1]
+        self.manager.get_screen('dateWindow').endYear.text = DateWindow.currentYear
+
+        self.manager.get_screen('roomWindow').room1.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room2.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room3.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room4.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room5.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room6.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room7.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room8.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room9.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room10.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room11.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room12.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room13.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room14.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room15.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room16.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room17.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room18.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room19.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindow').room20.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+
+        self.manager.get_screen('roomWindowFloor2').room21.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindowFloor2').room22.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindowFloor2').room23.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindowFloor2').room24.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindowFloor2').room25.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindowFloor2').room26.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindowFloor2').room27.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindowFloor2').room28.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindowFloor2').room29.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        self.manager.get_screen('roomWindowFloor2').room30.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+
+        self.manager.get_screen('bookWindow').firstName.text = ""
+        self.manager.get_screen('bookWindow').lastName.text = ""
+        self.manager.get_screen('bookWindow').email.text = ""
+        self.manager.get_screen('bookWindow').telephone.text = ""
+
+        DesktopHotelManagementSystem.startDayOutput = ""
+        DesktopHotelManagementSystem.endDayOutput = ""
+        DesktopHotelManagementSystem.startMonthOutput = ""
+        DesktopHotelManagementSystem.endMonthOutput = ""
+        DesktopHotelManagementSystem.startYearOutput = ""
+        DesktopHotelManagementSystem.endYearOutput = ""
+        DesktopHotelManagementSystem.selectedRoomNumbers = []
+        DesktopHotelManagementSystem.clientInformation = []
+        DesktopHotelManagementSystem.startDateToCheckColor = ""
+        DesktopHotelManagementSystem.endDateToCheckColor = ""
+
+        return "actionWindow"
 
     def daysInSelectedMonthForStart(self):
         self.daysStart = []
@@ -708,6 +772,10 @@ class BookWindow(Screen):
             return True
         else:
             return False
+
+
+class BrowserWindow(Screen):
+    pass
 
 
 class WindowManager(ScreenManager):
