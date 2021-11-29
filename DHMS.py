@@ -4,6 +4,8 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
+from kivy.uix.textinput import TextInput
+from kivy.uix.spinner import Spinner
 from kivy.properties import ObjectProperty
 from kivy.core.window import Window
 from kivy.metrics import dp
@@ -779,6 +781,8 @@ class BookWindow(Screen):
 
 
 class BrowserWindow(Screen):
+    pageLimits = [0, 10]
+
     def createBooksRows(self):
         # connect to database
         conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
@@ -786,45 +790,57 @@ class BrowserWindow(Screen):
         cur = conn.cursor()
         dataToBrowse = []
         for roomNumber in range(30):
-            cur.execute("SELECT clients.clientid, clients.lastname, clients.email, room" + str(
-                roomNumber + 1) + ".roomnumber, room" + str(roomNumber + 1) + ".startdate, room" + str(
-                roomNumber + 1) + ".enddate FROM clients JOIN room" + str(
-                roomNumber + 1) + " ON clients.clientid = room" + str(roomNumber + 1) + ".clientid ORDER BY room" + str(
-                roomNumber + 1) + ".startdate, room" + str(roomNumber + 1) + ".clientid, room" + str(
-                roomNumber + 1) + ".enddate")
+            cur.execute(
+                "SELECT room" + str(roomNumber + 1) + ".roomnumber, clients.lastname, clients.email, room" + str(
+                    roomNumber + 1) + ".startdate, room" + str(
+                    roomNumber + 1) + ".enddate FROM clients JOIN room" + str(
+                    roomNumber + 1) + " ON clients.clientid = room" + str(
+                    roomNumber + 1) + ".clientid ORDER BY room" + str(roomNumber + 1) + ".startdate, room" + str(
+                    roomNumber + 1) + ".clientid, room" + str(roomNumber + 1) + ".enddate")
             dataN = cur.fetchall()
-            # print(dataN)
             if len(dataN) > 0:
                 dataToBrowse.append(dataN)
-        print(dataToBrowse, len(dataToBrowse))
         conn.commit()
         # close cursor
         cur.close()
         # close connection
         conn.close()
         mainLayout = BoxLayout(orientation="vertical", padding=30)
+        buttonsLayout = BoxLayout(orientation="horizontal")
+        buttonsLayout.add_widget(TextInput(hint_text="LAST NAME, EMAIL, ETC."))
+        buttonsLayout.add_widget(
+            Spinner(text="CATEGORY", values=["ROOM", "LAST NAME", "E-MAIL", "START DATE", "END DATE"]))
+        buttonsLayout.add_widget(
+            Button(text="SEARCH", background_color=(163 / 255, 22 / 255, 33 / 255, 1), color=(1, 1, 1, 1)))
+        buttonsLayout.add_widget(
+            Button(text="<", size_hint_x=None, width=30, background_color=(144 / 255, 194 / 255, 231 / 255, 1)))
+        buttonsLayout.add_widget(
+            Button(text=">", size_hint_x=None, width=30, background_color=(144 / 255, 194 / 255, 231 / 255, 1)))
+        mainLayout.add_widget(buttonsLayout)
         header = BoxLayout(orientation="horizontal", spacing=10)
-        # header.add_widget(Label(text="CLIENT ID", color=(0, 0, 0, 1)))
-        # header.add_widget(Label(text="LASTNAME", color=(0, 0, 0, 1)))
+        header.add_widget(Label(text="ROOM", color=(0, 0, 0, 1), size_hint_x=None, width=50))
+        header.add_widget(Label(text="LAST NAME", color=(0, 0, 0, 1)))
         header.add_widget(Label(text="E-MAIL", color=(0, 0, 0, 1)))
-        header.add_widget(Label(text="ROOM NUMBER", color=(0, 0, 0, 1)))
-        header.add_widget(Label(text="START DATE", color=(0, 0, 0, 1)))
-        header.add_widget(Label(text="END DATE", color=(0, 0, 0, 1)))
-        header.add_widget(Label(text="UPDATE", color=(0, 0, 0, 1)))
+        header.add_widget(Label(text="START DATE", color=(0, 0, 0, 1), size_hint_x=None, width=90))
+        header.add_widget(Label(text="END DATE", color=(0, 0, 0, 1), size_hint_x=None, width=90))
+        header.add_widget(Label(text="UPDATE", color=(0, 0, 0, 1), size_hint_x=None, width=60))
         mainLayout.add_widget(header)
-        for i in dataToBrowse:
-            startDate = i[0][4][6:] + "-" + i[0][4][4:6] + "-" + i[0][4][:4]
-            endDate = i[0][5][6:] + "-" + i[0][5][4:6] + "-" + i[0][5][:4]
-            layout = BoxLayout(orientation="horizontal", spacing=10)
-            # layout.add_widget(Label(text=str(i[0][0]), color=(0, 0, 0, 1)))
-            # layout.add_widget(Label(text=str(i[0][1]), color=(0, 0, 0, 1)))
-            layout.add_widget(Label(text=str(i[0][2]), color=(0, 0, 0, 1)))
-            layout.add_widget(Label(text=str(i[0][3]), color=(0, 0, 0, 1)))
-            layout.add_widget(Label(text=startDate, color=(0, 0, 0, 1)))
-            layout.add_widget(Label(text=endDate, color=(0, 0, 0, 1)))
-            layout.add_widget(
-                Button(text="SELECT", color=(0, 0, 0, 1), background_color=(144 / 255, 194 / 255, 231 / 255, 1)))
-            mainLayout.add_widget(layout)
+
+        for i in range(len(dataToBrowse)):
+            oneRoomData = dataToBrowse[i]
+            for j in oneRoomData:
+                startDate = j[3][6:] + "-" + j[3][4:6] + "-" + j[3][:4]
+                endDate = j[4][6:] + "-" + j[4][4:6] + "-" + j[4][:4]
+                layout = BoxLayout(orientation="horizontal", spacing=10)
+                layout.add_widget(Label(text=str(j[0]), color=(0, 0, 0, 1), size_hint_x=None, width=50))
+                layout.add_widget(Label(text=str(j[1]), color=(0, 0, 0, 1)))
+                layout.add_widget(Label(text=str(j[2]), color=(0, 0, 0, 1)))
+                layout.add_widget(Label(text=startDate, color=(0, 0, 0, 1), size_hint_x=None, width=90))
+                layout.add_widget(Label(text=endDate, color=(0, 0, 0, 1), size_hint_x=None, width=90))
+                layout.add_widget(
+                    Button(text="SELECT", color=(0, 0, 0, 1), background_color=(144 / 255, 194 / 255, 231 / 255, 1),
+                           size_hint_x=None, width=60))  # TODO this must be normal implementation
+                mainLayout.add_widget(layout)
         self.add_widget(mainLayout)
 
 
