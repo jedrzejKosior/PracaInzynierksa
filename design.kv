@@ -603,3 +603,9 @@ WindowManager:
 
 <BrowserWindow>:
     name: "browserWindow"
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: "gradientBackground.png"
+    on_pre_enter: root.createBooksRows()
