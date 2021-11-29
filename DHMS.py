@@ -2,6 +2,8 @@ from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.scrollview import ScrollView
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
@@ -14,7 +16,7 @@ from calendar import monthrange
 import psycopg2
 import re
 
-Window.minimum_width, Window.minimum_height = 800, 580
+Window.minimum_width, Window.minimum_height = 800, 600
 
 
 # validations of inputs
@@ -805,33 +807,31 @@ class BrowserWindow(Screen):
         cur.close()
         # close connection
         conn.close()
-        mainLayout = BoxLayout(orientation="vertical", padding=30)
+
         buttonsLayout = BoxLayout(orientation="horizontal")
-        buttonsLayout.add_widget(TextInput(hint_text="LAST NAME, EMAIL, ETC."))
+        buttonsLayout.add_widget(Button(text="BACK", on_relese=))
+        buttonsLayout.add_widget(TextInput(hint_text="LAST NAME, EMAIL, ETC.", size_hint_y=None, height=41))
         buttonsLayout.add_widget(
-            Spinner(text="CATEGORY", values=["ROOM", "LAST NAME", "E-MAIL", "START DATE", "END DATE"]))
+            Spinner(text="CATEGORY", values=["ROOM", "LAST NAME", "E-MAIL", "START DATE", "END DATE"], size_hint_y=None, height=40))
         buttonsLayout.add_widget(
-            Button(text="SEARCH", background_color=(163 / 255, 22 / 255, 33 / 255, 1), color=(1, 1, 1, 1)))
-        buttonsLayout.add_widget(
-            Button(text="<", size_hint_x=None, width=30, background_color=(144 / 255, 194 / 255, 231 / 255, 1)))
-        buttonsLayout.add_widget(
-            Button(text=">", size_hint_x=None, width=30, background_color=(144 / 255, 194 / 255, 231 / 255, 1)))
-        mainLayout.add_widget(buttonsLayout)
-        header = BoxLayout(orientation="horizontal", spacing=10)
+            Button(text="SEARCH", background_color=(163 / 255, 22 / 255, 33 / 255, 1), color=(1, 1, 1, 1), size_hint_y=None, height=40))
+
+        header = GridLayout(padding=[30, 0, 30, 0], cols=6, spacing=20)
         header.add_widget(Label(text="ROOM", color=(0, 0, 0, 1), size_hint_x=None, width=50))
         header.add_widget(Label(text="LAST NAME", color=(0, 0, 0, 1)))
         header.add_widget(Label(text="E-MAIL", color=(0, 0, 0, 1)))
         header.add_widget(Label(text="START DATE", color=(0, 0, 0, 1), size_hint_x=None, width=90))
         header.add_widget(Label(text="END DATE", color=(0, 0, 0, 1), size_hint_x=None, width=90))
         header.add_widget(Label(text="UPDATE", color=(0, 0, 0, 1), size_hint_x=None, width=60))
-        mainLayout.add_widget(header)
 
+        layout = GridLayout(padding=30, cols=6, spacing=20, size_hint_y=None)
+        # Make sure the height is such that there is something to scroll.
+        layout.bind(minimum_height=layout.setter('height'))
         for i in range(len(dataToBrowse)):
             oneRoomData = dataToBrowse[i]
             for j in oneRoomData:
                 startDate = j[3][6:] + "-" + j[3][4:6] + "-" + j[3][:4]
                 endDate = j[4][6:] + "-" + j[4][4:6] + "-" + j[4][:4]
-                layout = BoxLayout(orientation="horizontal", spacing=10)
                 layout.add_widget(Label(text=str(j[0]), color=(0, 0, 0, 1), size_hint_x=None, width=50))
                 layout.add_widget(Label(text=str(j[1]), color=(0, 0, 0, 1)))
                 layout.add_widget(Label(text=str(j[2]), color=(0, 0, 0, 1)))
@@ -839,9 +839,15 @@ class BrowserWindow(Screen):
                 layout.add_widget(Label(text=endDate, color=(0, 0, 0, 1), size_hint_x=None, width=90))
                 layout.add_widget(
                     Button(text="SELECT", color=(0, 0, 0, 1), background_color=(144 / 255, 194 / 255, 231 / 255, 1),
-                           size_hint_x=None, width=60))  # TODO this must be normal implementation
-                mainLayout.add_widget(layout)
+                           size_hint_y=None, height=30, size_hint_x=None, width=60))  # TODO this must be normal implementation
+        scrollRoot = ScrollView(size_hint=(1, None), size=(Window.width, Window.height * 0.80))
+        scrollRoot.add_widget(layout)
+        mainLayout = BoxLayout(padding=30, orientation="vertical")
+        mainLayout.add_widget(header)
+        mainLayout.add_widget(scrollRoot)
+        mainLayout.add_widget(buttonsLayout)
         self.add_widget(mainLayout)
+        # self.add_widget(scrollRoot)
 
 
 class WindowManager(ScreenManager):
