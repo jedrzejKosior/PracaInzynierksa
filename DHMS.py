@@ -1,13 +1,10 @@
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
-from kivy.uix.textinput import TextInput
-from kivy.uix.spinner import Spinner
 from kivy.properties import ObjectProperty
 from kivy.core.window import Window
 from kivy.metrics import dp
@@ -103,6 +100,55 @@ class ActionWindow(Screen):
 
 
 class DateWindow(Screen):
+    def abortUpdate(self):
+        if len(DesktopHotelManagementSystem.roomInfo) > 0 and len(DesktopHotelManagementSystem.clientInfo) > 0:
+            conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
+            # cursor
+            cur = conn.cursor()
+            cur.execute("INSERT INTO room" + str(DesktopHotelManagementSystem.roomInfo[0][0]) + " (roomnumber, startdate, enddate, clientid) VALUES (" + str(DesktopHotelManagementSystem.roomInfo[0][0]) + ", '" + str(DesktopHotelManagementSystem.roomInfo[0][1]) + "', '" + str(DesktopHotelManagementSystem.roomInfo[0][2]) + "', " + str(DesktopHotelManagementSystem.roomInfo[0][3]) + ")")
+            conn.commit()
+            cur.execute("INSERT INTO clients (firstname, lastname, email, telephone, clientid) VALUES ('" + str(DesktopHotelManagementSystem.clientInfo[0][0]) + "', '" + str(DesktopHotelManagementSystem.clientInfo[0][1]) + "', '" + str(DesktopHotelManagementSystem.clientInfo[0][2]) + "', '" + str(DesktopHotelManagementSystem.clientInfo[0][3]) + "', " + str(DesktopHotelManagementSystem.clientInfo[0][4]) + ")")
+
+            conn.commit()
+            # close cursor
+            cur.close()
+            # close connection
+            conn.close()
+            DesktopHotelManagementSystem.roomInfo = []
+            DesktopHotelManagementSystem.clientInfo = []
+            return "browserWindow"
+        else:
+            return "actionWindow"
+
+    def startUpdate(self):
+        if len(DesktopHotelManagementSystem.bookToUpdate) > 0:
+            conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
+            # cursor
+            cur = conn.cursor()
+            cur.execute(
+                "SELECT * FROM room" + str(DesktopHotelManagementSystem.bookToUpdate[0]) + " WHERE startdate='" + str(
+                    DesktopHotelManagementSystem.bookToUpdate[3]) + "' AND enddate='" + str(
+                    DesktopHotelManagementSystem.bookToUpdate[4] + "'"))
+            DesktopHotelManagementSystem.roomInfo = cur.fetchall()
+            print(DesktopHotelManagementSystem.roomInfo[0])
+            cur.execute("SELECT * FROM clients WHERE lastname='" + str(
+                DesktopHotelManagementSystem.bookToUpdate[1]) + "' AND email='" + str(
+                DesktopHotelManagementSystem.bookToUpdate[2] + "'"))
+            DesktopHotelManagementSystem.clientInfo = cur.fetchall()
+            cur.execute(
+                "DELETE FROM room" + str(DesktopHotelManagementSystem.bookToUpdate[0]) + " WHERE startdate='" + str(
+                    DesktopHotelManagementSystem.bookToUpdate[3]) + "' AND enddate='" + str(
+                    DesktopHotelManagementSystem.bookToUpdate[4] + "'"))
+            conn.commit()
+            cur.execute("DELETE FROM clients WHERE lastname='" + str(
+                DesktopHotelManagementSystem.bookToUpdate[1]) + "' AND email='" + str(
+                DesktopHotelManagementSystem.bookToUpdate[2] + "'"))
+            conn.commit()
+            # close cursor
+            cur.close()
+            # close connection
+            conn.close()
+
     startDay = ObjectProperty(None)
     endDay = ObjectProperty(None)
     startMonth = ObjectProperty(None)
@@ -178,7 +224,7 @@ class DateWindow(Screen):
         DesktopHotelManagementSystem.startDateToCheckColor = ""
         DesktopHotelManagementSystem.endDateToCheckColor = ""
 
-        return "actionWindow"
+        return self.abortUpdate()
 
     def daysInSelectedMonthForStart(self):
         self.daysStart = []
@@ -716,7 +762,7 @@ class BookWindow(Screen):
         DesktopHotelManagementSystem.startDateToCheckColor = ""
         DesktopHotelManagementSystem.endDateToCheckColor = ""
 
-    def registerPress(self):
+    def registerPress(self):  # TODO no the same e-mails and telephone numbers
         if isRightName(self.ids.firstName.text) and isRightName(self.ids.lastName.text) and isRightEmail(
                 self.ids.email.text) and isRightTelephoneNumber(self.ids.telephone.text):
             DesktopHotelManagementSystem.clientInformation.append(self.ids.firstName.text)
@@ -782,10 +828,27 @@ class BookWindow(Screen):
             return False
 
 
-class BrowserWindow(Screen):
-    pageLimits = [0, 10]
+class ScreenButton(Button):
+    roomData = ObjectProperty(None)
+    background_color = ObjectProperty(None)
+    id = ObjectProperty(None)
 
+    def on_press(self, *args):
+        if 0.63 < self.background_color[0] < 0.64:
+            self.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+        else:
+            self.background_color = (
+            163 / 255, 22 / 255, 33 / 255, 1)  # TODO repair schedule so not last matched red is data
+            DesktopHotelManagementSystem.bookToUpdate = self.roomData
+
+
+class BrowserWindow(Screen):
     def createBooksRows(self):
+        scrollRoot = ScrollView(size_hint=(1, None), size=(Window.width, Window.height * 0.75))
+        layout = GridLayout(padding=30, cols=6, spacing=20, size_hint_y=None)
+        layout.bind(minimum_height=layout.setter('height'))
+        header = GridLayout(padding=[30, 0, 30, 0], cols=6, spacing=20)
+
         # connect to database
         conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
         # cursor
@@ -808,15 +871,6 @@ class BrowserWindow(Screen):
         # close connection
         conn.close()
 
-        buttonsLayout = BoxLayout(orientation="horizontal")
-        buttonsLayout.add_widget(Button(text="BACK", on_relese=))
-        buttonsLayout.add_widget(TextInput(hint_text="LAST NAME, EMAIL, ETC.", size_hint_y=None, height=41))
-        buttonsLayout.add_widget(
-            Spinner(text="CATEGORY", values=["ROOM", "LAST NAME", "E-MAIL", "START DATE", "END DATE"], size_hint_y=None, height=40))
-        buttonsLayout.add_widget(
-            Button(text="SEARCH", background_color=(163 / 255, 22 / 255, 33 / 255, 1), color=(1, 1, 1, 1), size_hint_y=None, height=40))
-
-        header = GridLayout(padding=[30, 0, 30, 0], cols=6, spacing=20)
         header.add_widget(Label(text="ROOM", color=(0, 0, 0, 1), size_hint_x=None, width=50))
         header.add_widget(Label(text="LAST NAME", color=(0, 0, 0, 1)))
         header.add_widget(Label(text="E-MAIL", color=(0, 0, 0, 1)))
@@ -824,12 +878,11 @@ class BrowserWindow(Screen):
         header.add_widget(Label(text="END DATE", color=(0, 0, 0, 1), size_hint_x=None, width=90))
         header.add_widget(Label(text="UPDATE", color=(0, 0, 0, 1), size_hint_x=None, width=60))
 
-        layout = GridLayout(padding=30, cols=6, spacing=20, size_hint_y=None)
-        # Make sure the height is such that there is something to scroll.
-        layout.bind(minimum_height=layout.setter('height'))
+        idButton = 0
         for i in range(len(dataToBrowse)):
             oneRoomData = dataToBrowse[i]
             for j in oneRoomData:
+                idButton = idButton + 1
                 startDate = j[3][6:] + "-" + j[3][4:6] + "-" + j[3][:4]
                 endDate = j[4][6:] + "-" + j[4][4:6] + "-" + j[4][:4]
                 layout.add_widget(Label(text=str(j[0]), color=(0, 0, 0, 1), size_hint_x=None, width=50))
@@ -837,17 +890,13 @@ class BrowserWindow(Screen):
                 layout.add_widget(Label(text=str(j[2]), color=(0, 0, 0, 1)))
                 layout.add_widget(Label(text=startDate, color=(0, 0, 0, 1), size_hint_x=None, width=90))
                 layout.add_widget(Label(text=endDate, color=(0, 0, 0, 1), size_hint_x=None, width=90))
-                layout.add_widget(
-                    Button(text="SELECT", color=(0, 0, 0, 1), background_color=(144 / 255, 194 / 255, 231 / 255, 1),
-                           size_hint_y=None, height=30, size_hint_x=None, width=60))  # TODO this must be normal implementation
-        scrollRoot = ScrollView(size_hint=(1, None), size=(Window.width, Window.height * 0.80))
+                layout.add_widget(ScreenButton(text="SELECT", color=(0, 0, 0, 1),
+                                               background_color=(144 / 255, 194 / 255, 231 / 255, 1),
+                                               size_hint_y=None, height=30, size_hint_x=None, width=60,
+                                               roomData=j, id="roomBrowse" + str(idButton)))  # TODO
         scrollRoot.add_widget(layout)
-        mainLayout = BoxLayout(padding=30, orientation="vertical")
-        mainLayout.add_widget(header)
-        mainLayout.add_widget(scrollRoot)
-        mainLayout.add_widget(buttonsLayout)
-        self.add_widget(mainLayout)
-        # self.add_widget(scrollRoot)
+        DesktopHotelManagementSystem.renderBrowser = False
+        return scrollRoot
 
 
 class WindowManager(ScreenManager):
@@ -869,6 +918,10 @@ class DesktopHotelManagementSystem(App):
     clientInformation = []
     startDateToCheckColor = ""
     endDateToCheckColor = ""
+    bookToUpdate = []
+    renderBrowser = True
+    clientInfo = []
+    roomInfo = []
 
     def build(self):
         Window.clearcolor = (206 / 255, 211 / 255, 220 / 255, 1)

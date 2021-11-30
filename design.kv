@@ -176,6 +176,7 @@ WindowManager:
     endMonth: endMonth
     startYear: startYear
     endYear: endYear
+    on_pre_enter: root.startUpdate()
     canvas.before:
         Rectangle:
             pos: self.pos
@@ -608,4 +609,72 @@ WindowManager:
             pos: self.pos
             size: self.size
             source: "gradientBackground.png"
-    on_pre_enter: root.createBooksRows()
+    on_pre_enter: if app.renderBrowser: main.add_widget(root.createBooksRows())
+    BoxLayout:
+        orientation: "vertical"
+        padding: 30
+        id: main
+        BoxLayout:
+            id: buttonsRow
+            orientation: "horizontal"
+            size_hint_y: None
+            height: 41
+            TextInput:
+                hint_text: "LAST NAME, EMAIL, ETC."
+                size_hint_x: None
+                width: 200
+            Spinner:
+                text:"CATEGORY"
+                values: ["ROOM", "LAST NAME", "E-MAIL", "START DATE", "END DATE"]
+                size_hint_y: None
+                height: 40
+            RoundedButton:
+                text: "SEARCH"
+                size_hint_y: None
+                height: 40
+                on_press: print(app.bookToUpdate)
+            Button:
+                text: "BACK"
+                size_hint_y: None
+                height: 40
+                background_color: utils.get_color_from_hex("#CED3DC")
+                color: (0, 0, 0, 1)
+                on_release: app.root.current = "actionWindow"
+            Button:
+                text: "UPDATE SELECTED"
+                size_hint_y: None
+                height: 40
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: app.root.current = 'dateWindow'
+        GridLayout:
+            padding: [30, 10, 30, 0]
+            cols: 6
+            spacing: 20
+            Label:
+                text: "ROOM"
+                color: (0, 0, 0, 1)
+                size_hint_x: None
+                width: 50
+            Label:
+                text: "LAST NAME"
+                color: (0, 0, 0, 1)
+            Label:
+                text: "E-MAIL"
+                color: (0, 0, 0, 1)
+            Label:
+                text: "START DATE"
+                color: (0, 0, 0, 1)
+                size_hint_x: None
+                width: 90
+            Label:
+                text: "END DATE"
+                color: (0, 0, 0, 1)
+                size_hint_x: None
+                width: 90
+            Label:
+                text: "UPDATE"
+                color: (0, 0, 0, 1)
+                size_hint_x: None
+                width: 60
+
