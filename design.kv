@@ -641,12 +641,19 @@ WindowManager:
                 color: (0, 0, 0, 1)
                 on_release: app.root.current = "actionWindow"
             Button:
-                text: "UPDATE SELECTED"
+                text: "UPDATE"
                 size_hint_y: None
                 height: 40
                 background_color: utils.get_color_from_hex("#90C2E7")
                 color: (0, 0, 0, 1)
                 on_release: app.root.current = 'dateWindow'
+            Button:
+                text: "DELETE"
+                size_hint_y: None
+                height: 40
+                background_color: utils.get_color_from_hex("#90C2E7")
+                color: (0, 0, 0, 1)
+                on_release: root.deleteBook()
         GridLayout:
             padding: [30, 10, 30, 0]
             cols: 6
@@ -673,7 +680,7 @@ WindowManager:
                 size_hint_x: None
                 width: 90
             Label:
-                text: "UPDATE"
+                text: "EDITION"
                 color: (0, 0, 0, 1)
                 size_hint_x: None
                 width: 60

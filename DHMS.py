@@ -105,9 +105,19 @@ class DateWindow(Screen):
             conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
             # cursor
             cur = conn.cursor()
-            cur.execute("INSERT INTO room" + str(DesktopHotelManagementSystem.roomInfo[0][0]) + " (roomnumber, startdate, enddate, clientid) VALUES (" + str(DesktopHotelManagementSystem.roomInfo[0][0]) + ", '" + str(DesktopHotelManagementSystem.roomInfo[0][1]) + "', '" + str(DesktopHotelManagementSystem.roomInfo[0][2]) + "', " + str(DesktopHotelManagementSystem.roomInfo[0][3]) + ")")
+            cur.execute("INSERT INTO room" + str(DesktopHotelManagementSystem.roomInfo[0][
+                                                     0]) + " (roomnumber, startdate, enddate, clientid) VALUES (" + str(
+                DesktopHotelManagementSystem.roomInfo[0][0]) + ", '" + str(
+                DesktopHotelManagementSystem.roomInfo[0][1]) + "', '" + str(
+                DesktopHotelManagementSystem.roomInfo[0][2]) + "', " + str(
+                DesktopHotelManagementSystem.roomInfo[0][3]) + ")")
             conn.commit()
-            cur.execute("INSERT INTO clients (firstname, lastname, email, telephone, clientid) VALUES ('" + str(DesktopHotelManagementSystem.clientInfo[0][0]) + "', '" + str(DesktopHotelManagementSystem.clientInfo[0][1]) + "', '" + str(DesktopHotelManagementSystem.clientInfo[0][2]) + "', '" + str(DesktopHotelManagementSystem.clientInfo[0][3]) + "', " + str(DesktopHotelManagementSystem.clientInfo[0][4]) + ")")
+            cur.execute("INSERT INTO clients (firstname, lastname, email, telephone, clientid) VALUES ('" + str(
+                DesktopHotelManagementSystem.clientInfo[0][0]) + "', '" + str(
+                DesktopHotelManagementSystem.clientInfo[0][1]) + "', '" + str(
+                DesktopHotelManagementSystem.clientInfo[0][2]) + "', '" + str(
+                DesktopHotelManagementSystem.clientInfo[0][3]) + "', " + str(
+                DesktopHotelManagementSystem.clientInfo[0][4]) + ")")
 
             conn.commit()
             # close cursor
@@ -838,7 +848,7 @@ class ScreenButton(Button):
             self.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         else:
             self.background_color = (
-            163 / 255, 22 / 255, 33 / 255, 1)  # TODO repair schedule so not last matched red is data
+                163 / 255, 22 / 255, 33 / 255, 1)  # TODO repair schedule so not last matched red is data
             DesktopHotelManagementSystem.bookToUpdate = self.roomData
 
 
@@ -847,7 +857,6 @@ class BrowserWindow(Screen):
         scrollRoot = ScrollView(size_hint=(1, None), size=(Window.width, Window.height * 0.75))
         layout = GridLayout(padding=30, cols=6, spacing=20, size_hint_y=None)
         layout.bind(minimum_height=layout.setter('height'))
-        header = GridLayout(padding=[30, 0, 30, 0], cols=6, spacing=20)
 
         # connect to database
         conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
@@ -871,13 +880,6 @@ class BrowserWindow(Screen):
         # close connection
         conn.close()
 
-        header.add_widget(Label(text="ROOM", color=(0, 0, 0, 1), size_hint_x=None, width=50))
-        header.add_widget(Label(text="LAST NAME", color=(0, 0, 0, 1)))
-        header.add_widget(Label(text="E-MAIL", color=(0, 0, 0, 1)))
-        header.add_widget(Label(text="START DATE", color=(0, 0, 0, 1), size_hint_x=None, width=90))
-        header.add_widget(Label(text="END DATE", color=(0, 0, 0, 1), size_hint_x=None, width=90))
-        header.add_widget(Label(text="UPDATE", color=(0, 0, 0, 1), size_hint_x=None, width=60))
-
         idButton = 0
         for i in range(len(dataToBrowse)):
             oneRoomData = dataToBrowse[i]
@@ -897,6 +899,23 @@ class BrowserWindow(Screen):
         scrollRoot.add_widget(layout)
         DesktopHotelManagementSystem.renderBrowser = False
         return scrollRoot
+
+    def deleteBook(self):
+        conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
+        # cursor
+        cur = conn.cursor()
+        cur.execute("DELETE FROM room" + str(DesktopHotelManagementSystem.bookToUpdate[0]) + " WHERE startdate='" + str(
+            DesktopHotelManagementSystem.bookToUpdate[3]) + "' AND enddate='" + str(
+            DesktopHotelManagementSystem.bookToUpdate[4] + "'"))
+        conn.commit()
+        cur.execute("DELETE FROM clients WHERE lastname='" + str(
+            DesktopHotelManagementSystem.bookToUpdate[1]) + "' AND email='" + str(
+            DesktopHotelManagementSystem.bookToUpdate[2] + "'"))
+        conn.commit()
+        # close cursor
+        cur.close()
+        # close connection
+        conn.close()
 
 
 class WindowManager(ScreenManager):
