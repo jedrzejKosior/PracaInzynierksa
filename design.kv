@@ -86,6 +86,16 @@
         Button:
             text: "OK"
             on_release: root.dismiss()
+<BrowserUpdatePopup@Popup>
+    BoxLayout:
+        orientation: "vertical"
+        spacing: 10
+        Label:
+            text: "NO DATA OR MORE THAN ONE SELECTED"
+            color: (0, 0, 0, 1)
+        Button:
+            text: "OK"
+            on_release: root.dismiss()
 WindowManager:
     transition: WipeTransition()
 	LoginWindow:
@@ -611,7 +621,7 @@ WindowManager:
             pos: self.pos
             size: self.size
             source: "gradientBackground.png"
-#    on_pre_enter: if app.renderBrowser: main.add_widget(root.createBooksRows())
+    on_pre_enter: main.add_widget(root.createBooksRows()) if app.renderBrowser else root.reloadSpinner()
     BoxLayout:
         orientation: "vertical"
         padding: 30
@@ -622,19 +632,21 @@ WindowManager:
             height: 41
             TextInput:
                 id: textToSelect
-                hint_text: "LAST NAME, EMAIL, ETC."
-                size_hint_x: None
-                width: 200
+                hint_text: "LAST NAME/EMAIL/ETC."
             Spinner:
                 id: columnToSelect
                 text:"CATEGORY"
                 values: ["ROOM", "LAST NAME", "E-MAIL", "START DATE", "END DATE"]
                 size_hint_y: None
                 height: 40
+                size_hint_x: None
+                width: 100
             RoundedButton:
                 text: "SEARCH"
                 size_hint_y: None
                 height: 40
+                size_hint_x: None
+                width: 100
                 on_press: main.add_widget(root.createBooksRows()) if app.renderBrowser else root.reloadSpinner()
             Button:
                 text: "BACK"
@@ -642,6 +654,8 @@ WindowManager:
                 height: 40
                 background_color: utils.get_color_from_hex("#CED3DC")
                 color: (0, 0, 0, 1)
+                size_hint_x: None
+                width: 70
                 on_release: app.root.current = "actionWindow"
             Button:
                 text: "UPDATE"
@@ -649,11 +663,15 @@ WindowManager:
                 height: 40
                 background_color: utils.get_color_from_hex("#90C2E7")
                 color: (0, 0, 0, 1)
-                on_release: app.root.current = 'dateWindow'
+                size_hint_x: None
+                width: 70
+                on_release: app.root.current = 'dateWindow' #if root.updateOrNot() else Factory.BrowserUpdatePopup().open()  TODO
             Button:
                 text: "DELETE"
                 size_hint_y: None
                 height: 40
                 background_color: utils.get_color_from_hex("#90C2E7")
                 color: (0, 0, 0, 1)
+                size_hint_x: None
+                width: 70
                 on_release: root.deleteBook()

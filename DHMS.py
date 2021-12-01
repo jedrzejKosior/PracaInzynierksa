@@ -850,11 +850,13 @@ class ScreenButton(Button):
         if 0.63 < self.background_color[0] < 0.64:
             self.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
             self.color = (0, 0, 0, 1)
+            DesktopHotelManagementSystem.amountToUpdate = DesktopHotelManagementSystem.amountToUpdate - 1
         else:
             self.background_color = (
                 163 / 255, 22 / 255, 33 / 255, 1)  # TODO repair schedule so not last matched red is data
             self.color = (1, 1, 1, 1)
             DesktopHotelManagementSystem.bookToUpdate = self.roomData
+            DesktopHotelManagementSystem.amountToUpdate = DesktopHotelManagementSystem.amountToUpdate + 1
 
 
 class BrowserWindow(Screen):
@@ -901,21 +903,56 @@ class BrowserWindow(Screen):
                 if len(dataN) > 0:
                     dataToBrowse.append(dataN)
         elif inputCategory == "ROOM":
-            cur.execute(
-                "SELECT room" + str(inputText) + ".roomnumber, clients.lastname, clients.email, room" + str(
-                    inputText) + ".startdate, room" + str(
-                    inputText) + ".enddate FROM clients JOIN room" + str(
-                    inputText) + " ON clients.clientid = room" + str(
-                    inputText) + ".clientid ORDER BY room" + str(inputText) + ".startdate, room" + str(
-                    inputText) + ".clientid, room" + str(inputText) + ".enddate")
-            dataN = cur.fetchall()
-            if len(dataN) > 0:
-                dataToBrowse.append(dataN)
+            if 1 <= len(inputText) <= 2 and inputText[0].isdigit():
+                cur.execute(
+                    "SELECT room" + str(inputText) + ".roomnumber, clients.lastname, clients.email, room" + str(
+                        inputText) + ".startdate, room" + str(
+                        inputText) + ".enddate FROM clients JOIN room" + str(
+                        inputText) + " ON clients.clientid = room" + str(
+                        inputText) + ".clientid ORDER BY room" + str(inputText) + ".startdate, room" + str(
+                        inputText) + ".clientid, room" + str(inputText) + ".enddate")
+                dataN = cur.fetchall()
+                if len(dataN) > 0:
+                    dataToBrowse.append(dataN)
+        elif inputCategory == "START DATE" or inputCategory == "END DATE":
+            if inputCategory == "START DATE": inputCategory = "startdate"
+            if inputCategory == "END DATE": inputCategory = "enddate"
+
+            if inputText[4] == " " or inputText[4] == "-" or inputText[4] == "/":
+                inputText = str(inputText[:4]) + str(inputText[5:7]) + str(inputText[8:])
+                print(inputText)
+                for roomNumber in range(30):
+                    cur.execute(
+                        "SELECT room" + str(
+                            roomNumber + 1) + ".roomnumber, clients.lastname, clients.email, room" + str(
+                            roomNumber + 1) + ".startdate, room" + str(
+                            roomNumber + 1) + ".enddate FROM clients JOIN room" + str(
+                            roomNumber + 1) + " ON clients.clientid = room" + str(
+                            roomNumber + 1) + ".clientid WHERE " + str(inputCategory) + "='" + str(
+                            inputText) + "' ORDER BY room" + str(roomNumber + 1) + ".startdate, room" + str(
+                            roomNumber + 1) + ".clientid, room" + str(roomNumber + 1) + ".enddate")
+                    dataN = cur.fetchall()
+                    if len(dataN) > 0:
+                        dataToBrowse.append(dataN)
+            elif inputText[2] == " " or inputText[2] == "-" or inputText[2] == "/":
+                inputText = str(inputText[6:] + str(inputText[3:5]) + str(inputText[:2]))
+                print(inputText)
+                for roomNumber in range(30):
+                    cur.execute(
+                        "SELECT room" + str(
+                            roomNumber + 1) + ".roomnumber, clients.lastname, clients.email, room" + str(
+                            roomNumber + 1) + ".startdate, room" + str(
+                            roomNumber + 1) + ".enddate FROM clients JOIN room" + str(
+                            roomNumber + 1) + " ON clients.clientid = room" + str(
+                            roomNumber + 1) + ".clientid WHERE " + str(inputCategory) + "='" + str(
+                            inputText) + "' ORDER BY room" + str(roomNumber + 1) + ".startdate, room" + str(
+                            roomNumber + 1) + ".clientid, room" + str(roomNumber + 1) + ".enddate")
+                    dataN = cur.fetchall()
+                    if len(dataN) > 0:
+                        dataToBrowse.append(dataN)
         else:
             if inputCategory == "LAST NAME": inputCategory = "lastname"
             if inputCategory == "E-MAIL": inputCategory = "email"
-            if inputCategory == "START DATE": inputCategory = "startdate"
-            if inputCategory == "END DATE": inputCategory = "enddate"
             for roomNumber in range(30):
                 cur.execute(
                     "SELECT room" + str(roomNumber + 1) + ".roomnumber, clients.lastname, clients.email, room" + str(
@@ -951,8 +988,12 @@ class BrowserWindow(Screen):
                                                background_color=(144 / 255, 194 / 255, 231 / 255, 1),
                                                size_hint_y=None, height=30, size_hint_x=None, width=60,
                                                roomData=j, id="roomBrowse" + str(idButton)))  # TODO
+
         scrollRoot.add_widget(layout)
         mainLayout.add_widget(header)
+        if len(dataToBrowse) == 0:
+            mainLayout.add_widget(
+                Label(text="NO RESULTS OR INVALID INPUT DATA", color=(163 / 255, 22 / 255, 33 / 255, 1)))
         mainLayout.add_widget(scrollRoot)
         self.mainLayoutForKv = mainLayout
 
@@ -978,6 +1019,14 @@ class BrowserWindow(Screen):
         conn.close()
         self.reloadSpinner()
 
+    # noinspection PyMethodMayBeStatic  TODO
+    # def updateOrNot(self):
+    #     print(DesktopHotelManagementSystem.amountToUpdate)
+    #     if DesktopHotelManagementSystem.amountToUpdate == 1:
+    #         return True
+    #     else:
+    #         return False
+
 
 class WindowManager(ScreenManager):
     pass
@@ -1002,6 +1051,7 @@ class DesktopHotelManagementSystem(App):
     renderBrowser = True
     clientInfo = []
     roomInfo = []
+    amountToUpdate = 0
 
     def build(self):
         Window.clearcolor = (206 / 255, 211 / 255, 220 / 255, 1)
