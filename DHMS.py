@@ -100,6 +100,8 @@ class ActionWindow(Screen):
 
 
 class DateWindow(Screen):
+
+    # noinspection PyMethodMayBeStatic
     def abortUpdate(self):
         if len(DesktopHotelManagementSystem.roomInfo) > 0 and len(DesktopHotelManagementSystem.clientInfo) > 0:
             conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
@@ -130,6 +132,7 @@ class DateWindow(Screen):
         else:
             return "actionWindow"
 
+    # noinspection PyMethodMayBeStatic
     def startUpdate(self):
         if len(DesktopHotelManagementSystem.bookToUpdate) > 0:
             conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
@@ -846,34 +849,86 @@ class ScreenButton(Button):
     def on_press(self, *args):
         if 0.63 < self.background_color[0] < 0.64:
             self.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
+            self.color = (0, 0, 0, 1)
         else:
             self.background_color = (
                 163 / 255, 22 / 255, 33 / 255, 1)  # TODO repair schedule so not last matched red is data
+            self.color = (1, 1, 1, 1)
             DesktopHotelManagementSystem.bookToUpdate = self.roomData
 
 
 class BrowserWindow(Screen):
+    mainLayoutForKv = ObjectProperty(None)
+
+    # noinspection PyMethodMayBeStatic
+    def reloadSpinner(self):
+        self.ids.main.remove_widget(self.mainLayoutForKv)
+        self.mainLayoutForKv.clear_widgets()
+        self.ids.main.add_widget(self.createBooksRows())
+
+    # noinspection PyMethodMayBeStatic
     def createBooksRows(self):
+        inputText = self.textToSelect.text
+        inputCategory = self.columnToSelect.text
         scrollRoot = ScrollView(size_hint=(1, None), size=(Window.width, Window.height * 0.75))
+        mainLayout = GridLayout(cols=1)
+        self.ids['scrollID'] = mainLayout
         layout = GridLayout(padding=30, cols=6, spacing=20, size_hint_y=None)
         layout.bind(minimum_height=layout.setter('height'))
+        header = GridLayout(padding=[30, 0, 30, 0], cols=6, spacing=20)
+        header.add_widget(Label(text="ROOM", color=(0, 0, 0, 1), size_hint_x=None, width=50))
+        header.add_widget(Label(text="LAST NAME", color=(0, 0, 0, 1)))
+        header.add_widget(Label(text="E-MAIL", color=(0, 0, 0, 1)))
+        header.add_widget(Label(text="START DATE", color=(0, 0, 0, 1), size_hint_x=None, width=90))
+        header.add_widget(Label(text="END DATE", color=(0, 0, 0, 1), size_hint_x=None, width=90))
+        header.add_widget(Label(text="UPDATE", color=(0, 0, 0, 1), size_hint_x=None, width=60))
 
         # connect to database
         conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
         # cursor
         cur = conn.cursor()
         dataToBrowse = []
-        for roomNumber in range(30):
+        if len(inputText) == 0 or inputCategory == "CATEGORY":
+            for roomNumber in range(30):
+                cur.execute(
+                    "SELECT room" + str(roomNumber + 1) + ".roomnumber, clients.lastname, clients.email, room" + str(
+                        roomNumber + 1) + ".startdate, room" + str(
+                        roomNumber + 1) + ".enddate FROM clients JOIN room" + str(
+                        roomNumber + 1) + " ON clients.clientid = room" + str(
+                        roomNumber + 1) + ".clientid ORDER BY room" + str(roomNumber + 1) + ".startdate, room" + str(
+                        roomNumber + 1) + ".clientid, room" + str(roomNumber + 1) + ".enddate")
+                dataN = cur.fetchall()
+                if len(dataN) > 0:
+                    dataToBrowse.append(dataN)
+        elif inputCategory == "ROOM":
             cur.execute(
-                "SELECT room" + str(roomNumber + 1) + ".roomnumber, clients.lastname, clients.email, room" + str(
-                    roomNumber + 1) + ".startdate, room" + str(
-                    roomNumber + 1) + ".enddate FROM clients JOIN room" + str(
-                    roomNumber + 1) + " ON clients.clientid = room" + str(
-                    roomNumber + 1) + ".clientid ORDER BY room" + str(roomNumber + 1) + ".startdate, room" + str(
-                    roomNumber + 1) + ".clientid, room" + str(roomNumber + 1) + ".enddate")
+                "SELECT room" + str(inputText) + ".roomnumber, clients.lastname, clients.email, room" + str(
+                    inputText) + ".startdate, room" + str(
+                    inputText) + ".enddate FROM clients JOIN room" + str(
+                    inputText) + " ON clients.clientid = room" + str(
+                    inputText) + ".clientid ORDER BY room" + str(inputText) + ".startdate, room" + str(
+                    inputText) + ".clientid, room" + str(inputText) + ".enddate")
             dataN = cur.fetchall()
             if len(dataN) > 0:
                 dataToBrowse.append(dataN)
+        else:
+            if inputCategory == "LAST NAME": inputCategory = "lastname"
+            if inputCategory == "E-MAIL": inputCategory = "email"
+            if inputCategory == "START DATE": inputCategory = "startdate"
+            if inputCategory == "END DATE": inputCategory = "enddate"
+            for roomNumber in range(30):
+                cur.execute(
+                    "SELECT room" + str(roomNumber + 1) + ".roomnumber, clients.lastname, clients.email, room" + str(
+                        roomNumber + 1) + ".startdate, room" + str(
+                        roomNumber + 1) + ".enddate FROM clients JOIN room" + str(
+                        roomNumber + 1) + " ON clients.clientid = room" + str(
+                        roomNumber + 1) + ".clientid WHERE " + str(inputCategory) + "='" + str(
+                        inputText) + "' ORDER BY room" + str(roomNumber + 1) + ".startdate, room" + str(
+                        roomNumber + 1) + ".clientid, room" + str(roomNumber + 1) + ".enddate")
+                dataN = cur.fetchall()
+                if len(dataN) > 0:
+                    dataToBrowse.append(dataN)
+
         conn.commit()
         # close cursor
         cur.close()
@@ -897,9 +952,14 @@ class BrowserWindow(Screen):
                                                size_hint_y=None, height=30, size_hint_x=None, width=60,
                                                roomData=j, id="roomBrowse" + str(idButton)))  # TODO
         scrollRoot.add_widget(layout)
-        DesktopHotelManagementSystem.renderBrowser = False
-        return scrollRoot
+        mainLayout.add_widget(header)
+        mainLayout.add_widget(scrollRoot)
+        self.mainLayoutForKv = mainLayout
 
+        DesktopHotelManagementSystem.renderBrowser = False
+        return self.mainLayoutForKv
+
+    # noinspection PyMethodMayBeStatic
     def deleteBook(self):
         conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
         # cursor
@@ -916,6 +976,7 @@ class BrowserWindow(Screen):
         cur.close()
         # close connection
         conn.close()
+        self.reloadSpinner()
 
 
 class WindowManager(ScreenManager):
