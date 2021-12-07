@@ -834,7 +834,12 @@ class BookWindow(Screen):
             cur.close()
             # close connection
             conn.close()
-
+            DesktopHotelManagementSystem.dateWindowStartDataFromLastBook = str(
+                DesktopHotelManagementSystem.startYearOutput) + str(startMonthToDatabase) + str(startDayToDatabase)
+            DesktopHotelManagementSystem.dateWindowEndDataFromLastBook = str(
+                DesktopHotelManagementSystem.endYearOutput) + str(endMonthToDatabase) + str(endDayToDatabase)
+            DesktopHotelManagementSystem.dateWindowEmailFromLastBook = str(self.ids.email.text)
+            self.resetToDefaults()
             return True
         else:
             return False
@@ -1042,6 +1047,21 @@ class DietWindow(Screen):
         daysStart.append(str(i + 1))
     daysEnd = daysStart.copy()
 
+    # noinspection PyMethodMayBeStatic
+    def startingValues(self):
+        if len(DesktopHotelManagementSystem.dateWindowStartDataFromLastBook) > 0:
+            lastStartDate = DesktopHotelManagementSystem.dateWindowStartDataFromLastBook
+            lastEndDate = DesktopHotelManagementSystem.dateWindowEndDataFromLastBook
+            self.ids.startYear.text = lastStartDate[:4]
+            self.ids.startMonth.text = lastStartDate[4:6]
+            self.ids.startDay.text = lastStartDate[7:]
+
+            self.ids.endYear.text = lastEndDate[:4]
+            self.ids.endMonth.text = lastEndDate[4:6]
+            self.ids.endDay.text = lastEndDate[7:]
+
+            self.ids.emailFood.text = DesktopHotelManagementSystem.dateWindowEmailFromLastBook
+
     def daysInSelectedMonthForStart(self):
         self.daysStart = []
         for i in range(monthrange(int(self.ids.startYear.text), int(self.ids.startMonth.text))[1]):
@@ -1100,6 +1120,8 @@ class DietWindow(Screen):
     def limit_spinner(self):
         maxItems = 3
         self.spinner.dropdown_cls.max_height = maxItems * dp(48)
+        self.peopleLeft()
+        # self.startingValues()
 
     def peopleLeft(self):
         self.numberOfFood()
@@ -1144,6 +1166,14 @@ class DietWindow(Screen):
         conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
         # cursor
         cur = conn.cursor()
+        if not isRightEmail(str(self.ids.emailFood.text)):
+            return False
+        if str(self.ids.classicDiet.text) == '0' and str(self.ids.vegetarianDiet.text) == '0' and str(
+                self.ids.veganDiet.text) == '0':
+            return False
+        cur.execute("DELETE FROM diets WHERE email='" + str(self.ids.emailFood.text) + "' AND startdate='" + str(
+            self.parseData()[0]) + "' AND enddate='" + str(self.parseData()[1]) + "'")
+        conn.commit()
         cur.execute("INSERT INTO diets (email, startdate, enddate, classic, vegetarian, vegan) VALUES('" + str(
             self.ids.emailFood.text) + "', '" + str(self.parseData()[0]) + "', '" + str(
             self.parseData()[1]) + "', '" + str(self.ids.classicDiet.text) + "', '" + str(
@@ -1153,6 +1183,7 @@ class DietWindow(Screen):
         cur.close()
         # close connection
         conn.close()
+        return True
 
 
 class WindowManager(ScreenManager):
@@ -1179,6 +1210,9 @@ class DesktopHotelManagementSystem(App):
     clientInfo = []
     roomInfo = []
     amountToUpdate = 0
+    dateWindowStartDataFromLastBook = ""
+    dateWindowEndDataFromLastBook = ""
+    dateWindowEmailFromLastBook = ""
 
     def build(self):
         Window.clearcolor = (206 / 255, 211 / 255, 220 / 255, 1)

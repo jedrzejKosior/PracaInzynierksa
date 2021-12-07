@@ -96,6 +96,16 @@
         Button:
             text: "OK"
             on_release: root.dismiss()
+<DietWindowPopup@Popup>
+    BoxLayout:
+        orientation: "vertical"
+        spacing: 10
+        Label:
+            text: "INVALID DATA"
+            color: (0, 0, 0, 1)
+        Button:
+            text: "OK"
+            on_release: root.dismiss()
 WindowManager:
     transition: WipeTransition()
 	LoginWindow:
@@ -197,6 +207,7 @@ WindowManager:
     startYear: startYear
     endYear: endYear
     emailFood: emailFood
+    on_pre_enter: root.startingValues()
     on_enter: root.limit_spinner()
     canvas.before:
         Rectangle:
@@ -330,7 +341,7 @@ WindowManager:
                 on_release: app.root.current = "actionWindow"
             RoundedButton:
                 text: "SAVE"
-                on_release: root.saveFood() # app.root.current = 'actionWindow'
+                on_release: app.root.current = "actionWindow" if root.saveFood() else Factory.DietWindowPopup().open()
 
 <DateWindow>:
     name: "dateWindow"
@@ -704,7 +715,6 @@ WindowManager:
                 on_release: app.root.current = "bookWindow" if len(app.selectedRoomNumbers) else Factory.RoomNumberPopup().open()
 
 <BookWindow>: # TODO checkbox invoice
-    on_pre_leave: root.resetToDefaults()
 	name: "bookWindow"
 	firstName: firstName
 	lastName: lastName
