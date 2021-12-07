@@ -116,6 +116,9 @@ WindowManager:
 	RoomWindowFloor2
 	BookWindow:
 	BrowserWindow:
+	KitchenWindow:
+	DailyKitchenWindow:
+	IngredientsWindow:
 
 
 <LoginWindow>:
@@ -839,3 +842,103 @@ WindowManager:
                 size_hint_x: None
                 width: 70
                 on_release: root.deleteBook()
+
+<KitchenWindow>:
+    name: "kitchenWindow"
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: "gradientBackground.png"
+    BoxLayout:
+        orientation: "vertical"
+        spacing: 10
+        padding: 150
+        Button:
+            text: "DAILY SCHEDULE"
+            background_color: utils.get_color_from_hex("#90C2E7")
+            color: (0, 0, 0, 1)
+            on_release: app.root.current = "dailyKitchenWindow"
+        Button:
+            text: "INGREDIENTS"
+            background_color: utils.get_color_from_hex("#90C2E7")
+            color: (0, 0, 0, 1)
+        RoundedButton:
+            text: "LOGOUT"
+            on_release: app.root.current = "loginWindow"
+
+<DailyKitchenWindow>:
+    name: "dailyKitchenWindow"
+    classicToday: classicToday
+    vegetarianToday: vegetarianToday
+    veganToday: veganToday
+    classicToday: classicTomorrow
+    vegetarianToday: vegetarianTomorrow
+    veganToday: veganTomorrow
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: "gradientBackground.png"
+    on_pre_enter: root.checkAmounts()
+    BoxLayout:
+        orientation: "vertical"
+        padding: 30
+        spacing: 10
+        Label:
+            text: "TODAY"
+            color: (0, 0, 0, 1)
+        BoxLayout:
+            orientation: "horizontal"
+            Label:
+                text: "CLASSIC"
+                color: (0, 0, 0, 1)
+            Label:
+                text: "VEGETARIAN"
+                color: (0, 0, 0, 1)
+            Label:
+                text: "VEGAN"
+                color: (0, 0, 0, 1)
+        BoxLayout:
+            orientation: "horizontal"
+            Label:
+                id: classicToday
+                color: (0, 0, 0, 1)
+            Label:
+                id: vegetarianToday
+                color: (0, 0, 0, 1)
+            Label:
+                id: veganToday
+                color: (0, 0, 0, 1)
+        Label:
+            text: "TOMORROW"
+            color: (0, 0, 0, 1)
+        BoxLayout:
+            orientation: "horizontal"
+            Label:
+                id: classicTomorrow
+                color: (0, 0, 0, 1)
+            Label:
+                id: vegetarianTomorrow
+                color: (0, 0, 0, 1)
+            Label:
+                id: veganTomorrow
+                color: (0, 0, 0, 1)
+        BoxLayout:
+            orientation: "horizontal"
+            RoundedButton:
+                text: "BACK"
+                background_color: utils.get_color_from_hex("#CED3DC")
+                color: (0, 0, 0, 1)
+                on_release: app.root.current = "kitchenWindow"
+            RoundedButton:
+                text: "MARK TODAY AS DONE"
+                on_release: app.root.current = "kitchenWindow"
+
+<IngredientsWindow>:
+    name: "ingredientsWindow"
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: "gradientBackground.png"

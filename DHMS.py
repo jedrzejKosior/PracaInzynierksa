@@ -77,7 +77,12 @@ class LoginWindow(Screen):
             if login == user[0]:
                 foundLogin = True
                 if password == user[1]:
-                    self.window = "actionWindow"
+                    if user[2] == "reception":
+                        self.window = "actionWindow"
+                    elif user[2] == "kitchen":
+                        self.window = "kitchenWindow"
+                    elif user[2] == "maid":
+                        self.window = "maidWindow"
                 else:
                     isCorrect = False
                 break
@@ -98,6 +103,36 @@ class LoginWindow(Screen):
 class ActionWindow(Screen):
     pass
 
+
+class KitchenWindow(Screen):
+    pass
+
+
+class IngredientsWindow(Screen):
+    pass
+
+
+class DailyKitchenWindow(Screen):
+    # noinspection PyMethodMayBeStatic
+    def checkAmounts(self):
+
+        conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
+        # cursor
+        cur = conn.cursor()
+        cur.execute("SELECT classic, vegetarian, vegan FROM diets")
+        dietsAmount = cur.fetchall()
+        self.ids.classicToday.text = str(dietsAmount[0][0])
+        self.ids.vegetarianToday.text = str(dietsAmount[0][1])
+        self.ids.veganToday.text = str(dietsAmount[0][2])
+
+        self.ids.classicTomorrow.text = str(dietsAmount[0][0])
+        self.ids.vegetarianTomorrow.text = str(dietsAmount[0][1])
+        self.ids.veganTomorrow.text = str(dietsAmount[0][2])
+        conn.commit()
+        # close cursor
+        cur.close()
+        # close connection
+        conn.close()
 
 class DateWindow(Screen):
 
