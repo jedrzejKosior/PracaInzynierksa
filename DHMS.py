@@ -143,7 +143,6 @@ class DateWindow(Screen):
                     DesktopHotelManagementSystem.bookToUpdate[3]) + "' AND enddate='" + str(
                     DesktopHotelManagementSystem.bookToUpdate[4] + "'"))
             DesktopHotelManagementSystem.roomInfo = cur.fetchall()
-            print(DesktopHotelManagementSystem.roomInfo[0])
             cur.execute("SELECT * FROM clients WHERE lastname='" + str(
                 DesktopHotelManagementSystem.bookToUpdate[1]) + "' AND email='" + str(
                 DesktopHotelManagementSystem.bookToUpdate[2] + "'"))
@@ -920,7 +919,6 @@ class BrowserWindow(Screen):
 
             if inputText[4] == " " or inputText[4] == "-" or inputText[4] == "/":
                 inputText = str(inputText[:4]) + str(inputText[5:7]) + str(inputText[8:])
-                print(inputText)
                 for roomNumber in range(30):
                     cur.execute(
                         "SELECT room" + str(
@@ -936,7 +934,6 @@ class BrowserWindow(Screen):
                         dataToBrowse.append(dataN)
             elif inputText[2] == " " or inputText[2] == "-" or inputText[2] == "/":
                 inputText = str(inputText[6:] + str(inputText[3:5]) + str(inputText[:2]))
-                print(inputText)
                 for roomNumber in range(30):
                     cur.execute(
                         "SELECT room" + str(
@@ -1026,6 +1023,136 @@ class BrowserWindow(Screen):
     #         return True
     #     else:
     #         return False
+
+
+class DietWindow(Screen):
+    startDay = ObjectProperty(None)
+    endDay = ObjectProperty(None)
+    startMonth = ObjectProperty(None)
+    endMonth = ObjectProperty(None)
+    startYear = ObjectProperty(None)
+    endYear = ObjectProperty(None)
+    emailFood = ObjectProperty(None)
+
+    currentYear = str(datetime.now().year)
+    currentMonth = str(datetime.now().month)
+    currentDay = str(datetime.now().day)
+    daysStart = []
+    for i in range(monthrange(int(currentYear), int(currentMonth))[1]):
+        daysStart.append(str(i + 1))
+    daysEnd = daysStart.copy()
+
+    def daysInSelectedMonthForStart(self):
+        self.daysStart = []
+        for i in range(monthrange(int(self.ids.startYear.text), int(self.ids.startMonth.text))[1]):
+            self.daysStart.append(str(i + 1))
+        self.startDay.values = self.daysStart
+        if int(self.startDay.text) > int(self.daysStart[-1]):
+            self.startDay.text = str(self.daysStart[-1])
+        self.peopleLeft()
+
+    def daysInSelectedMonthForEnd(self):
+        self.daysEnd = []
+        for i in range(monthrange(int(self.ids.endYear.text), int(self.ids.endMonth.text))[1]):
+            self.daysEnd.append(str(i + 1))
+        self.endDay.values = self.daysEnd
+        if int(self.endDay.text) > int(self.daysEnd[-1]):
+            self.endDay.text = str(self.daysEnd[-1])
+        self.peopleLeft()
+
+    def parseData(self):
+        if int(self.ids.startMonth.text) < 10:
+            startMonthToDatabase = str(0) + str(self.ids.startMonth.text)
+        else:
+            startMonthToDatabase = str(self.ids.startMonth.text)
+        if int(self.ids.startDay.text) < 10:
+            startDayToDatabase = str(0) + str(self.ids.startDay.text)
+        else:
+            startDayToDatabase = str(self.ids.startDay.text)
+
+        if int(self.ids.endMonth.text) < 10:
+            endMonthToDatabase = str(0) + str(self.ids.endMonth.text)
+        else:
+            endMonthToDatabase = str(self.ids.endMonth.text)
+        if int(self.ids.endDay.text) < 10:
+            endDayToDatabase = str(0) + str(self.ids.endDay.text)
+        else:
+            endDayToDatabase = str(self.ids.endDay.text)
+
+        startingDate = str(self.ids.startYear.text) + str(startMonthToDatabase) + str(startDayToDatabase)
+        endingDate = str(self.ids.endYear.text) + str(endMonthToDatabase) + str(endDayToDatabase)
+
+        return startingDate, endingDate
+
+    def wrongTimePeriod(self):
+        isCorrect = True
+        if int(self.ids.startYear.text) > int(self.ids.endYear.text):
+            isCorrect = False
+        if (self.months.index(self.ids.startMonth.text) > self.months.index(self.ids.endMonth.text)) and (
+                int(self.ids.startYear.text) >= int(self.ids.endYear.text)):
+            isCorrect = False
+        if (int(self.ids.startDay.text) >= int(self.ids.endDay.text)) and (
+                self.months.index(self.ids.startMonth.text) >= self.months.index(self.ids.endMonth.text)) and (
+                int(self.ids.startYear.text) >= int(self.ids.endYear.text)):
+            isCorrect = False
+        return isCorrect
+
+    def limit_spinner(self):
+        maxItems = 3
+        self.spinner.dropdown_cls.max_height = maxItems * dp(48)
+
+    def peopleLeft(self):
+        self.numberOfFood()
+        answer = (self.multiplayer * 4) - int(self.ids.classicDiet.text) - int(self.ids.vegetarianDiet.text) - int(
+            self.ids.veganDiet.text)
+        peopleLeftValues = []
+        for i in range(answer + 1):
+            peopleLeftValues.append(str(i))
+            self.ids.classicDiet.values = peopleLeftValues
+            self.ids.vegetarianDiet.values = peopleLeftValues
+            self.ids.veganDiet.values = peopleLeftValues
+
+    multiplayer = 0
+
+    def numberOfFood(self):
+        # connect to database
+        conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
+        # cursor
+        cur = conn.cursor()
+        dataToBrowse = []
+        startingDate, endingDate = self.parseData()
+        for roomNumber in range(30):
+            cur.execute("SELECT clients.email, room" + str(roomNumber + 1) + ".startdate, room" + str(
+                roomNumber + 1) + ".enddate FROM clients JOIN room" + str(
+                roomNumber + 1) + " ON clients.clientid = room" + str(roomNumber + 1) + ".clientid WHERE room" + str(
+                roomNumber + 1) + ".startdate='" + str(startingDate) + "' AND room" + str(
+                roomNumber + 1) + ".enddate='" + str(endingDate) + "' AND clients.email='" + str(
+                self.ids.emailFood.text) + "'")
+            dataN = cur.fetchall()
+            if len(dataN) > 0:
+                dataToBrowse.append(dataN)
+        conn.commit()
+        # close cursor
+        cur.close()
+        # close connection
+        conn.close()
+        self.multiplayer = len(dataToBrowse)
+
+    # noinspection PyMethodMayBeStatic
+    def saveFood(self):
+        # connect to database
+        conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
+        # cursor
+        cur = conn.cursor()
+        cur.execute("INSERT INTO diets (email, startdate, enddate, classic, vegetarian, vegan) VALUES('" + str(
+            self.ids.emailFood.text) + "', '" + str(self.parseData()[0]) + "', '" + str(
+            self.parseData()[1]) + "', '" + str(self.ids.classicDiet.text) + "', '" + str(
+            self.ids.vegetarianDiet.text) + "', '" + str(self.ids.veganDiet.text) + "')")
+        conn.commit()
+        # close cursor
+        cur.close()
+        # close connection
+        conn.close()
 
 
 class WindowManager(ScreenManager):

@@ -100,6 +100,7 @@ WindowManager:
     transition: WipeTransition()
 	LoginWindow:
 	ActionWindow:
+	DietWindow
 	DateWindow:
 	RoomWindow:
 	RoomWindowFloor2
@@ -174,9 +175,162 @@ WindowManager:
             on_release: app.root.current = "browserWindow"
             background_color: utils.get_color_from_hex("#90C2E7")
             color: (0, 0, 0, 1)
+        Button:
+            text: "SET CLIENT'S DIET"
+            on_release: app.root.current = "dietWindow"
+            background_color: utils.get_color_from_hex("#90C2E7")
+            color: (0, 0, 0, 1)
         RoundedButton:
             text: "LOGOUT"
             on_release: app.root.current = "loginWindow"
+
+<DietWindow>:
+    name: "dietWindow"
+    classicDiet: classicDiet
+    vegetarianDiet: vegetarianDiet
+    veganDiet: veganDiet
+    spinner: classicDiet
+    startDay: startDay
+    endDay: endDay
+    startMonth: startMonth
+    endMonth: endMonth
+    startYear: startYear
+    endYear: endYear
+    emailFood: emailFood
+    on_enter: root.limit_spinner()
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: "gradientBackground.png"
+    BoxLayout:
+        orientation: "vertical"
+        padding: 100
+        spacing: 10
+        BoxLayout:
+            orientation: "horizontal"
+            Label:
+                color: (0, 0, 0, 1)
+                text: "E-MAIL"
+            Label:
+                color: (0, 0, 0, 1)
+                text: "START DATE"
+            Label:
+                color: (0, 0, 0, 1)
+                text: "END DATE"
+        BoxLayout:
+            orientation: "horizontal"
+            spacing: 10
+            GridLayout:
+                cols: 1
+                TextInput:
+                    id: emailFood
+                    hint_text: "E-MAIL"
+                    size_hint_y: None
+                    height: 42
+                    on_text: root.peopleLeft()
+            GridLayout:
+                cols: 3
+                Spinner:
+                    id: startDay
+                    text: root.currentDay
+                    background_color: utils.get_color_from_hex("#90C2E7")
+                    size_hint_y: None
+                    height: 40
+                    values: root.daysStart
+                    on_text: root.peopleLeft()
+                Spinner:
+                    id: startMonth
+                    text: root.currentMonth
+                    background_color: utils.get_color_from_hex("#90C2E7")
+                    size_hint_y: None
+                    height: 40
+                    on_text: root.daysInSelectedMonthForStart()
+                    values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+                Spinner:
+                    id: startYear
+                    text: root.currentYear
+                    background_color: utils.get_color_from_hex("#90C2E7")
+                    size_hint_y: None
+                    height: 40
+                    on_text: root.daysInSelectedMonthForStart()
+                    values: ["2021", "2022", "2023", "2024", "2025", "2026", "2027"]
+            GridLayout:
+                cols: 3
+                Spinner:
+                    id: endDay
+                    text: root.currentDay
+                    background_color: utils.get_color_from_hex("#90C2E7")
+                    size_hint_y: None
+                    height: 40
+                    values: root.daysEnd
+                    on_text: root.peopleLeft()
+                Spinner:
+                    id: endMonth
+                    text: root.currentMonth
+                    background_color: utils.get_color_from_hex("#90C2E7")
+                    size_hint_y: None
+                    height: 40
+                    on_text: root.daysInSelectedMonthForEnd()
+                    values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+                Spinner:
+                    id: endYear
+                    text: root.currentYear
+                    background_color: utils.get_color_from_hex("#90C2E7")
+                    size_hint_y: None
+                    height: 40
+                    on_text: root.daysInSelectedMonthForEnd()
+                    values: ["2021", "2022", "2023", "2024", "2025", "2026", "2027"]
+        Label:
+            font_size: 20
+            color: (0, 0, 0, 1)
+            text: "CHOOSE AMOUNTS OF DIETS"
+        GridLayout:
+            cols: 3
+            spacing: 10
+            Label:
+                text: "CLASSIC"
+                color: (0, 0, 0, 1)
+            Label:
+                text: "VEGETARIAN"
+                color: (0, 0, 0, 1)
+            Label:
+                text: "VEGAN"
+                color: (0, 0, 0, 1)
+            Spinner:
+                id: classicDiet
+                text: "0"
+                background_color: utils.get_color_from_hex("#90C2E7")
+                size_hint_y: None
+                height: 50
+                on_text: root.peopleLeft()
+                values: ["0", "1", "2", "3", "4"]
+            Spinner:
+                id: vegetarianDiet
+                text: "0"
+                background_color: utils.get_color_from_hex("#90C2E7")
+                size_hint_y: None
+                height: 50
+                on_text: root.peopleLeft()
+                values: ["0", "1", "2", "3", "4"]
+            Spinner:
+                id: veganDiet
+                text: "0"
+                background_color: utils.get_color_from_hex("#90C2E7")
+                size_hint_y: None
+                height: 50
+                on_text: root.peopleLeft()
+                values: ["0", "1", "2", "3", "4"]
+        BoxLayout:
+            orientation: "horizontal"
+            RoundedButton:
+                text: "BACK"
+                background_color: utils.get_color_from_hex("#CED3DC")
+                color: (0, 0, 0, 1)
+                on_release: app.root.current = "actionWindow"
+            RoundedButton:
+                text: "SAVE"
+                on_release: root.saveFood() # app.root.current = 'actionWindow'
 
 <DateWindow>:
     name: "dateWindow"
@@ -610,7 +764,7 @@ WindowManager:
                 on_release: app.root.current = "roomWindow"
             RoundedButton:
                 text: "BOOK"
-                on_release: app.root.current = "actionWindow" if root.registerPress() else Factory.BookWindowPopup().open()
+                on_release: app.root.current = "dietWindow" if root.registerPress() else Factory.BookWindowPopup().open()
 
 <BrowserWindow>:
     name: "browserWindow"
