@@ -8,7 +8,7 @@ from kivy.uix.button import Button
 from kivy.properties import ObjectProperty
 from kivy.core.window import Window
 from kivy.metrics import dp
-from datetime import datetime
+from datetime import datetime, timedelta, date
 from calendar import monthrange
 import psycopg2
 import re
@@ -114,28 +114,88 @@ class IngredientsWindow(Screen):
 
 class DailyKitchenWindow(Screen):
     # noinspection PyMethodMayBeStatic
-    def checkAmounts(self):
+    def parseDataDiet(self):
+        currentYear = str(datetime.now().year)
+        currentMonth = str(datetime.now().month)
+        currentDay = str(datetime.now().day)
+        if int(currentMonth) < 10:
+            startMonthToDatabase = str(0) + str(currentMonth)
+        else:
+            startMonthToDatabase = str(currentMonth)
+        if int(currentDay) < 10:
+            startDayToDatabase = str(0) + str(currentDay)
+        else:
+            startDayToDatabase = str(currentDay)
 
+        dateToDietToday = str(currentYear) + str(startMonthToDatabase) + str(startDayToDatabase)
+        dateToDietTomorrow = date.today() + timedelta(days=1)
+        dateToDietTomorrow = str(dateToDietTomorrow).replace("-", "")
+        return dateToDietToday, dateToDietTomorrow
+
+    def checkAmounts(self):
+        dietsClassicToday = 0
+        dietsClassicTomorrow = 0
+        dietsVegetarianToday = 0
+        dietsVegetarianTomorrow = 0
+        dietsVeganToday = 0
+        dietsVeganTomorrow = 0
+        dateToDietToday, dateToDietTomorrow = self.parseDataDiet()
         conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
         # cursor
         cur = conn.cursor()
-        cur.execute("SELECT classic, vegetarian, vegan FROM diets")
-        dietsAmount = cur.fetchall()
-        self.ids.classicToday.text = str(dietsAmount[0][0])
-        self.ids.vegetarianToday.text = str(dietsAmount[0][1])
-        self.ids.veganToday.text = str(dietsAmount[0][2])
+        # cur.execute("DELETE FROM diets WHERE enddate<'" + str(dateToDietToday) + "'")
+        cur.execute("SELECT classic, vegetarian, vegan, startdate, enddate FROM diets WHERE startdate<='" + str(
+            dateToDietToday) + "' AND enddate>='" + str(dateToDietToday) + "'")
+        dietsToday = cur.fetchall()
+        cur.execute("SELECT classic, vegetarian, vegan, startdate, enddate FROM diets WHERE startdate<='" + str(
+            dateToDietTomorrow) + "' AND enddate>'" + str(dateToDietTomorrow) + "'")
+        dietsTomorrow = cur.fetchall()
 
-        self.ids.classicTomorrow.text = str(dietsAmount[0][0])
-        self.ids.vegetarianTomorrow.text = str(dietsAmount[0][1])
-        self.ids.veganTomorrow.text = str(dietsAmount[0][2])
+        for diet in dietsToday:
+            dietsClassicToday = dietsClassicToday + int(diet[0])
+            dietsVegetarianToday = dietsVegetarianToday + int(diet[1])
+            dietsVeganToday = dietsVeganToday + int(diet[2])
+
+        for diet in dietsTomorrow:
+            dietsClassicTomorrow = dietsClassicTomorrow + int(diet[0])
+            dietsVegetarianTomorrow = dietsVegetarianTomorrow + int(diet[1])
+            dietsVeganTomorrow = dietsVeganTomorrow + int(diet[2])
+
+        self.ids.classicToday.text = str(dietsClassicToday)
+        self.ids.vegetarianToday.text = str(dietsVegetarianToday)
+        self.ids.veganToday.text = str(dietsVeganToday)
+
+        self.ids.classicTomorrow.text = str(dietsClassicTomorrow)
+        self.ids.vegetarianTomorrow.text = str(dietsVegetarianTomorrow)
+        self.ids.veganTomorrow.text = str(dietsVeganTomorrow)
         conn.commit()
         # close cursor
         cur.close()
         # close connection
         conn.close()
 
-class DateWindow(Screen):
+    def lowerAmount(self, button, resetFlag):
+        if resetFlag == 1:
+            self.ids.classicToday.text = str(0)
+            self.ids.vegetarianToday.text = str(0)
+            self.ids.veganToday.text = str(0)
+        else:
+            if button == "classicToday" and int(self.ids.classicToday.text) != 0:
+                self.ids.classicToday.text = str(int(self.ids.classicToday.text) - 1)
+            if button == "vegetarianToday" and int(self.ids.vegetarianToday.text) != 0:
+                self.ids.vegetarianToday.text = str(int(self.ids.vegetarianToday.text) - 1)
+            if button == "veganToday" and int(self.ids.veganToday.text) != 0:
+                self.ids.veganToday.text = str(int(self.ids.veganToday.text) - 1)
 
+            if button == "classicTomorrow" and int(self.ids.classicTomorrow.text) != 0:
+                self.ids.classicTomorrow.text = str(int(self.ids.classicTomorrow.text) - 1)
+            if button == "vegetarianTomorrow" and int(self.ids.vegetarianTomorrow.text) != 0:
+                self.ids.vegetarianTomorrow.text = str(int(self.ids.vegetarianTomorrow.text) - 1)
+            if button == "veganTomorrow" and int(self.ids.veganTomorrow.text) != 0:
+                self.ids.veganTomorrow.text = str(int(self.ids.veganTomorrow.text) - 1)
+
+
+class DateWindow(Screen):
     # noinspection PyMethodMayBeStatic
     def abortUpdate(self):
         if len(DesktopHotelManagementSystem.roomInfo) > 0 and len(DesktopHotelManagementSystem.clientInfo) > 0:
@@ -1050,6 +1110,8 @@ class BrowserWindow(Screen):
             DesktopHotelManagementSystem.bookToUpdate[1]) + "' AND email='" + str(
             DesktopHotelManagementSystem.bookToUpdate[2] + "'"))
         conn.commit()
+        cur.execute("DELETE FROM diets WHERE email='" + DesktopHotelManagementSystem.bookToUpdate[2] + "'")
+        conn.commit()
         # close cursor
         cur.close()
         # close connection
@@ -1089,11 +1151,11 @@ class DietWindow(Screen):
             lastEndDate = DesktopHotelManagementSystem.dateWindowEndDataFromLastBook
             self.ids.startYear.text = lastStartDate[:4]
             self.ids.startMonth.text = lastStartDate[4:6]
-            self.ids.startDay.text = lastStartDate[7:]
+            self.ids.startDay.text = lastStartDate[6:]
 
             self.ids.endYear.text = lastEndDate[:4]
             self.ids.endMonth.text = lastEndDate[4:6]
-            self.ids.endDay.text = lastEndDate[7:]
+            self.ids.endDay.text = lastEndDate[6:]
 
             self.ids.emailFood.text = DesktopHotelManagementSystem.dateWindowEmailFromLastBook
 

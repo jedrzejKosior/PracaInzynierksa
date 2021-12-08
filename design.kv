@@ -9,6 +9,7 @@
     halign: 'center'
     valign: 'middle'
     font_size: 15
+    write_tab: False
 <Label>
     background_normal: ""
     background_color: (206/255, 211/255, 220/255, 1)
@@ -883,47 +884,51 @@ WindowManager:
     on_pre_enter: root.checkAmounts()
     BoxLayout:
         orientation: "vertical"
-        padding: 30
-        spacing: 10
-        Label:
-            text: "TODAY"
-            color: (0, 0, 0, 1)
-        BoxLayout:
-            orientation: "horizontal"
-            Label:
+        padding: 150
+        GridLayout:
+            cols: 4
+            Button:
+                text: " "
+                color: (1, 1, 1, 1)
+            Button:
                 text: "CLASSIC"
-                color: (0, 0, 0, 1)
-            Label:
+                color: (1, 1, 1, 1)
+            Button:
                 text: "VEGETARIAN"
-                color: (0, 0, 0, 1)
-            Label:
+                color: (1, 1, 1, 1)
+            Button:
                 text: "VEGAN"
-                color: (0, 0, 0, 1)
-        BoxLayout:
-            orientation: "horizontal"
-            Label:
+                color: (1, 1, 1, 1)
+            Button:
+                text: "TODAY"
+                color: (1, 1, 1, 1)
+            Button:
                 id: classicToday
-                color: (0, 0, 0, 1)
-            Label:
+                color: (1, 1, 1, 1)
+                on_release: root.lowerAmount("classicToday", 0)
+            Button:
                 id: vegetarianToday
-                color: (0, 0, 0, 1)
-            Label:
+                color: (1, 1, 1, 1)
+                on_release: root.lowerAmount("vegetarianToday", 0)
+            Button:
                 id: veganToday
-                color: (0, 0, 0, 1)
-        Label:
-            text: "TOMORROW"
-            color: (0, 0, 0, 1)
-        BoxLayout:
-            orientation: "horizontal"
-            Label:
+                color: (1, 1, 1, 1)
+                on_release: root.lowerAmount("veganToday", 0)
+            Button:
+                text: "TOMORROW"
+                color: (1, 1, 1, 1)
+            Button:
                 id: classicTomorrow
-                color: (0, 0, 0, 1)
-            Label:
+                color: (1, 1, 1, 1)
+                on_release: root.lowerAmount("classicTomorrow", 0)
+            Button:
                 id: vegetarianTomorrow
-                color: (0, 0, 0, 1)
-            Label:
+                color: (1, 1, 1, 1)
+                on_release: root.lowerAmount("vegetarianTomorrow", 0)
+            Button:
                 id: veganTomorrow
-                color: (0, 0, 0, 1)
+                color: (1, 1, 1, 1)
+                on_release: root.lowerAmount("veganTomorrow", 0)
         BoxLayout:
             orientation: "horizontal"
             RoundedButton:
@@ -933,7 +938,7 @@ WindowManager:
                 on_release: app.root.current = "kitchenWindow"
             RoundedButton:
                 text: "MARK TODAY AS DONE"
-                on_release: app.root.current = "kitchenWindow"
+                on_release: root.lowerAmount("None", 1)
 
 <IngredientsWindow>:
     name: "ingredientsWindow"
