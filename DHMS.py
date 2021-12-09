@@ -109,7 +109,100 @@ class KitchenWindow(Screen):
 
 
 class IngredientsWindow(Screen):
-    pass
+    # noinspection PyMethodMayBeStatic
+    def parseDataDiet(self):
+
+        today = date.today()
+        penultimateMonday = today - timedelta(days=today.weekday(), weeks=1)
+        lastMonday = today - timedelta(days=today.weekday())
+        comingMonday = today + timedelta(days=-today.weekday(), weeks=1)
+        nextNextMonday = today + timedelta(days=-today.weekday(), weeks=2)
+
+        nextNextMonday = str(nextNextMonday).replace("-", "")
+        lastMonday = str(lastMonday).replace("-", "")
+        comingMonday = str(comingMonday).replace("-", "")
+
+        return lastMonday, comingMonday, penultimateMonday, nextNextMonday
+
+    def checkAmounts(self):
+        dietsClassicThisWeek = 0
+        dietsClassicNextWeek = 0
+        dietsVegetarianThisWeek = 0
+        dietsVegetarianNextWeek = 0
+        dietsVeganThisWeek = 0
+        dietsVeganNextWeek = 0
+        lastMonday, comingMonday, penultimateMonday, nextNextMonday = self.parseDataDiet()
+        conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
+        # cursor
+        cur = conn.cursor()
+
+        cur.execute("SELECT classic, vegetarian, vegan, startdate, enddate FROM diets")
+        diets = cur.fetchall()
+
+        for diet in diets:
+            if int(diet[4]) >= int(lastMonday):
+                if int(diet[4]) < int(comingMonday) and int(diet[3]) <= int(lastMonday):  # before end and before start
+                    lDate = date(int(str(diet[4])[:4]), int(str(diet[4])[4:6]), int(str(diet[4])[6:]))
+                    fDate = date(int(lastMonday[:4]), int(lastMonday[4:6]), int(lastMonday[6:]))
+                    multiply = lDate - fDate
+                    multiply = multiply.days + 1
+                elif int(diet[4]) < int(comingMonday) and int(diet[3]) > int(lastMonday):  # before end and after start
+                    lDate = date(int(str(diet[4])[:4]), int(str(diet[4])[4:6]), int(str(diet[4])[6:]))
+                    fDate = date(int(str(diet[3])[:4]), int(str(diet[3])[4:6]), int(str(diet[3])[6:]))
+                    multiply = lDate - fDate
+                    multiply = multiply.days + 1
+                elif int(diet[4]) >= int(comingMonday) and int(diet[3]) > int(lastMonday):  # after end and after start
+                    lDate = date(int(comingMonday[:4]), int(comingMonday[4:6]), int(comingMonday[6:]))
+                    fDate = date(int(str(diet[3])[:4]), int(str(diet[3])[4:6]), int(str(diet[3])[6:]))
+                    multiply = lDate - fDate
+                    multiply = multiply.days
+                elif int(diet[4]) >= int(comingMonday) and int(diet[3]) > int(lastMonday):  # after end and before start
+                    multiply = 7
+                else:
+                    multiply = 0
+
+                dietsClassicThisWeek = dietsClassicThisWeek + (int(diet[0]) * multiply)
+                dietsVegetarianThisWeek = dietsVegetarianThisWeek + (int(diet[1]) * multiply)
+                dietsVeganThisWeek = dietsVeganThisWeek + (int(diet[2]) * multiply)
+
+        self.ids.classicThisWeek.text = str(dietsClassicThisWeek)
+        self.ids.vegetarianThisWeek.text = str(dietsVegetarianThisWeek)
+        self.ids.veganThisWeek.text = str(dietsVeganThisWeek)
+
+        for diet in diets:
+            if int(diet[4]) >= int(comingMonday):
+                if int(diet[4]) < int(nextNextMonday) and int(diet[3]) <= int(comingMonday):  # before end and before start
+                    lDate = date(int(str(diet[4])[:4]), int(str(diet[4])[4:6]), int(str(diet[4])[6:]))
+                    fDate = date(int(comingMonday[:4]), int(comingMonday[4:6]), int(comingMonday[6:]))
+                    multiply = lDate - fDate
+                    multiply = multiply.days + 1
+                elif int(diet[4]) < int(nextNextMonday) and int(diet[3]) > int(comingMonday):  # before end and after start
+                    lDate = date(int(str(diet[4])[:4]), int(str(diet[4])[4:6]), int(str(diet[4])[6:]))
+                    fDate = date(int(str(diet[3])[:4]), int(str(diet[3])[4:6]), int(str(diet[3])[6:]))
+                    multiply = lDate - fDate
+                    multiply = multiply.days + 1
+                elif int(diet[4]) >= int(nextNextMonday) and int(diet[3]) > int(comingMonday):  # after end and after start
+                    lDate = date(int(nextNextMonday[:4]), int(nextNextMonday[4:6]), int(nextNextMonday[6:]))
+                    fDate = date(int(str(diet[3])[:4]), int(str(diet[3])[4:6]), int(str(diet[3])[6:]))
+                    multiply = lDate - fDate
+                    multiply = multiply.days
+                elif int(diet[4]) >= int(nextNextMonday) and int(diet[3]) > int(comingMonday):  # after end and before start
+                    multiply = 7
+                else:
+                    multiply = 0
+
+                dietsClassicNextWeek = dietsClassicNextWeek + (int(diet[0]) * multiply)
+                dietsVegetarianNextWeek = dietsVegetarianNextWeek + (int(diet[1]) * multiply)
+                dietsVeganNextWeek = dietsVeganNextWeek + (int(diet[2]) * multiply)
+
+        self.ids.classicNextWeek.text = str(dietsClassicNextWeek)
+        self.ids.vegetarianNextWeek.text = str(dietsVegetarianNextWeek)
+        self.ids.veganNextWeek.text = str(dietsVeganNextWeek)
+        conn.commit()
+        # close cursor
+        cur.close()
+        # close connection
+        conn.close()
 
 
 class DailyKitchenWindow(Screen):

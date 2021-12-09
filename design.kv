@@ -864,6 +864,7 @@ WindowManager:
             text: "INGREDIENTS"
             background_color: utils.get_color_from_hex("#90C2E7")
             color: (0, 0, 0, 1)
+            on_release: app.root.current = "ingredientsWindow"
         RoundedButton:
             text: "LOGOUT"
             on_release: app.root.current = "loginWindow"
@@ -942,8 +943,63 @@ WindowManager:
 
 <IngredientsWindow>:
     name: "ingredientsWindow"
+    classicThisWeek: classicThisWeek
+    vegetarianThisWeek: vegetarianThisWeek
+    veganThisWeek: veganThisWeek
+    classicNextWeek: classicNextWeek
+    vegetarianNextWeek: vegetarianNextWeek
+    veganNextWeek: veganNextWeek
+    on_pre_enter: root.checkAmounts()
     canvas.before:
         Rectangle:
             pos: self.pos
             size: self.size
             source: "gradientBackground.png"
+    BoxLayout:
+        orientation: "vertical"
+        padding: 150
+        GridLayout:
+            cols: 4
+            Button:
+                text: " "
+                color: (1, 1, 1, 1)
+            Button:
+                text: "CLASSIC"
+                color: (1, 1, 1, 1)
+            Button:
+                text: "VEGETARIAN"
+                color: (1, 1, 1, 1)
+            Button:
+                text: "VEGAN"
+                color: (1, 1, 1, 1)
+            Button:
+                text: "THIS WEEK"
+                color: (1, 1, 1, 1)
+            Button:
+                id: classicThisWeek
+                color: (1, 1, 1, 1)
+            Button:
+                id: vegetarianThisWeek
+                color: (1, 1, 1, 1)
+            Button:
+                id: veganThisWeek
+                color: (1, 1, 1, 1)
+            Button:
+                text: "NEXT WEEK"
+                color: (1, 1, 1, 1)
+            Button:
+                id: classicNextWeek
+                color: (1, 1, 1, 1)
+            Button:
+                id: vegetarianNextWeek
+                color: (1, 1, 1, 1)
+            Button:
+                id: veganNextWeek
+                color: (1, 1, 1, 1)
+        BoxLayout:
+            orientation: "horizontal"
+            RoundedButton:
+                text: "BACK"
+                background_color: utils.get_color_from_hex("#CED3DC")
+                color: (0, 0, 0, 1)
+                on_release: app.root.current = "kitchenWindow"
