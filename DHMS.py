@@ -109,7 +109,217 @@ class RoomWindowAbsence(Screen):
 
 
 class MaidWindow(Screen):
-    pass
+    def selectAsVisited(self, room):
+        if room == 1:
+            if 0.30 < self.ids.visited1.background_color[0] < 0.31:
+                self.ids.visited1.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited1.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited1.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited1.color = (1, 1, 1, 1)
+        if room == 2:
+            if 0.30 < self.ids.visited2.background_color[0] < 0.31:
+                self.ids.visited2.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited2.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited2.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited2.color = (1, 1, 1, 1)
+        if room == 3:
+            if 0.30 < self.ids.visited3.background_color[0] < 0.31:
+                self.ids.visited3.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited3.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited3.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited3.color = (1, 1, 1, 1)
+        if room == 4:
+            if 0.30 < self.ids.visited4.background_color[0] < 0.31:
+                self.ids.visited4.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited4.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited4.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited4.color = (1, 1, 1, 1)
+        if room == 5:
+            if 0.30 < self.ids.visited5.background_color[0] < 0.31:
+                self.ids.visited5.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited5.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited5.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited5.color = (1, 1, 1, 1)
+        if room == 6:
+            if 0.30 < self.ids.visited6.background_color[0] < 0.31:
+                self.ids.visited6.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited6.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited6.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited6.color = (1, 1, 1, 1)
+        if room == 7:
+            if 0.30 < self.ids.visited7.background_color[0] < 0.31:
+                self.ids.visited7.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited7.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited7.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited7.color = (1, 1, 1, 1)
+        if room == 8:
+            if 0.30 < self.ids.visited8.background_color[0] < 0.31:
+                self.ids.visited8.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited8.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited8.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited8.color = (1, 1, 1, 1)
+        if room == 9:
+            if 0.30 < self.ids.visited9.background_color[0] < 0.31:
+                self.ids.visited9.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited9.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited9.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited9.color = (1, 1, 1, 1)
+        if room == 10:
+            if 0.30 < self.ids.visited10.background_color[0] < 0.31:
+                self.ids.visited10.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited10.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited10.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited10.color = (1, 1, 1, 1)
+        if room == 11:
+            if 0.30 < self.ids.visited11.background_color[0] < 0.31:
+                self.ids.visited11.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited11.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited11.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited11.color = (1, 1, 1, 1)
+        if room == 12:
+            if 0.30 < self.ids.visited12.background_color[0] < 0.31:
+                self.ids.visited12.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited12.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited12.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited12.color = (1, 1, 1, 1)
+        if room == 13:
+            if 0.30 < self.ids.visited13.background_color[0] < 0.31:
+                self.ids.visited13.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited13.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited13.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited13.color = (1, 1, 1, 1)
+        if room == 14:
+            if 0.30 < self.ids.visited14.background_color[0] < 0.31:
+                self.ids.visited14.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited14.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited14.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited14.color = (1, 1, 1, 1)
+        if room == 15:
+            if 0.30 < self.ids.visited15.background_color[0] < 0.31:
+                self.ids.visited15.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited15.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited15.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited15.color = (1, 1, 1, 1)
+        if room == 16:
+            if 0.30 < self.ids.visited16.background_color[0] < 0.31:
+                self.ids.visited16.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited16.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited16.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited16.color = (1, 1, 1, 1)
+        if room == 17:
+            if 0.30 < self.ids.visited17.background_color[0] < 0.31:
+                self.ids.visited17.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited17.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited17.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited17.color = (1, 1, 1, 1)
+        if room == 18:
+            if 0.30 < self.ids.visited18.background_color[0] < 0.31:
+                self.ids.visited18.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited18.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited18.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited18.color = (1, 1, 1, 1)
+        if room == 19:
+            if 0.30 < self.ids.visited19.background_color[0] < 0.31:
+                self.ids.visited19.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited19.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited19.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited19.color = (1, 1, 1, 1)
+        if room == 20:
+            if 0.30 < self.ids.visited20.background_color[0] < 0.31:
+                self.ids.visited20.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited20.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited20.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited20.color = (1, 1, 1, 1)
+        if room == 21:
+            if 0.30 < self.ids.visited21.background_color[0] < 0.31:
+                self.ids.visited21.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited21.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited21.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited21.color = (1, 1, 1, 1)
+        if room == 22:
+            if 0.30 < self.ids.visited22.background_color[0] < 0.31:
+                self.ids.visited22.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited22.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited22.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited22.color = (1, 1, 1, 1)
+        if room == 23:
+            if 0.30 < self.ids.visited23.background_color[0] < 0.31:
+                self.ids.visited23.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited23.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited23.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited23.color = (1, 1, 1, 1)
+        if room == 24:
+            if 0.30 < self.ids.visited24.background_color[0] < 0.31:
+                self.ids.visited24.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited24.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited24.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited24.color = (1, 1, 1, 1)
+        if room == 25:
+            if 0.30 < self.ids.visited25.background_color[0] < 0.31:
+                self.ids.visited25.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited25.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited25.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited25.color = (1, 1, 1, 1)
+        if room == 26:
+            if 0.30 < self.ids.visited26.background_color[0] < 0.31:
+                self.ids.visited26.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited26.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited26.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited26.color = (1, 1, 1, 1)
+        if room == 27:
+            if 0.30 < self.ids.visited27.background_color[0] < 0.31:
+                self.ids.visited27.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited27.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited27.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited27.color = (1, 1, 1, 1)
+        if room == 28:
+            if 0.30 < self.ids.visited28.background_color[0] < 0.31:
+                self.ids.visited28.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited28.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited28.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited28.color = (1, 1, 1, 1)
+        if room == 29:
+            if 0.30 < self.ids.visited29.background_color[0] < 0.31:
+                self.ids.visited29.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited29.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited29.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited29.color = (1, 1, 1, 1)
+        if room == 30:
+            if 0.30 < self.ids.visited30.background_color[0] < 0.31:
+                self.ids.visited30.background_color = (0 / 255, 224 / 255, 161 / 255, 1)
+                self.ids.visited30.color = (0, 0, 0, 1)
+            else:
+                self.ids.visited30.background_color = (78 / 255, 128 / 255, 152 / 255, 1)
+                self.ids.visited30.color = (1, 1, 1, 1)
 
 
 class KitchenWindow(Screen):
@@ -179,22 +389,26 @@ class IngredientsWindow(Screen):
 
         for diet in diets:
             if int(diet[4]) >= int(comingMonday):
-                if int(diet[4]) < int(nextNextMonday) and int(diet[3]) <= int(comingMonday):  # before end and before start
+                if int(diet[4]) < int(nextNextMonday) and int(diet[3]) <= int(
+                        comingMonday):  # before end and before start
                     lDate = date(int(str(diet[4])[:4]), int(str(diet[4])[4:6]), int(str(diet[4])[6:]))
                     fDate = date(int(comingMonday[:4]), int(comingMonday[4:6]), int(comingMonday[6:]))
                     multiply = lDate - fDate
                     multiply = multiply.days + 1
-                elif int(diet[4]) < int(nextNextMonday) and int(diet[3]) > int(comingMonday):  # before end and after start
+                elif int(diet[4]) < int(nextNextMonday) and int(diet[3]) > int(
+                        comingMonday):  # before end and after start
                     lDate = date(int(str(diet[4])[:4]), int(str(diet[4])[4:6]), int(str(diet[4])[6:]))
                     fDate = date(int(str(diet[3])[:4]), int(str(diet[3])[4:6]), int(str(diet[3])[6:]))
                     multiply = lDate - fDate
                     multiply = multiply.days + 1
-                elif int(diet[4]) >= int(nextNextMonday) and int(diet[3]) > int(comingMonday):  # after end and after start
+                elif int(diet[4]) >= int(nextNextMonday) and int(diet[3]) > int(
+                        comingMonday):  # after end and after start
                     lDate = date(int(nextNextMonday[:4]), int(nextNextMonday[4:6]), int(nextNextMonday[6:]))
                     fDate = date(int(str(diet[3])[:4]), int(str(diet[3])[4:6]), int(str(diet[3])[6:]))
                     multiply = lDate - fDate
                     multiply = multiply.days
-                elif int(diet[4]) >= int(nextNextMonday) and int(diet[3]) > int(comingMonday):  # after end and before start
+                elif int(diet[4]) >= int(nextNextMonday) and int(diet[3]) > int(
+                        comingMonday):  # after end and before start
                     multiply = 7
                 else:
                     multiply = 0
