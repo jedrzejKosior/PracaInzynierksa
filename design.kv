@@ -120,6 +120,8 @@ WindowManager:
 	KitchenWindow:
 	DailyKitchenWindow:
 	IngredientsWindow:
+	RoomWindowAbsence:
+	MaidWindow:
 
 
 <LoginWindow>:
@@ -194,10 +196,55 @@ WindowManager:
             on_release: app.root.current = "dietWindow"
             background_color: utils.get_color_from_hex("#90C2E7")
             color: (0, 0, 0, 1)
+        Button:
+            text: "REGISTER ABSENCE"
+            on_release: app.root.current = "roomWindowAbsence"
+            background_color: utils.get_color_from_hex("#90C2E7")
+            color: (0, 0, 0, 1)
         RoundedButton:
             text: "LOGOUT"
             on_release: app.root.current = "loginWindow"
 
+<MaidWindow>:
+    name: "maidWindow"
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: "gradientBackground.png"
+<RoomWindowAbsence>:
+    name: "roomWindowAbsence"
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: "gradientBackground.png"
+    BoxLayout:
+        orientation: "vertical"
+        padding: 150
+        spacing: 30
+        Label:
+            text: "CHOOSE ROOM STATUS"
+            color: (0, 0, 0, 1)
+        TextInput:
+            hint_text: "ROOM NUMBERS"
+            size_hint_y: None
+            height: 50
+        Spinner:
+            text: "STATUS"
+            size_hint_y: None
+            height: 50
+            values: ["ABSENT", "PRESENT"]
+        BoxLayout:
+            orientation: "horizontal"
+            RoundedButton:
+                text: "BACK"
+                background_color: utils.get_color_from_hex("#CED3DC")
+                color: (0, 0, 0, 1)
+                on_release: app.root.current = "actionWindow"
+            RoundedButton:
+                text: "SAVE"
+                on_release: app.root.current = "actionWindow" if root.saveFood() else Factory.DietWindowPopup().open()
 <DietWindow>:
     name: "dietWindow"
     classicDiet: classicDiet

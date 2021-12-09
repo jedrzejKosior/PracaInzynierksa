@@ -104,6 +104,14 @@ class ActionWindow(Screen):
     pass
 
 
+class RoomWindowAbsence(Screen):
+    pass
+
+
+class MaidWindow(Screen):
+    pass
+
+
 class KitchenWindow(Screen):
     pass
 
