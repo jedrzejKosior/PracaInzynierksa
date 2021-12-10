@@ -107,6 +107,16 @@
         Button:
             text: "OK"
             on_release: root.dismiss()
+<AbsenceWindowPopup@Popup>
+    BoxLayout:
+        orientation: "vertical"
+        spacing: 10
+        Label:
+            text: "INVALID DATA"
+            color: (0, 0, 0, 1)
+        Button:
+            text: "OK"
+            on_release: root.dismiss()
 WindowManager:
     transition: WipeTransition()
 	LoginWindow:
@@ -237,11 +247,42 @@ WindowManager:
     visited28: visited28
     visited29: visited29
     visited30: visited30
+    status1: status1
+    status2: status2
+    status3: status3
+    status4: status4
+    status5: status5
+    status6: status6
+    status7: status7
+    status8: status8
+    status9: status9
+    status10: status10
+    status11: status11
+    status12: status12
+    status13: status13
+    status14: status14
+    status15: status15
+    status16: status16
+    status17: status17
+    status18: status18
+    status19: status19
+    status20: status20
+    status21: status21
+    status22: status22
+    status23: status23
+    status24: status24
+    status25: status25
+    status26: status26
+    status27: status27
+    status28: status28
+    status29: status29
+    status30: status30
     canvas.before:
         Rectangle:
             pos: self.pos
             size: self.size
             source: "gradientBackground.png"
+    on_pre_enter: root.absentOrPresent()
     BoxLayout:
         orientation: "vertical"
         padding: 30
@@ -255,6 +296,7 @@ WindowManager:
                     text: "1"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status1
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -265,6 +307,7 @@ WindowManager:
                     text: "2"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status2
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -275,6 +318,7 @@ WindowManager:
                     text: "3"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status3
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -285,6 +329,7 @@ WindowManager:
                     text: "4"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status4
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -295,6 +340,7 @@ WindowManager:
                     text: "5"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status5
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -305,6 +351,7 @@ WindowManager:
                     text: "6"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status6
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -315,6 +362,7 @@ WindowManager:
                     text: "7"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status7
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -325,6 +373,7 @@ WindowManager:
                     text: "8"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status8
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -335,6 +384,7 @@ WindowManager:
                     text: "9"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status9
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -345,6 +395,7 @@ WindowManager:
                     text: "10"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status10
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -355,6 +406,7 @@ WindowManager:
                     text: "11"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status11
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -365,6 +417,7 @@ WindowManager:
                     text: "12"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status12
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -375,6 +428,7 @@ WindowManager:
                     text: "13"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status13
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -385,6 +439,7 @@ WindowManager:
                     text: "14"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status14
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -395,6 +450,7 @@ WindowManager:
                     text: "15"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status15
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -407,6 +463,7 @@ WindowManager:
                     text: "16"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status16
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -417,6 +474,7 @@ WindowManager:
                     text: "17"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status17
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -427,6 +485,7 @@ WindowManager:
                     text: "18"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status18
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -437,6 +496,7 @@ WindowManager:
                     text: "19"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status19
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -447,6 +507,7 @@ WindowManager:
                     text: "20"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status20
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -457,6 +518,7 @@ WindowManager:
                     text: "21"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status21
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -467,6 +529,7 @@ WindowManager:
                     text: "22"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status22
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -477,6 +540,7 @@ WindowManager:
                     text: "23"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status23
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -487,6 +551,7 @@ WindowManager:
                     text: "24"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status24
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -497,6 +562,7 @@ WindowManager:
                     text: "25"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status25
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -507,6 +573,7 @@ WindowManager:
                     text: "26"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status26
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -517,6 +584,7 @@ WindowManager:
                     text: "27"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status27
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -527,6 +595,7 @@ WindowManager:
                     text: "28"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status28
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -537,6 +606,7 @@ WindowManager:
                     text: "29"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status29
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -547,6 +617,7 @@ WindowManager:
                     text: "30"
                     color: (1, 1, 1, 1)
                 Button:
+                    id: status30
                     text: "ABSENT"
                     color: (1, 1, 1, 1)
                 Button:
@@ -567,6 +638,8 @@ WindowManager:
                 on_release: app.root.current = "loginWindow"
 <RoomWindowAbsence>:
     name: "roomWindowAbsence"
+    roomsInput: roomsInput
+    statusInput: statusInput
     canvas.before:
         Rectangle:
             pos: self.pos
@@ -580,10 +653,12 @@ WindowManager:
             text: "CHOOSE ROOM STATUS"
             color: (0, 0, 0, 1)
         TextInput:
-            hint_text: "ROOM NUMBERS"
+            id: roomsInput
+            hint_text: "1, 5, 25"
             size_hint_y: None
             height: 50
         Spinner:
+            id: statusInput
             text: "STATUS"
             size_hint_y: None
             height: 50
@@ -597,7 +672,7 @@ WindowManager:
                 on_release: app.root.current = "actionWindow"
             RoundedButton:
                 text: "SAVE"
-                on_release: app.root.current = "actionWindow" if root.saveFood() else Factory.DietWindowPopup().open()
+                on_release: app.root.current = "actionWindow" if root.saveAbsence() else Factory.AbsenceWindowPopup().open()
 <DietWindow>:
     name: "dietWindow"
     classicDiet: classicDiet

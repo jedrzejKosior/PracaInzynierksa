@@ -88,8 +88,6 @@ class LoginWindow(Screen):
                 break
         if not foundLogin:
             isCorrect = False
-
-        # print(f"Hello {login}, {password}")
         # commit your changes
         conn.commit()
         # close cursor
@@ -105,10 +103,239 @@ class ActionWindow(Screen):
 
 
 class RoomWindowAbsence(Screen):
-    pass
+    def saveAbsence(self):
+        # connect to database
+        conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
+        # cursor
+        cur = conn.cursor()
+        inputValue = self.ids.roomsInput.text
+        inputLength = len(inputValue)
+        if inputLength == 0:
+            return False
+        for index in range(inputLength):
+            character = inputValue[index]
+            if character.isdigit() or character == " " or character == ",":
+                continue
+            else:
+                return False
+        inputValue = re.sub(' +', ' ', inputValue)
+        inputValue.replace(",", " ")
+        inputValue.replace(", ", " ")
+        rooms = inputValue.split()
+        for i in rooms:
+            if int(i) > 30:
+                return False
+        if self.ids.statusInput.text == 'STATUS':
+            return False
+        for room in rooms:
+            if self.ids.statusInput.text == 'ABSENT':
+                cur.execute("UPDATE absence SET status = 'absent' WHERE roomnumber = '" + str(room) + "'")
+            else:
+                cur.execute("UPDATE absence SET status = 'present' WHERE roomnumber = '" + str(room) + "'")
+        # commit your changes
+        conn.commit()
+        # close cursor
+        cur.close()
+        # close connection
+        conn.close()
+        return True
 
 
 class MaidWindow(Screen):
+    def absentOrPresent(self):
+        # connect to database
+        conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
+        # cursor
+        cur = conn.cursor()
+        cur.execute("SELECT roomnumber, status FROM absence ORDER BY roomnumber")
+        absentInfo = cur.fetchall()
+        # commit your changes
+        conn.commit()
+        # close cursor
+        cur.close()
+        # close connection
+        conn.close()
+        if absentInfo[0][1] == "present":
+            self.ids.status1.text = "PRESENT"
+            self.ids.status1.color = (0, 0, 0, 1)
+        else:
+            self.ids.status1.text = "ABSENT"
+            self.ids.status1.color = (1, 1, 1, 1)
+        if absentInfo[1][1] == "present":
+            self.ids.status2.text = "PRESENT"
+            self.ids.status2.color = (0, 0, 0, 1)
+        else:
+            self.ids.status2.text = "ABSENT"
+            self.ids.status2.color = (1, 1, 1, 1)
+        if absentInfo[2][1] == "present":
+            self.ids.status3.text = "PRESENT"
+            self.ids.status3.color = (0, 0, 0, 1)
+        else:
+            self.ids.status3.text = "ABSENT"
+            self.ids.status3.color = (1, 1, 1, 1)
+        if absentInfo[3][1] == "present":
+            self.ids.status4.text = "PRESENT"
+            self.ids.status4.color = (0, 0, 0, 1)
+        else:
+            self.ids.status4.text = "ABSENT"
+            self.ids.status4.color = (1, 1, 1, 1)
+        if absentInfo[4][1] == "present":
+            self.ids.status5.text = "PRESENT"
+            self.ids.status5.color = (0, 0, 0, 1)
+        else:
+            self.ids.status5.text = "ABSENT"
+            self.ids.status5.color = (1, 1, 1, 1)
+        if absentInfo[5][1] == "present":
+            self.ids.status6.text = "PRESENT"
+            self.ids.status6.color = (0, 0, 0, 1)
+        else:
+            self.ids.status6.text = "ABSENT"
+            self.ids.status6.color = (1, 1, 1, 1)
+        if absentInfo[6][1] == "present":
+            self.ids.status7.text = "PRESENT"
+            self.ids.status7.color = (0, 0, 0, 1)
+        else:
+            self.ids.status7.text = "ABSENT"
+            self.ids.status7.color = (1, 1, 1, 1)
+        if absentInfo[7][1] == "present":
+            self.ids.status8.text = "PRESENT"
+            self.ids.status8.color = (0, 0, 0, 1)
+        else:
+            self.ids.status8.text = "ABSENT"
+            self.ids.status8.color = (1, 1, 1, 1)
+        if absentInfo[8][1] == "present":
+            self.ids.status9.text = "PRESENT"
+            self.ids.status9.color = (0, 0, 0, 1)
+        else:
+            self.ids.status9.text = "ABSENT"
+            self.ids.status9.color = (1, 1, 1, 1)
+        if absentInfo[9][1] == "present":
+            self.ids.status10.text = "PRESENT"
+            self.ids.status10.color = (0, 0, 0, 1)
+        else:
+            self.ids.status10.text = "ABSENT"
+            self.ids.status10.color = (1, 1, 1, 1)
+        if absentInfo[10][1] == "present":
+            self.ids.status11.text = "PRESENT"
+            self.ids.status11.color = (0, 0, 0, 1)
+        else:
+            self.ids.status11.text = "ABSENT"
+            self.ids.status11.color = (1, 1, 1, 1)
+        if absentInfo[11][1] == "present":
+            self.ids.status12.text = "PRESENT"
+            self.ids.status12.color = (0, 0, 0, 1)
+        else:
+            self.ids.status12.text = "ABSENT"
+            self.ids.status12.color = (1, 1, 1, 1)
+        if absentInfo[12][1] == "present":
+            self.ids.status13.text = "PRESENT"
+            self.ids.status13.color = (0, 0, 0, 1)
+        else:
+            self.ids.status13.text = "ABSENT"
+            self.ids.status13.color = (1, 1, 1, 1)
+        if absentInfo[13][1] == "present":
+            self.ids.status14.text = "PRESENT"
+            self.ids.status14.color = (0, 0, 0, 1)
+        else:
+            self.ids.status14.text = "ABSENT"
+            self.ids.status14.color = (1, 1, 1, 1)
+        if absentInfo[14][1] == "present":
+            self.ids.status15.text = "PRESENT"
+            self.ids.status15.color = (0, 0, 0, 1)
+        else:
+            self.ids.status15.text = "ABSENT"
+            self.ids.status15.color = (1, 1, 1, 1)
+        if absentInfo[15][1] == "present":
+            self.ids.status16.text = "PRESENT"
+            self.ids.status16.color = (0, 0, 0, 1)
+        else:
+            self.ids.status16.text = "ABSENT"
+            self.ids.status16.color = (1, 1, 1, 1)
+        if absentInfo[16][1] == "present":
+            self.ids.status17.text = "PRESENT"
+            self.ids.status17.color = (0, 0, 0, 1)
+        else:
+            self.ids.status17.text = "ABSENT"
+            self.ids.status17.color = (1, 1, 1, 1)
+        if absentInfo[17][1] == "present":
+            self.ids.status18.text = "PRESENT"
+            self.ids.status18.color = (0, 0, 0, 1)
+        else:
+            self.ids.status18.text = "ABSENT"
+            self.ids.status18.color = (1, 1, 1, 1)
+        if absentInfo[18][1] == "present":
+            self.ids.status19.text = "PRESENT"
+            self.ids.status19.color = (0, 0, 0, 1)
+        else:
+            self.ids.status19.text = "ABSENT"
+            self.ids.status19.color = (1, 1, 1, 1)
+        if absentInfo[19][1] == "present":
+            self.ids.status20.text = "PRESENT"
+            self.ids.status20.color = (0, 0, 0, 1)
+        else:
+            self.ids.status20.text = "ABSENT"
+            self.ids.status20.color = (1, 1, 1, 1)
+        if absentInfo[20][1] == "present":
+            self.ids.status21.text = "PRESENT"
+            self.ids.status21.color = (0, 0, 0, 1)
+        else:
+            self.ids.status21.text = "ABSENT"
+            self.ids.status21.color = (1, 1, 1, 1)
+        if absentInfo[21][1] == "present":
+            self.ids.status22.text = "PRESENT"
+            self.ids.status22.color = (0, 0, 0, 1)
+        else:
+            self.ids.status22.text = "ABSENT"
+            self.ids.status22.color = (1, 1, 1, 1)
+        if absentInfo[22][1] == "present":
+            self.ids.status23.text = "PRESENT"
+            self.ids.status23.color = (0, 0, 0, 1)
+        else:
+            self.ids.status23.text = "ABSENT"
+            self.ids.status23.color = (1, 1, 1, 1)
+        if absentInfo[23][1] == "present":
+            self.ids.status24.text = "PRESENT"
+            self.ids.status24.color = (0, 0, 0, 1)
+        else:
+            self.ids.status24.text = "ABSENT"
+            self.ids.status24.color = (1, 1, 1, 1)
+        if absentInfo[24][1] == "present":
+            self.ids.status25.text = "PRESENT"
+            self.ids.status25.color = (0, 0, 0, 1)
+        else:
+            self.ids.status25.text = "ABSENT"
+            self.ids.status25.color = (1, 1, 1, 1)
+        if absentInfo[25][1] == "present":
+            self.ids.status26.text = "PRESENT"
+            self.ids.status26.color = (0, 0, 0, 1)
+        else:
+            self.ids.status26.text = "ABSENT"
+            self.ids.status26.color = (1, 1, 1, 1)
+        if absentInfo[26][1] == "present":
+            self.ids.status27.text = "PRESENT"
+            self.ids.status27.color = (0, 0, 0, 1)
+        else:
+            self.ids.status27.text = "ABSENT"
+            self.ids.status27.color = (1, 1, 1, 1)
+        if absentInfo[27][1] == "present":
+            self.ids.status28.text = "PRESENT"
+            self.ids.status28.color = (0, 0, 0, 1)
+        else:
+            self.ids.status28.text = "ABSENT"
+            self.ids.status28.color = (1, 1, 1, 1)
+        if absentInfo[28][1] == "present":
+            self.ids.status29.text = "PRESENT"
+            self.ids.status29.color = (0, 0, 0, 1)
+        else:
+            self.ids.status29.text = "ABSENT"
+            self.ids.status29.color = (1, 1, 1, 1)
+        if absentInfo[29][1] == "present":
+            self.ids.status30.text = "PRESENT"
+            self.ids.status30.color = (0, 0, 0, 1)
+        else:
+            self.ids.status30.text = "ABSENT"
+            self.ids.status30.color = (1, 1, 1, 1)
+
     def selectAsVisited(self, room):
         if room == 1:
             if 0.30 < self.ids.visited1.background_color[0] < 0.31:
