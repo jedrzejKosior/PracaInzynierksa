@@ -101,6 +101,10 @@ class LoginWindow(Screen):
 
 
 class ActionWindow(Screen):
+    pass
+
+
+class AdminWindow(Screen):
     def createUser(self):
         # connect to database
         conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
@@ -109,22 +113,25 @@ class ActionWindow(Screen):
         newUser = self.ids.newLogin.text
         newPassword = self.ids.newPassword.text
         newPermission = self.ids.permissions.text
-        if newPermission == "PERMISSIONS":
+        if len(newUser) == 0 or len(newPassword) == 0 or newPermission == "PERMISSIONS":
             return False
         cur.execute("SELECT username FROM users")
         users = cur.fetchall()
         for user in users:
-            if
-
+            if user == newUser:
+                return False
+        cur.execute("INSERT INTO users VALUES ('" + str(newUser) + "', '" + str(newPassword) + "', '" + str(
+            newPermission.lower() + "')"))
         # commit your changes
         conn.commit()
         # close cursor
         cur.close()
         # close connection
         conn.close()
-
-class AdminWindow(Screen):
-    pass
+        self.ids.newLogin.text = ""
+        self.ids.newPassword.text = ""
+        self.ids.permissions.text = "PERMISSIONS"
+        return True
 
 
 class RoomWindowAbsence(Screen):

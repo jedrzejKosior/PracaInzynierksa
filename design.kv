@@ -205,9 +205,11 @@ WindowManager:
             TextInput:
                 hint_text: "LOGIN"
                 id: newLogin
+                font_size: 20
             TextInput:
                 hint_text: "PASSWORD"
                 id: newPassword
+                font_size: 20
             Spinner:
                 id: permissions
                 text: "PERMISSIONS"
@@ -225,7 +227,7 @@ WindowManager:
                 on_release: app.root.current = "loginWindow"
             RoundedButton:
                 text: "SAVE"
-                on_release: app.root.current = "loginWindow"
+                on_release: root.createUser()
 <ActionWindow>:
     name: "actionWindow"
     canvas.before:
