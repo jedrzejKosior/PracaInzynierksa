@@ -103,7 +103,25 @@ class ActionWindow(Screen):
 
 
 class RoomWindowAbsence(Screen):
+    # noinspection PyMethodMayBeStatic
+    def parseDataToday(self):
+        currentYear = str(datetime.now().year)
+        currentMonth = str(datetime.now().month)
+        currentDay = str(datetime.now().day)
+        if int(currentMonth) < 10:
+            startMonthToDatabase = str(0) + str(currentMonth)
+        else:
+            startMonthToDatabase = str(currentMonth)
+        if int(currentDay) < 10:
+            startDayToDatabase = str(0) + str(currentDay)
+        else:
+            startDayToDatabase = str(currentDay)
+
+        dateToday = str(currentYear) + str(startMonthToDatabase) + str(startDayToDatabase)
+        return dateToday
+
     def saveAbsence(self):
+        dateToday = self.parseDataToday()
         # connect to database
         conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
         # cursor
@@ -124,6 +142,19 @@ class RoomWindowAbsence(Screen):
         rooms = inputValue.split()
         for i in rooms:
             if int(i) > 30:
+                return False
+            cur.execute("SELECT startdate, enddate FROM room" + str(i) + "")
+            isRightDate = cur.fetchall()
+            if len(isRightDate) == 0:
+                return False
+            flag = False
+            for j in isRightDate:
+                if int(j[0]) > int(dateToday) or int(j[1]) < int(dateToday):
+                    continue
+                else:
+                    flag = True
+                    break
+            if not flag:
                 return False
         if self.ids.statusInput.text == 'STATUS':
             return False
