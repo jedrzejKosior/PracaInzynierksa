@@ -83,6 +83,8 @@ class LoginWindow(Screen):
                         self.window = "kitchenWindow"
                     elif user[2] == "maid":
                         self.window = "maidWindow"
+                    else:
+                        self.window = "adminWindow"
                 else:
                     isCorrect = False
                 break
@@ -99,6 +101,29 @@ class LoginWindow(Screen):
 
 
 class ActionWindow(Screen):
+    def createUser(self):
+        # connect to database
+        conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
+        # cursor
+        cur = conn.cursor()
+        newUser = self.ids.newLogin.text
+        newPassword = self.ids.newPassword.text
+        newPermission = self.ids.permissions.text
+        if newPermission == "PERMISSIONS":
+            return False
+        cur.execute("SELECT username FROM users")
+        users = cur.fetchall()
+        for user in users:
+            if
+
+        # commit your changes
+        conn.commit()
+        # close cursor
+        cur.close()
+        # close connection
+        conn.close()
+
+class AdminWindow(Screen):
     pass
 
 
