@@ -16,7 +16,6 @@ import re
 Window.minimum_width, Window.minimum_height = 800, 600
 
 
-# validations of inputs
 def isRightName(textInput):
     if len(textInput) == 0:
         return False
@@ -55,16 +54,13 @@ def isRightEmail(email):
         return False
 
 
-# Define our different screens
 class LoginWindow(Screen):
     login = ObjectProperty(None)
     password = ObjectProperty(None)
     window = "loginWindow"
 
     def loginPress(self):
-        # connect to database
         conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
-        # cursor
         cur = conn.cursor()
 
         isCorrect = True
@@ -90,11 +86,8 @@ class LoginWindow(Screen):
                 break
         if not foundLogin:
             isCorrect = False
-        # commit your changes
         conn.commit()
-        # close cursor
         cur.close()
-        # close connection
         conn.close()
         self.password.text = ""
         return isCorrect, self.window
@@ -106,9 +99,7 @@ class ActionWindow(Screen):
 
 class AdminWindow(Screen):
     def createUser(self):
-        # connect to database
         conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
-        # cursor
         cur = conn.cursor()
         newUser = self.ids.newLogin.text
         newPassword = self.ids.newPassword.text
@@ -122,11 +113,8 @@ class AdminWindow(Screen):
                 return False
         cur.execute("INSERT INTO users VALUES ('" + str(newUser) + "', '" + str(newPassword) + "', '" + str(
             newPermission.lower() + "')"))
-        # commit your changes
         conn.commit()
-        # close cursor
         cur.close()
-        # close connection
         conn.close()
         self.ids.newLogin.text = ""
         self.ids.newPassword.text = ""
@@ -154,9 +142,7 @@ class RoomWindowAbsence(Screen):
 
     def saveAbsence(self):
         dateToday = self.parseDataToday()
-        # connect to database
         conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
-        # cursor
         cur = conn.cursor()
         inputValue = self.ids.roomsInput.text
         inputLength = len(inputValue)
@@ -195,28 +181,26 @@ class RoomWindowAbsence(Screen):
                 cur.execute("UPDATE absence SET status = 'absent' WHERE roomnumber = '" + str(room) + "'")
             else:
                 cur.execute("UPDATE absence SET status = 'present' WHERE roomnumber = '" + str(room) + "'")
-        # commit your changes
         conn.commit()
-        # close cursor
         cur.close()
-        # close connection
+
         conn.close()
         return True
 
 
 class MaidWindow(Screen):
     def absentOrPresent(self):
-        # connect to database
+
         conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
-        # cursor
+
         cur = conn.cursor()
         cur.execute("SELECT roomnumber, status FROM absence ORDER BY roomnumber")
         absentInfo = cur.fetchall()
-        # commit your changes
+
         conn.commit()
-        # close cursor
+
         cur.close()
-        # close connection
+
         conn.close()
         if absentInfo[0][1] == "present":
             self.ids.status1.text = "PRESENT"
@@ -641,7 +625,7 @@ class IngredientsWindow(Screen):
         dietsVeganNextWeek = 0
         lastMonday, comingMonday, penultimateMonday, nextNextMonday = self.parseDataDiet()
         conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
-        # cursor
+
         cur = conn.cursor()
 
         cur.execute("SELECT classic, vegetarian, vegan, startdate, enddate FROM diets")
@@ -649,22 +633,22 @@ class IngredientsWindow(Screen):
 
         for diet in diets:
             if int(diet[4]) >= int(lastMonday):
-                if int(diet[4]) < int(comingMonday) and int(diet[3]) <= int(lastMonday):  # before end and before start
+                if int(diet[4]) < int(comingMonday) and int(diet[3]) <= int(lastMonday):
                     lDate = date(int(str(diet[4])[:4]), int(str(diet[4])[4:6]), int(str(diet[4])[6:]))
                     fDate = date(int(lastMonday[:4]), int(lastMonday[4:6]), int(lastMonday[6:]))
                     multiply = lDate - fDate
                     multiply = multiply.days + 1
-                elif int(diet[4]) < int(comingMonday) and int(diet[3]) > int(lastMonday):  # before end and after start
+                elif int(diet[4]) < int(comingMonday) and int(diet[3]) > int(lastMonday):
                     lDate = date(int(str(diet[4])[:4]), int(str(diet[4])[4:6]), int(str(diet[4])[6:]))
                     fDate = date(int(str(diet[3])[:4]), int(str(diet[3])[4:6]), int(str(diet[3])[6:]))
                     multiply = lDate - fDate
                     multiply = multiply.days + 1
-                elif int(diet[4]) >= int(comingMonday) and int(diet[3]) > int(lastMonday):  # after end and after start
+                elif int(diet[4]) >= int(comingMonday) and int(diet[3]) > int(lastMonday):
                     lDate = date(int(comingMonday[:4]), int(comingMonday[4:6]), int(comingMonday[6:]))
                     fDate = date(int(str(diet[3])[:4]), int(str(diet[3])[4:6]), int(str(diet[3])[6:]))
                     multiply = lDate - fDate
                     multiply = multiply.days
-                elif int(diet[4]) >= int(comingMonday) and int(diet[3]) > int(lastMonday):  # after end and before start
+                elif int(diet[4]) >= int(comingMonday) and int(diet[3]) > int(lastMonday):
                     multiply = 7
                 else:
                     multiply = 0
@@ -692,13 +676,13 @@ class IngredientsWindow(Screen):
                     multiply = lDate - fDate
                     multiply = multiply.days + 1
                 elif int(diet[4]) >= int(nextNextMonday) and int(diet[3]) > int(
-                        comingMonday):  # after end and after start
+                        comingMonday):
                     lDate = date(int(nextNextMonday[:4]), int(nextNextMonday[4:6]), int(nextNextMonday[6:]))
                     fDate = date(int(str(diet[3])[:4]), int(str(diet[3])[4:6]), int(str(diet[3])[6:]))
                     multiply = lDate - fDate
                     multiply = multiply.days
                 elif int(diet[4]) >= int(nextNextMonday) and int(diet[3]) > int(
-                        comingMonday):  # after end and before start
+                        comingMonday):
                     multiply = 7
                 else:
                     multiply = 0
@@ -711,9 +695,9 @@ class IngredientsWindow(Screen):
         self.ids.vegetarianNextWeek.text = str(dietsVegetarianNextWeek)
         self.ids.veganNextWeek.text = str(dietsVeganNextWeek)
         conn.commit()
-        # close cursor
+
         cur.close()
-        # close connection
+
         conn.close()
 
 
@@ -746,9 +730,8 @@ class DailyKitchenWindow(Screen):
         dietsVeganTomorrow = 0
         dateToDietToday, dateToDietTomorrow = self.parseDataDiet()
         conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
-        # cursor
+
         cur = conn.cursor()
-        # cur.execute("DELETE FROM diets WHERE enddate<'" + str(dateToDietToday) + "'")
         cur.execute("SELECT classic, vegetarian, vegan, startdate, enddate FROM diets WHERE startdate<='" + str(
             dateToDietToday) + "' AND enddate>='" + str(dateToDietToday) + "'")
         dietsToday = cur.fetchall()
@@ -774,9 +757,9 @@ class DailyKitchenWindow(Screen):
         self.ids.vegetarianTomorrow.text = str(dietsVegetarianTomorrow)
         self.ids.veganTomorrow.text = str(dietsVeganTomorrow)
         conn.commit()
-        # close cursor
+
         cur.close()
-        # close connection
+
         conn.close()
 
     def lowerAmount(self, button, resetFlag):
@@ -805,7 +788,7 @@ class DateWindow(Screen):
     def abortUpdate(self):
         if len(HotelManager.roomInfo) > 0 and len(HotelManager.clientInfo) > 0:
             conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
-            # cursor
+
             cur = conn.cursor()
             cur.execute("INSERT INTO room" + str(HotelManager.roomInfo[0][
                                                      0]) + " (roomnumber, startdate, enddate, clientid) VALUES (" + str(
@@ -822,9 +805,9 @@ class DateWindow(Screen):
                 HotelManager.clientInfo[0][4]) + ")")
 
             conn.commit()
-            # close cursor
+
             cur.close()
-            # close connection
+
             conn.close()
             HotelManager.roomInfo = []
             HotelManager.clientInfo = []
@@ -836,7 +819,7 @@ class DateWindow(Screen):
     def startUpdate(self):
         if len(HotelManager.bookToUpdate) > 0:
             conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
-            # cursor
+
             cur = conn.cursor()
             cur.execute(
                 "SELECT * FROM room" + str(HotelManager.bookToUpdate[0]) + " WHERE startdate='" + str(
@@ -856,9 +839,9 @@ class DateWindow(Screen):
                 HotelManager.bookToUpdate[1]) + "' AND email='" + str(
                 HotelManager.bookToUpdate[2] + "'"))
             conn.commit()
-            # close cursor
+
             cur.close()
-            # close connection
+
             conn.close()
 
     startDay = ObjectProperty(None)
@@ -986,9 +969,9 @@ class DateWindow(Screen):
 def turnRedIfUnavailable():
     startDate = HotelManager.startDateToCheckColor
     endDate = HotelManager.endDateToCheckColor
-    # connect to database
+
     conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
-    # cursor
+
     cur = conn.cursor()
     unavailableRooms = []
     for roomNumber in range(30):
@@ -1000,9 +983,9 @@ def turnRedIfUnavailable():
                     int(startDate) <= int(roomPeriod[0]) and int(endDate) >= int(roomPeriod[1])):
                 unavailableRooms.append(roomNumber + 1)
     conn.commit()
-    # close cursor
+
     cur.close()
-    # close connection
+
     conn.close()
     return unavailableRooms
 
@@ -1124,163 +1107,163 @@ class RoomWindow(Screen):
                 self.ids.room20.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
 
     def selectedRoom1(self):
-        if self.ids.room1.background_color[0] == 0:  # if green
+        if self.ids.room1.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(1)
-            self.ids.room1.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room1.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room1.background_color[0] < 0.57:  # if blue
-            self.ids.room1.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room1.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(1)
 
     def selectedRoom2(self):
-        if self.ids.room2.background_color[0] == 0:  # if green
+        if self.ids.room2.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(2)
-            self.ids.room2.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room2.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room2.background_color[0] < 0.57:
-            self.ids.room2.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room2.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(2)
 
     def selectedRoom3(self):
-        if self.ids.room3.background_color[0] == 0:  # if green
+        if self.ids.room3.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(3)
-            self.ids.room3.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room3.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room3.background_color[0] < 0.57:
-            self.ids.room3.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room3.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(3)
 
     def selectedRoom4(self):
-        if self.ids.room4.background_color[0] == 0:  # if green
+        if self.ids.room4.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(4)
-            self.ids.room4.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room4.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room4.background_color[0] < 0.57:
-            self.ids.room4.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room4.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(4)
 
     def selectedRoom5(self):
-        if self.ids.room5.background_color[0] == 0:  # if green
+        if self.ids.room5.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(5)
-            self.ids.room5.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room5.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room5.background_color[0] < 0.57:
-            self.ids.room5.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room5.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(5)
 
     def selectedRoom6(self):
-        if self.ids.room6.background_color[0] == 0:  # if green
+        if self.ids.room6.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(6)
-            self.ids.room6.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room6.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room6.background_color[0] < 0.57:
-            self.ids.room6.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room6.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(6)
 
     def selectedRoom7(self):
-        if self.ids.room7.background_color[0] == 0:  # if green
+        if self.ids.room7.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(7)
-            self.ids.room7.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room7.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room7.background_color[0] < 0.57:
-            self.ids.room7.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room7.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(7)
 
     def selectedRoom8(self):
-        if self.ids.room8.background_color[0] == 0:  # if green
+        if self.ids.room8.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(8)
-            self.ids.room8.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room8.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room8.background_color[0] < 0.57:
-            self.ids.room8.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room8.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(8)
 
     def selectedRoom9(self):
-        if self.ids.room9.background_color[0] == 0:  # if green
+        if self.ids.room9.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(9)
-            self.ids.room9.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room9.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room9.background_color[0] < 0.57:
-            self.ids.room9.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room9.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(9)
 
     def selectedRoom10(self):
-        if self.ids.room10.background_color[0] == 0:  # if green
+        if self.ids.room10.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(10)
-            self.ids.room10.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room10.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room10.background_color[0] < 0.57:
-            self.ids.room10.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room10.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(10)
 
     def selectedRoom11(self):
-        if self.ids.room11.background_color[0] == 0:  # if green
+        if self.ids.room11.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(11)
-            self.ids.room11.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room11.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room11.background_color[0] < 0.57:
-            self.ids.room11.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room11.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(11)
 
     def selectedRoom12(self):
-        if self.ids.room12.background_color[0] == 0:  # if green
+        if self.ids.room12.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(12)
-            self.ids.room12.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room12.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room12.background_color[0] < 0.57:
-            self.ids.room12.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room12.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(12)
 
     def selectedRoom13(self):
-        if self.ids.room13.background_color[0] == 0:  # if green
+        if self.ids.room13.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(13)
-            self.ids.room13.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room13.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room13.background_color[0] < 0.57:
-            self.ids.room13.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room13.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(13)
 
     def selectedRoom14(self):
-        if self.ids.room14.background_color[0] == 0:  # if green
+        if self.ids.room14.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(14)
-            self.ids.room14.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room14.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room14.background_color[0] < 0.57:
-            self.ids.room14.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room14.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(14)
 
     def selectedRoom15(self):
-        if self.ids.room15.background_color[0] == 0:  # if green
+        if self.ids.room15.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(15)
-            self.ids.room15.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room15.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room15.background_color[0] < 0.57:
-            self.ids.room15.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room15.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(15)
 
     def selectedRoom16(self):
-        if self.ids.room16.background_color[0] == 0:  # if green
+        if self.ids.room16.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(16)
-            self.ids.room16.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room16.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room16.background_color[0] < 0.57:
-            self.ids.room16.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room16.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(16)
 
     def selectedRoom17(self):
-        if self.ids.room17.background_color[0] == 0:  # if green
+        if self.ids.room17.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(17)
-            self.ids.room17.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room17.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room17.background_color[0] < 0.57:
-            self.ids.room17.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room17.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(17)
 
     def selectedRoom18(self):
-        if self.ids.room18.background_color[0] == 0:  # if green
+        if self.ids.room18.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(18)
-            self.ids.room18.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room18.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room18.background_color[0] < 0.57:
-            self.ids.room18.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room18.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(18)
 
     def selectedRoom19(self):
-        if self.ids.room19.background_color[0] == 0:  # if green
+        if self.ids.room19.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(19)
-            self.ids.room19.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room19.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room19.background_color[0] < 0.57:
-            self.ids.room19.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room19.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(19)
 
     def selectedRoom20(self):
-        if self.ids.room20.background_color[0] == 0:  # if green
+        if self.ids.room20.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(20)
-            self.ids.room20.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room20.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room20.background_color[0] < 0.57:
-            self.ids.room20.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room20.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(20)
 
 
@@ -1333,83 +1316,83 @@ class RoomWindowFloor2(Screen):
                 self.ids.room30.background_color = (163 / 255, 22 / 255, 33 / 255, 1)
 
     def selectedRoom21(self):
-        if self.ids.room21.background_color[0] == 0:  # if green
+        if self.ids.room21.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(21)
-            self.ids.room21.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room21.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room21.background_color[0] < 0.57:
-            self.ids.room21.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room21.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(21)
 
     def selectedRoom22(self):
-        if self.ids.room22.background_color[0] == 0:  # if green
+        if self.ids.room22.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(22)
-            self.ids.room22.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room22.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room22.background_color[0] < 0.57:
-            self.ids.room22.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room22.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(22)
 
     def selectedRoom23(self):
-        if self.ids.room23.background_color[0] == 0:  # if green
+        if self.ids.room23.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(23)
-            self.ids.room23.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room23.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room23.background_color[0] < 0.57:
-            self.ids.room23.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room23.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(23)
 
     def selectedRoom24(self):
-        if self.ids.room24.background_color[0] == 0:  # if green
+        if self.ids.room24.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(24)
-            self.ids.room24.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room24.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room24.background_color[0] < 0.57:
-            self.ids.room24.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room24.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(24)
 
     def selectedRoom25(self):
-        if self.ids.room25.background_color[0] == 0:  # if green
+        if self.ids.room25.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(25)
-            self.ids.room25.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room25.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room25.background_color[0] < 0.57:
-            self.ids.room25.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room25.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(25)
 
     def selectedRoom26(self):
-        if self.ids.room26.background_color[0] == 0:  # if green
+        if self.ids.room26.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(26)
-            self.ids.room26.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room26.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room26.background_color[0] < 0.57:
-            self.ids.room6.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room6.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(26)
 
     def selectedRoom27(self):
-        if self.ids.room27.background_color[0] == 0:  # if green
+        if self.ids.room27.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(27)
-            self.ids.room27.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room27.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room27.background_color[0] < 0.57:
-            self.ids.room27.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room27.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(27)
 
     def selectedRoom28(self):
-        if self.ids.room28.background_color[0] == 0:  # if green
+        if self.ids.room28.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(28)
-            self.ids.room28.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room28.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room28.background_color[0] < 0.57:
-            self.ids.room28.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room28.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(28)
 
     def selectedRoom29(self):
-        if self.ids.room29.background_color[0] == 0:  # if green
+        if self.ids.room29.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(29)
-            self.ids.room29.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room29.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room29.background_color[0] < 0.57:
-            self.ids.room29.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room29.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(29)
 
     def selectedRoom30(self):
-        if self.ids.room30.background_color[0] == 0:  # if green
+        if self.ids.room30.background_color[0] == 0:
             HotelManager.selectedRoomNumbers.remove(30)
-            self.ids.room30.background_color = (144 / 255, 194 / 255, 231 / 255, 1)  # then blue
+            self.ids.room30.background_color = (144 / 255, 194 / 255, 231 / 255, 1)
         elif 0.55 < self.ids.room30.background_color[0] < 0.57:
-            self.ids.room30.background_color = (0, 224 / 255, 161 / 255, 1)  # else green
+            self.ids.room30.background_color = (0, 224 / 255, 161 / 255, 1)
             HotelManager.selectedRoomNumbers.append(30)
 
 
@@ -1481,9 +1464,9 @@ class BookWindow(Screen):
             HotelManager.clientInformation.append(self.ids.lastName.text)
             HotelManager.clientInformation.append(self.ids.email.text)
             HotelManager.clientInformation.append(self.ids.telephone.text)
-            # connect to database
+
             conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
-            # cursor
+
             cur = conn.cursor()
             cur.execute("SELECT MAX(clientID) FROM clients")
             maxID = cur.fetchall()[0][0]
@@ -1530,9 +1513,9 @@ class BookWindow(Screen):
                             startDayToDatabase + "', '" + HotelManager.endYearOutput +
                             endMonthToDatabase + endDayToDatabase + "', '" + str(selectedID) + "')")
             conn.commit()
-            # close cursor
+
             cur.close()
-            # close connection
+
             conn.close()
             HotelManager.dateWindowStartDataFromLastBook = str(
                 HotelManager.startYearOutput) + str(startMonthToDatabase) + str(startDayToDatabase)
@@ -1589,9 +1572,8 @@ class BrowserWindow(Screen):
         header.add_widget(Label(text="END DATE", color=(0, 0, 0, 1), size_hint_x=None, width=90))
         header.add_widget(Label(text="UPDATE", color=(0, 0, 0, 1), size_hint_x=None, width=60))
 
-        # connect to database
         conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
-        # cursor
+
         cur = conn.cursor()
         dataToBrowse = []
         if len(inputText) == 0 or inputCategory == "CATEGORY":
@@ -1669,9 +1651,9 @@ class BrowserWindow(Screen):
                     dataToBrowse.append(dataN)
 
         conn.commit()
-        # close cursor
+
         cur.close()
-        # close connection
+
         conn.close()
 
         idButton = 0
@@ -1705,7 +1687,7 @@ class BrowserWindow(Screen):
     # noinspection PyMethodMayBeStatic
     def deleteBook(self):
         conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
-        # cursor
+
         cur = conn.cursor()
         cur.execute("DELETE FROM room" + str(HotelManager.bookToUpdate[0]) + " WHERE startdate='" + str(
             HotelManager.bookToUpdate[3]) + "' AND enddate='" + str(
@@ -1717,19 +1699,11 @@ class BrowserWindow(Screen):
         conn.commit()
         cur.execute("DELETE FROM diets WHERE email='" + HotelManager.bookToUpdate[2] + "'")
         conn.commit()
-        # close cursor
+
         cur.close()
-        # close connection
+
         conn.close()
         self.reloadScroll()
-
-    # noinspection PyMethodMayBeStatic  TODO
-    # def updateOrNot(self):
-    #     print(HotelManager.amountToUpdate)
-    #     if HotelManager.amountToUpdate == 1:
-    #         return True
-    #     else:
-    #         return False
 
 
 class DietWindow(Screen):
@@ -1823,7 +1797,6 @@ class DietWindow(Screen):
         maxItems = 3
         self.spinner.dropdown_cls.max_height = maxItems * dp(48)
         self.peopleLeft()
-        # self.startingValues()
 
     def peopleLeft(self):
         self.numberOfFood()
@@ -1839,9 +1812,9 @@ class DietWindow(Screen):
     multiplayer = 0
 
     def numberOfFood(self):
-        # connect to database
+
         conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
-        # cursor
+
         cur = conn.cursor()
         dataToBrowse = []
         startingDate, endingDate = self.parseData()
@@ -1856,17 +1829,17 @@ class DietWindow(Screen):
             if len(dataN) > 0:
                 dataToBrowse.append(dataN)
         conn.commit()
-        # close cursor
+
         cur.close()
-        # close connection
+
         conn.close()
         self.multiplayer = len(dataToBrowse)
 
     # noinspection PyMethodMayBeStatic
     def saveFood(self):
-        # connect to database
+
         conn = psycopg2.connect(host="localhost", database="hotel", user="postgres", password="admin")
-        # cursor
+
         cur = conn.cursor()
         if not isRightEmail(str(self.ids.emailFood.text)):
             return False
@@ -1881,9 +1854,9 @@ class DietWindow(Screen):
             self.parseData()[1]) + "', '" + str(self.ids.classicDiet.text) + "', '" + str(
             self.ids.vegetarianDiet.text) + "', '" + str(self.ids.veganDiet.text) + "')")
         conn.commit()
-        # close cursor
+
         cur.close()
-        # close connection
+
         conn.close()
         return True
 

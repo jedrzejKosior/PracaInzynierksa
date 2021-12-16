@@ -678,11 +678,7 @@ WindowManager:
             orientation: "horizontal"
             RoundedButton:
                 text: "LOGOUT"
-#                background_color: utils.get_color_from_hex("#CED3DC")
-#                color: (0, 0, 0, 1)
                 on_release: app.root.current = "loginWindow"
-#            RoundedButton:
-#                text: "SAVE" # TODO SAVE VISITED
 <RoomWindowAbsence>:
     name: "roomWindowAbsence"
     roomsInput: roomsInput
@@ -1355,7 +1351,7 @@ WindowManager:
                 color: (0, 0, 0, 1)
                 size_hint_x: None
                 width: 70
-                on_release: app.root.current = 'dateWindow' #if root.updateOrNot() else Factory.BrowserUpdatePopup().open()  TODO
+                on_release: app.root.current = 'dateWindow'
             Button:
                 text: "DELETE"
                 size_hint_y: None
