@@ -1567,7 +1567,7 @@ class BrowserWindow(Screen):
     mainLayoutForKv = ObjectProperty(None)
 
     # noinspection PyMethodMayBeStatic
-    def reloadSpinner(self):
+    def reloadScroll(self):
         self.ids.main.remove_widget(self.mainLayoutForKv)
         self.mainLayoutForKv.clear_widgets()
         self.ids.main.add_widget(self.createBooksRows())
@@ -1721,7 +1721,7 @@ class BrowserWindow(Screen):
         cur.close()
         # close connection
         conn.close()
-        self.reloadSpinner()
+        self.reloadScroll()
 
     # noinspection PyMethodMayBeStatic  TODO
     # def updateOrNot(self):
